@@ -84,165 +84,171 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		return Integer.parseInt(matcher.group());
 	}
 
-	private static final String ROUTE_1 = "South Keys <-> Ottawa-Rockcliffe";
-	private static final String ROUTE_2 = "Downtown <-> Bayshore";
-	private static final String ROUTE_4 = "Hurdman <-> Rideau Ctr";
-	private static final String ROUTE_5 = "Billings Bridge <-> St Laurent";
-	private static final String ROUTE_6 = "Hurdman <-> Tunney's Pasture";
-	private static final String ROUTE_7 = "Downtown & Carleton <-> Brittany & St Laurent";
-	private static final String ROUTE_8 = "Billings Bridge <-> Gatineau";
-	private static final String ROUTE_9 = "Rideau Ctr <-> Hurdman";
-	private static final String ROUTE_12 = "Blair <-> Rideau Ctr";
-	private static final String ROUTE_14 = "St Laurent <-> Carlington";
-	private static final String ROUTE_16 = "Main <-> Britannia";
-	private static final String ROUTE_20 = "Downtown <-> Orléans";
-	private static final String ROUTE_21 = "Downtown <-> Orléans";
-	private static final String ROUTE_22 = "Downtown <-> Millennium";
-	private static final String ROUTE_24 = "Downtown <-> Beacon Hl";
-	private static final String ROUTE_27 = "Gatineau <-> Orléans";
-	private static final String ROUTE_28 = "St Laurent <-> Rideau Ctr";
-	private static final String ROUTE_30 = "Downtown <-> Jeanne d'Arc";
-	private static final String ROUTE_31 = "Downtown <-> Jeanne d'Arc";
-	private static final String ROUTE_34 = "Downtown <-> Jeanne d'Arc";
-	private static final String ROUTE_35 = "Downtown <-> Orléans";
-	private static final String ROUTE_37 = "Downtown <-> Jeanne d'Arc";
-	private static final String ROUTE_38 = "Downtown <-> Jeanne d'Arc";
-	private static final String ROUTE_40 = "Gatineau <-> Blossom Park";
-	private static final String ROUTE_41 = "Downtown <-> Walkley";
-	private static final String ROUTE_43 = "Downtown <-> Conroy";
-	private static final String ROUTE_60 = "Downtown <-> Kanata";
-	private static final String ROUTE_61 = "Downtown <-> Kanata";
-	private static final String ROUTE_62 = "Downtown <-> Kanata";
-	private static final String ROUTE_64 = "Downtown <-> Kanata";
-	private static final String ROUTE_65 = "Downtown <-> Kanata";
-	private static final String ROUTE_66 = "Downtown <-> Kanata";
-	private static final String ROUTE_67 = "Downtown <-> Pinecrest";
-	private static final String ROUTE_68 = "Downtown <-> Kanata";
-	private static final String ROUTE_69 = "Downtown <-> Nepean Ctr";
-	private static final String ROUTE_70 = "Downtown <-> Barrhaven";
-	private static final String ROUTE_71 = "Downtown <-> Barrhaven";
-	private static final String ROUTE_72 = "Downtown <-> Barrhaven";
-	private static final String ROUTE_73 = "Downtown <-> Barrhaven";
-	private static final String ROUTE_77 = "Downtown <-> Barrhaven";
-	private static final String ROUTE_85 = "Hurdman <-> Bayshore";
-	private static final String ROUTE_86 = "Elmvale <-> Baseline/Colonnade";
-	private static final String ROUTE_87 = "South Keys <-> Baseline";
-	private static final String ROUTE_93 = "Lincoln Fields <-> Kanata North / LeBreton";
-	private static final String ROUTE_94 = "Riverview <-> Millennium";
-	private static final String ROUTE_95 = "Orléans & Trim <-> Barrhaven Ctr";
-	private static final String ROUTE_96 = "Blair, Hurdman <-> Terry Fox, Stittsville";
-	private static final String ROUTE_97 = "Airport <-> Bayshore & Bells Corners";
-	private static final String ROUTE_98 = "Hawthorne <-> Greenboro & Tunney's Pasture";
-	private static final String ROUTE_99 = "Greenboro <-> Barrhaven / Manotick";
-	private static final String ROUTE_101 = "St Laurent <-> Bayshore";
-	private static final String ROUTE_105 = "Gatineau <-> Tunney's Pasture";
-	private static final String ROUTE_106 = "Elmvale <-> Hurdman";
-	private static final String ROUTE_107 = "Bayview <-> Southkeys";
-	private static final String ROUTE_111 = "Billings Bridge/Carleton <-> Baseline";
-	private static final String ROUTE_112 = "Elmvale <-> Billings Bridge";
-	private static final String ROUTE_114 = "Hurdman <-> Greenboro";
-	private static final String ROUTE_116 = "Greenboro & Hurdman <-> Merivale";
-	private static final String ROUTE_118 = "Hurdman <-> Kanata";
-	private static final String ROUTE_120 = "Portobello <-> Place d'Orléans";
-	private static final String ROUTE_121 = "Blair <-> Hurdman";
-	private static final String ROUTE_122 = "Millennium <-> Place d'Orléans";
+	private static final String RLN_SEPARATOR = "<->";
+	private static final String ROUTE_1 = "South Keys " + RLN_SEPARATOR + " Ottawa-Rockcliffe";
+	private static final String ROUTE_2 = "Downtown " + RLN_SEPARATOR + " Bayshore";
+	private static final String ROUTE_4 = "Hurdman " + RLN_SEPARATOR + " Rideau Ctr";
+	private static final String ROUTE_5 = "Billings Bridge " + RLN_SEPARATOR + " St Laurent";
+	private static final String ROUTE_6 = "Hurdman " + RLN_SEPARATOR + " Tunney's Pasture";
+	private static final String ROUTE_7 = "Downtown & Carleton " + RLN_SEPARATOR + " Brittany & St Laurent";
+	private static final String ROUTE_8 = "Billings Bridge " + RLN_SEPARATOR + " Gatineau";
+	private static final String ROUTE_9 = "Rideau Ctr " + RLN_SEPARATOR + " Hurdman";
+	private static final String ROUTE_12 = "Blair " + RLN_SEPARATOR + " Rideau Ctr";
+	private static final String ROUTE_14 = "St Laurent " + RLN_SEPARATOR + " Carlington";
+	private static final String ROUTE_16 = "Main " + RLN_SEPARATOR + " Britannia";
+	private static final String ROUTE_20 = "Downtown " + RLN_SEPARATOR + " Orléans";
+	private static final String ROUTE_21 = "Downtown " + RLN_SEPARATOR + " Orléans";
+	private static final String ROUTE_22 = "Downtown " + RLN_SEPARATOR + " Millennium";
+	private static final String ROUTE_24 = "Downtown " + RLN_SEPARATOR + " Beacon Hl";
+	private static final String ROUTE_27 = "Gatineau " + RLN_SEPARATOR + " Orléans";
+	private static final String ROUTE_28 = "St Laurent " + RLN_SEPARATOR + " Rideau Ctr";
+	private static final String ROUTE_30 = "Downtown " + RLN_SEPARATOR + " Jeanne d'Arc";
+	private static final String ROUTE_31 = "Downtown " + RLN_SEPARATOR + " Jeanne d'Arc";
+	private static final String ROUTE_34 = "Downtown " + RLN_SEPARATOR + " Jeanne d'Arc";
+	private static final String ROUTE_35 = "Downtown " + RLN_SEPARATOR + " Orléans";
+	private static final String ROUTE_37 = "Downtown " + RLN_SEPARATOR + " Jeanne d'Arc";
+	private static final String ROUTE_38 = "Downtown " + RLN_SEPARATOR + " Jeanne d'Arc";
+	private static final String ROUTE_40 = "Gatineau " + RLN_SEPARATOR + " Blossom Park";
+	private static final String ROUTE_41 = "Downtown " + RLN_SEPARATOR + " Walkley";
+	private static final String ROUTE_43 = "Downtown " + RLN_SEPARATOR + " Conroy";
+	private static final String ROUTE_60 = "Downtown " + RLN_SEPARATOR + " Kanata";
+	private static final String ROUTE_61 = "Downtown " + RLN_SEPARATOR + " Kanata";
+	private static final String ROUTE_62 = "Downtown " + RLN_SEPARATOR + " Kanata";
+	private static final String ROUTE_64 = "Downtown " + RLN_SEPARATOR + " Kanata";
+	private static final String ROUTE_65 = "Downtown " + RLN_SEPARATOR + " Kanata";
+	private static final String ROUTE_66 = "Downtown " + RLN_SEPARATOR + " Kanata";
+	private static final String ROUTE_67 = "Downtown " + RLN_SEPARATOR + " Pinecrest";
+	private static final String ROUTE_68 = "Downtown " + RLN_SEPARATOR + " Kanata";
+	private static final String ROUTE_69 = "Downtown " + RLN_SEPARATOR + " Nepean Ctr";
+	private static final String ROUTE_70 = "Downtown " + RLN_SEPARATOR + " Barrhaven";
+	private static final String ROUTE_71 = "Downtown " + RLN_SEPARATOR + " Barrhaven";
+	private static final String ROUTE_72 = "Downtown " + RLN_SEPARATOR + " Barrhaven";
+	private static final String ROUTE_73 = "Downtown " + RLN_SEPARATOR + " Barrhaven";
+	private static final String ROUTE_77 = "Downtown " + RLN_SEPARATOR + " Barrhaven";
+	private static final String ROUTE_85 = "Hurdman " + RLN_SEPARATOR + " Bayshore";
+	private static final String ROUTE_86 = "Elmvale " + RLN_SEPARATOR + " Baseline / Colonnade";
+	private static final String ROUTE_87 = "South Keys " + RLN_SEPARATOR + " Baseline";
+	private static final String ROUTE_91 = "Orléans & Trim " + RLN_SEPARATOR + " Baseline";
+	private static final String ROUTE_92 = "St-Laurent " + RLN_SEPARATOR + " Terry Fox & Stittsville";
+	private static final String ROUTE_93 = "Lincoln Fields " + RLN_SEPARATOR + " Kanata North / LeBreton";
+	private static final String ROUTE_94 = "Riverview " + RLN_SEPARATOR + " Millennium";
+	private static final String ROUTE_95 = "Orléans & Trim " + RLN_SEPARATOR + " Barrhaven Ctr";
+	private static final String ROUTE_96 = "Blair, Hurdman " + RLN_SEPARATOR + " Terry Fox, Stittsville";
+	private static final String ROUTE_97 = "Airport " + RLN_SEPARATOR + " Bayshore & Bells Corners";
+	private static final String ROUTE_98 = "Hawthorne " + RLN_SEPARATOR + " Greenboro & Tunney's Pasture";
+	private static final String ROUTE_99 = "Greenboro " + RLN_SEPARATOR + " Barrhaven / Manotick";
+	private static final String ROUTE_101 = "St Laurent " + RLN_SEPARATOR + " Bayshore";
+	private static final String ROUTE_105 = "Gatineau " + RLN_SEPARATOR + " Tunney's Pasture";
+	private static final String ROUTE_106 = "Elmvale " + RLN_SEPARATOR + " Hurdman";
+	private static final String ROUTE_107 = "Bayview " + RLN_SEPARATOR + " Southkeys";
+	private static final String ROUTE_111 = "Billings Bridge/Carleton " + RLN_SEPARATOR + " Baseline";
+	private static final String ROUTE_112 = "Elmvale " + RLN_SEPARATOR + " Billings Bridge";
+	private static final String ROUTE_114 = "Hurdman " + RLN_SEPARATOR + " Greenboro";
+	private static final String ROUTE_116 = "Greenboro & Hurdman " + RLN_SEPARATOR + " Merivale";
+	private static final String ROUTE_118 = "Hurdman " + RLN_SEPARATOR + " Kanata";
+	private static final String ROUTE_120 = "Portobello " + RLN_SEPARATOR + " Place d'Orléans";
+	private static final String ROUTE_121 = "Blair " + RLN_SEPARATOR + " Hurdman";
+	private static final String ROUTE_122 = "Millennium " + RLN_SEPARATOR + " Place d'Orléans";
 	private static final String ROUTE_123 = "Gloucester North / Blair";
-	private static final String ROUTE_124 = "Beacon Hl <-> Hurdman";
-	private static final String ROUTE_126 = "Pineview <-> Hurdman";
-	private static final String ROUTE_127 = "Blair <-> St Laurent";
-	private static final String ROUTE_128 = "Blackburn Hamlet <-> Hurdman";
-	private static final String ROUTE_129 = "Carson's <-> Hurdman";
-	private static final String ROUTE_130 = "Millennium <-> Blair";
-	private static final String ROUTE_131 = "Convent Glen <-> Chapel Hl";
-	private static final String ROUTE_132 = "Place d'Orléans <-> Sunview";
-	private static final String ROUTE_134 = "Renaud <-> Place d'Orléans";
-	private static final String ROUTE_135 = "Esprit <-> Place d'Orléans";
-	private static final String ROUTE_136 = "Tenth Line <-> Place d'Orléans";
+	private static final String ROUTE_124 = "Beacon Hl " + RLN_SEPARATOR + " Hurdman";
+	private static final String ROUTE_126 = "Pineview " + RLN_SEPARATOR + " Hurdman";
+	private static final String ROUTE_127 = "Blair " + RLN_SEPARATOR + " St Laurent";
+	private static final String ROUTE_128 = "Blackburn Hamlet " + RLN_SEPARATOR + " Hurdman";
+	private static final String ROUTE_129 = "Carson's " + RLN_SEPARATOR + " Hurdman";
+	private static final String ROUTE_130 = "Millennium " + RLN_SEPARATOR + " Blair";
+	private static final String ROUTE_131 = "Convent Glen " + RLN_SEPARATOR + " Chapel Hl";
+	private static final String ROUTE_132 = "Place d'Orléans " + RLN_SEPARATOR + " Sunview";
+	private static final String ROUTE_134 = "Renaud " + RLN_SEPARATOR + " Place d'Orléans";
+	private static final String ROUTE_135 = "Esprit " + RLN_SEPARATOR + " Place d'Orléans";
+	private static final String ROUTE_136 = "Tenth Line " + RLN_SEPARATOR + " Place d'Orléans";
 	private static final String ROUTE_137 = "Queenswood Heights / Place d'Orléans";
-	private static final String ROUTE_140 = "McCarthy <-> Hurdman";
-	private static final String ROUTE_143 = "Conroy <-> South Keys";
-	private static final String ROUTE_144 = "Leitrim <-> South Keys";
-	private static final String ROUTE_146 = "South Keys <-> Hurdman";
+	private static final String ROUTE_140 = "McCarthy " + RLN_SEPARATOR + " Hurdman";
+	private static final String ROUTE_143 = "Conroy " + RLN_SEPARATOR + " South Keys";
+	private static final String ROUTE_144 = "Leitrim " + RLN_SEPARATOR + " South Keys";
+	private static final String ROUTE_146 = "South Keys " + RLN_SEPARATOR + " Hurdman";
 	private static final String ROUTE_147 = "Uplands / South Keys";
-	private static final String ROUTE_148 = "Elmvale <-> Hurdman";
-	private static final String ROUTE_149 = "Elmvale <-> Hurdman";
-	private static final String ROUTE_150 = "Tunney's Pasture <-> Lincoln Fields";
-	private static final String ROUTE_151 = "Tunney's Pasture <-> Clyde";
-	private static final String ROUTE_152 = "Lincoln Fields <-> Moodie & Bayshore";
-	private static final String ROUTE_153 = "Carlingwood <-> Lincoln Fields";
-	private static final String ROUTE_154 = "Queensway Terrace <-> Lincoln Fields";
-	private static final String ROUTE_155 = "Queensway Terrace <-> Pinecrest/Bayshore";
-	private static final String ROUTE_156 = "Baseline <-> Merivale";
-	private static final String ROUTE_157 = "Baseline <-> Amberwood";
-	private static final String ROUTE_159 = "Tunney's Pasture <-> Local";
-	private static final String ROUTE_161 = "Bridlewood <-> Terry Fox";
-	private static final String ROUTE_164 = "Bridlewood <-> Terry Fox";
-	private static final String ROUTE_168 = "Beaverbrook <-> Katimavik";
-	private static final String ROUTE_170 = "Fallowfield <-> Barrhaven Ctr";
-	private static final String ROUTE_171 = "Fallowfield <-> Barrhaven Ctr";
-	private static final String ROUTE_172 = "Lincoln Fields <-> Bayshore";
-	private static final String ROUTE_173 = "Barrhaven Ctr <-> Fallowfield & Bayshore";
-	private static final String ROUTE_174 = "Baseline <-> Knoxdale";
-	private static final String ROUTE_175 = "Golflinks <-> Barrhaven Ctr";
-	private static final String ROUTE_176 = "Barrhaven Ctr <-> Tunney's Pasture";
-	private static final String ROUTE_177 = "Barrhaven Ctr / Fallowfield <-> Cambrian";
+	private static final String ROUTE_148 = "Elmvale " + RLN_SEPARATOR + " Hurdman";
+	private static final String ROUTE_149 = "Elmvale " + RLN_SEPARATOR + " Hurdman";
+	private static final String ROUTE_150 = "Tunney's Pasture " + RLN_SEPARATOR + " Lincoln Fields";
+	private static final String ROUTE_151 = "Tunney's Pasture " + RLN_SEPARATOR + " Clyde";
+	private static final String ROUTE_152 = "Lincoln Fields " + RLN_SEPARATOR + " Moodie & Bayshore";
+	private static final String ROUTE_153 = "Carlingwood " + RLN_SEPARATOR + " Lincoln Fields";
+	private static final String ROUTE_154 = "Queensway Terrace " + RLN_SEPARATOR + " Lincoln Fields";
+	private static final String ROUTE_155 = "Queensway Terrace " + RLN_SEPARATOR + " Pinecrest/Bayshore";
+	private static final String ROUTE_156 = "Baseline " + RLN_SEPARATOR + " Merivale";
+	private static final String ROUTE_157 = "Baseline " + RLN_SEPARATOR + " Amberwood";
+	private static final String ROUTE_159 = "Tunney's Pasture " + RLN_SEPARATOR + " Local";
+	private static final String ROUTE_161 = "Bridlewood " + RLN_SEPARATOR + " Terry Fox";
+	private static final String ROUTE_162 = "Terry Fox " + RLN_SEPARATOR + " Stittsville";
+	private static final String ROUTE_165 = "Innovation " + RLN_SEPARATOR + " Terry Fox";
+	private static final String ROUTE_164 = "Bridlewood " + RLN_SEPARATOR + " Terry Fox";
+	private static final String ROUTE_168 = "Beaverbrook " + RLN_SEPARATOR + " Katimavik";
+	private static final String ROUTE_170 = "Fallowfield " + RLN_SEPARATOR + " Barrhaven Ctr";
+	private static final String ROUTE_171 = "Fallowfield " + RLN_SEPARATOR + " Barrhaven Ctr";
+	private static final String ROUTE_172 = "Lincoln Fields " + RLN_SEPARATOR + " Bayshore";
+	private static final String ROUTE_173 = "Barrhaven Ctr " + RLN_SEPARATOR + " Fallowfield & Bayshore";
+	private static final String ROUTE_174 = "Baseline " + RLN_SEPARATOR + " Knoxdale";
+	private static final String ROUTE_175 = "Golflinks " + RLN_SEPARATOR + " Barrhaven Ctr";
+	private static final String ROUTE_176 = "Barrhaven Ctr " + RLN_SEPARATOR + " Tunney's Pasture";
+	private static final String ROUTE_177 = "Barrhaven Ctr / Fallowfield " + RLN_SEPARATOR + " Cambrian";
 	private static final String ROUTE_178 = "Lincoln Fields / Ctrpointe";
-	private static final String ROUTE_180 = "Bayshore <-> Haanel";
-	private static final String ROUTE_181 = "Eagleson <-> Hertzberg";
-	private static final String ROUTE_182 = "Kanata <-> Lincoln Fields";
-	private static final String ROUTE_186 = "Manotick <-> Barrhaven Ctr";
-	private static final String ROUTE_188 = "Canadian Tire Ctr <-> Huntmar";
-	private static final String ROUTE_189 = "Riverview <-> Greenboro";
-	private static final String ROUTE_192 = "Hawthorne <-> Hurdman";
-	private static final String ROUTE_193 = "Place d'Orléans <-> Blair";
-	private static final String ROUTE_194 = "Gloucester North <-> Blair";
-	private static final String ROUTE_196 = "Tanger <-> Terry Fox";
-	private static final String ROUTE_198 = "Petrie Island <-> Place D'Orleans";
-	private static final String ROUTE_199 = "Barrhaven <-> Place d'Orléans";
-	private static final String ROUTE_201 = "Bayshore / Carlingwood <-> Stittsville / Richmond";
-	private static final String ROUTE_202 = "Place d'Orléans / St Laurent <-> Navan / Sarsfield / Cumberland";
-	private static final String ROUTE_203 = "Bayshore, Carlingwood <-> Stittsville, Dunrobin, Carp";
-	private static final String ROUTE_204 = "South Keys / Billings Bridge <-> Greely / Metcalfe";
-	private static final String ROUTE_205 = "Barrhaven / Carlingwood <-> Manotick / Kars / North Gower";
-	private static final String ROUTE_221 = "Downtown <-> Cumberland";
-	private static final String ROUTE_231 = "Downtown <-> Cumberland";
-	private static final String ROUTE_232 = "Downtown <-> Vars";
-	private static final String ROUTE_261 = "Downtown <-> Stittsville";
-	private static final String ROUTE_262 = "Downtown <-> Stittsville";
-	private static final String ROUTE_263 = "Downtown <-> Stittsville";
-	private static final String ROUTE_283 = "Downtown <-> Richmond & Munster Hamlet";
+	private static final String ROUTE_180 = "Bayshore " + RLN_SEPARATOR + " Haanel";
+	private static final String ROUTE_181 = "Eagleson " + RLN_SEPARATOR + " Hertzberg";
+	private static final String ROUTE_182 = "Kanata " + RLN_SEPARATOR + " Lincoln Fields";
+	private static final String ROUTE_185 = "LeBreton / Experimental Farm";
+	private static final String ROUTE_186 = "Manotick " + RLN_SEPARATOR + " Barrhaven Ctr";
+	private static final String ROUTE_188 = "Canadian Tire Ctr " + RLN_SEPARATOR + " Huntmar";
+	private static final String ROUTE_189 = "Riverview " + RLN_SEPARATOR + " Greenboro";
+	private static final String ROUTE_192 = "Hawthorne " + RLN_SEPARATOR + " Hurdman";
+	private static final String ROUTE_193 = "Place d'Orléans " + RLN_SEPARATOR + " Blair";
+	private static final String ROUTE_194 = "Gloucester North " + RLN_SEPARATOR + " Blair";
+	private static final String ROUTE_196 = "Tanger " + RLN_SEPARATOR + " Terry Fox";
+	private static final String ROUTE_198 = "Petrie Island " + RLN_SEPARATOR + " Place D'Orleans";
+	private static final String ROUTE_199 = "Barrhaven " + RLN_SEPARATOR + " Place d'Orléans";
+	private static final String ROUTE_201 = "Bayshore / Carlingwood " + RLN_SEPARATOR + " Stittsville / Richmond";
+	private static final String ROUTE_202 = "Place d'Orléans / St Laurent " + RLN_SEPARATOR + " Navan / Sarsfield / Cumberland";
+	private static final String ROUTE_203 = "Bayshore, Carlingwood " + RLN_SEPARATOR + " Stittsville, Dunrobin, Carp";
+	private static final String ROUTE_204 = "South Keys / Billings Bridge " + RLN_SEPARATOR + " Greely / Metcalfe";
+	private static final String ROUTE_205 = "Barrhaven / Carlingwood " + RLN_SEPARATOR + " Manotick / Kars / North Gower";
+	private static final String ROUTE_221 = "Downtown " + RLN_SEPARATOR + " Cumberland";
+	private static final String ROUTE_231 = "Downtown " + RLN_SEPARATOR + " Cumberland";
+	private static final String ROUTE_232 = "Downtown " + RLN_SEPARATOR + " Vars";
+	private static final String ROUTE_261 = "Downtown " + RLN_SEPARATOR + " Stittsville";
+	private static final String ROUTE_262 = "Downtown " + RLN_SEPARATOR + " Stittsville";
+	private static final String ROUTE_263 = "Downtown " + RLN_SEPARATOR + " Stittsville";
+	private static final String ROUTE_283 = "Downtown " + RLN_SEPARATOR + " Richmond & Munster Hamlet";
 	private static final String ROUTE_401 = "Canadian Tire Ctr";
 	private static final String ROUTE_402 = "Canadian Tire Ctr";
 	private static final String ROUTE_403 = "Canadian Tire Ctr";
 	private static final String ROUTE_404 = "Canadian Tire Ctr";
 	private static final String ROUTE_405 = "Canadian Tire Ctr";
 	private static final String ROUTE_406 = "Canadian Tire Ctr";
-	private static final String ROUTE_450 = "Lansdowne <-> Rideau Ctr";
-	private static final String ROUTE_451 = "Lansdowne Park <-> Blair";
-	private static final String ROUTE_452 = "Lansdowne Park <-> South Keys";
-	private static final String ROUTE_454 = "Lansdowne <-> Terry Fox";
-	private static final String ROUTE_455 = "Lansdowne <-> Trim";
-	private static final String ROUTE_456 = "Lansdowne Park <-> Barrhaven Ctr";
-	private static final String ROUTE_602 = "É. S De La Salle <-> Hurdman";
-	private static final String ROUTE_611 = "É. S Gisèle Lalonde <-> Chapel Hl";
-	private static final String ROUTE_612 = "É. S Gisèle Lalonde <-> Chapel Hl";
-	private static final String ROUTE_613 = "Immaculata High School <-> Hurdman Sta";
-	private static final String ROUTE_618 = "É. S Louis-Riel <-> Millennium Sta";
-	private static final String ROUTE_619 = "É. S Louis-Riel <-> Blair Sta";
-	private static final String ROUTE_622 = "Colonel By & Lester B. Pearson Schools <-> Renaud / Saddleridge";
-	private static final String ROUTE_632 = "É. S Gisèle Lalonde <-> Queenswood Heights";
-	private static final String ROUTE_633 = "Lester B. Pearson High School <-> St Laurent Sta";
-	private static final String ROUTE_640 = "Brookfield High School <-> Greenboro Sta";
-	private static final String ROUTE_641 = "É. S Louis Riel <-> Meadowglen / Orléans";
-	private static final String ROUTE_648 = "É. S Louis-Riel <-> Youville / St Joseph";
-	private static final String ROUTE_661 = "Bell High School <-> Terry Fox Sta";
+	private static final String ROUTE_450 = "Lansdowne " + RLN_SEPARATOR + " Rideau Ctr";
+	private static final String ROUTE_451 = "Lansdowne Park " + RLN_SEPARATOR + " Blair";
+	private static final String ROUTE_452 = "Lansdowne Park " + RLN_SEPARATOR + " South Keys";
+	private static final String ROUTE_454 = "Lansdowne " + RLN_SEPARATOR + " Terry Fox";
+	private static final String ROUTE_455 = "Lansdowne " + RLN_SEPARATOR + " Trim";
+	private static final String ROUTE_456 = "Lansdowne Park " + RLN_SEPARATOR + " Barrhaven Ctr";
+	private static final String ROUTE_602 = "É. S De La Salle " + RLN_SEPARATOR + " Hurdman";
+	private static final String ROUTE_611 = "É. S Gisèle Lalonde " + RLN_SEPARATOR + " Chapel Hl";
+	private static final String ROUTE_612 = "É. S Gisèle Lalonde " + RLN_SEPARATOR + " Chapel Hl";
+	private static final String ROUTE_613 = "Immaculata High School " + RLN_SEPARATOR + " Hurdman Sta";
+	private static final String ROUTE_618 = "É. S Louis-Riel " + RLN_SEPARATOR + " Millennium Sta";
+	private static final String ROUTE_619 = "É. S Louis-Riel " + RLN_SEPARATOR + " Blair Sta";
+	private static final String ROUTE_622 = "Colonel By & Lester B. Pearson Schools " + RLN_SEPARATOR + " Renaud / Saddleridge";
+	private static final String ROUTE_632 = "É. S Gisèle Lalonde " + RLN_SEPARATOR + " Queenswood Heights";
+	private static final String ROUTE_633 = "Lester B. Pearson High School " + RLN_SEPARATOR + " St Laurent Sta";
+	private static final String ROUTE_640 = "Brookfield High School " + RLN_SEPARATOR + " Greenboro Sta";
+	private static final String ROUTE_641 = "É. S Louis Riel " + RLN_SEPARATOR + " Meadowglen / Orléans";
+	private static final String ROUTE_648 = "É. S Louis-Riel " + RLN_SEPARATOR + " Youville / St Joseph";
+	private static final String ROUTE_661 = "Bell High School " + RLN_SEPARATOR + " Terry Fox Sta";
 	private static final String ROUTE_665 = "Bell High School < -> Bridlewood";
-	private static final String ROUTE_669 = "Bell High School <-> Bayshore / Carling";
-	private static final String ROUTE_670 = "St Pius X High School <-> Vaan / Woodroffe";
-	private static final String ROUTE_674 = "All Saints Catholic & Stephen Leacock Schools <-> Innovation / Hines";
-	private static final String ROUTE_678 = "É. S Louis-Riel <-> Jeanne d'Arc Sta";
-	private static final String ROUTE_681 = "Bell High School <-> Bridlewood";
-	private static final String ROUTE_691 = "É. S Deslauriers <-> Bayshore Sta";
+	private static final String ROUTE_669 = "Bell High School " + RLN_SEPARATOR + " Bayshore / Carling";
+	private static final String ROUTE_670 = "St Pius X High School " + RLN_SEPARATOR + " Vaan / Woodroffe";
+	private static final String ROUTE_674 = "All Saints Catholic & Stephen Leacock Schools " + RLN_SEPARATOR + " Innovation / Hines";
+	private static final String ROUTE_678 = "É. S Louis-Riel " + RLN_SEPARATOR + " Jeanne d'Arc Sta";
+	private static final String ROUTE_681 = "Bell High School " + RLN_SEPARATOR + " Bridlewood";
+	private static final String ROUTE_691 = "É. S Deslauriers " + RLN_SEPARATOR + " Bayshore Sta";
 
 	@Override
 	public String getRouteLongName(GRoute gRoute) {
@@ -294,6 +300,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		case 85: return ROUTE_85;
 		case 86: return ROUTE_86;
 		case 87: return ROUTE_87;
+		case 91: return ROUTE_91;
+		case 92: return ROUTE_92;
 		case 93: return ROUTE_93;
 		case 94: return ROUTE_94;
 		case 95: return ROUTE_95;
@@ -343,7 +351,9 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		case 157: return ROUTE_157;
 		case 159: return ROUTE_159;
 		case 161: return ROUTE_161;
+		case 162: return ROUTE_162;
 		case 164: return ROUTE_164;
+		case 165: return ROUTE_165;
 		case 168: return ROUTE_168;
 		case 170: return ROUTE_170;
 		case 171: return ROUTE_171;
@@ -357,6 +367,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		case 180: return ROUTE_180;
 		case 181: return ROUTE_181;
 		case 182: return ROUTE_182;
+		case 185: return ROUTE_185;
 		case 186: return ROUTE_186;
 		case 188: return ROUTE_188;
 		case 189: return ROUTE_189;
@@ -412,7 +423,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		case 691: return ROUTE_691;
 		// @formatter:on
 		default:
-			System.out.println("getRouteLongName() > Unexpected route ID '" + digits + "' (" + gRoute + ")");
+			System.out.printf("\n%s: getRouteLongName() > Unexpected route ID '%s' (%s)\n", gRoute.route_id, digits, gRoute);
 			System.exit(-1);
 			return null;
 		}
@@ -440,10 +451,10 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 
 	private static final Collection<Integer> BLACK_ROUTES = Arrays.asList(new Integer[] { //
 			1, 2, 4, 5, 7, 8, 9, 12, 14, 16, 18, //
-					85, 86, 87, 93, 94, 95, 96, 97, 98, 99, //
+					85, 86, 87, 91, 92, 93, 94, 95, 96, 97, 98, 99, //
 					101, 106, 107, 111, 112, 114, 116, 118, 120, 121, 122, 123, 124, //
 					126, 127, 128, 129, 130, 131, 132, 134, 135, 137, 143, 144, 146, 147, 148, 149, //
-					150, 151, 152, 153, 154, 156, 159, 161, 164, 168, 170, 171, 172, 173, 174, //
+					150, 151, 152, 153, 154, 156, 159, 161, 162, 164, 165, 168, 170, 171, 172, 173, 174, //
 					175, 176, 177, 178, 185, 196, 198 //
 			});
 
@@ -453,8 +464,9 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 
 	@Deprecated
 	private static final Collection<Integer> GRAY_ROUTES = Arrays.asList(new Integer[] { //
-			120, 123, 132, 137, //
-					154, 161, 174, 175, 178 //
+			91, //
+					120, 123, 132, 137, //
+					154, 161, 162, 165, 174, 175, 178 //
 			});
 
 	private static final Collection<Integer> RED_ROUTES = Arrays.asList(new Integer[] { //
@@ -507,7 +519,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		else if (TDP_ROUTES.contains(routeId)) { return ROUTE_COLOR_ORCHID; }
 		// @formatter:on
 		else {
-			System.out.println("No color for route " + gRoute + "!");
+			System.out.printf("\n%s: getRouteColor() > No color for route '%s'!", gRoute.route_id, gRoute);
 			System.exit(-1);
 		}
 		return super.getRouteColor(gRoute);
@@ -526,7 +538,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	@Override
 	public boolean mergeHeadsign(MTrip mTrip, MTrip mTripToMerge) {
 		if (mTrip.getHeadsignValue() == null || mTrip.getHeadsignValue().equals(mTripToMerge.getHeadsignValue())) {
-			System.out.println("Can't merge headsign for trips " + mTrip + " and " + mTripToMerge);
+			System.out.println("mergeHeadsign() > Can't merge headsign for trips " + mTrip + " and " + mTripToMerge);
 			System.exit(-1);
 			return false; // DO NOT MERGE, USED TO IDENTIY TRIP IN REAL TIME API
 		}
@@ -586,7 +598,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		} else if (gStop.stop_id.startsWith(RZ)) {
 			stopId = 1100000;
 		} else {
-			System.out.println("Stop doesn't have an ID (start with)! " + gStop);
+			System.out.println("getStopId() > Stop doesn't have an ID (start with)! " + gStop);
 			System.exit(-1);
 			stopId = -1;
 		}
