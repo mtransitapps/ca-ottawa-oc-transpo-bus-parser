@@ -17,7 +17,7 @@ import org.mtransit.parser.gtfs.data.GStop;
 import org.mtransit.parser.gtfs.data.GTrip;
 import org.mtransit.parser.mt.data.MAgency;
 import org.mtransit.parser.mt.data.MRoute;
-import org.mtransit.parser.mt.data.MSpec;
+import org.mtransit.parser.CleanUtils;
 import org.mtransit.parser.mt.data.MTrip;
 
 // http://www.octranspo1.com/developers
@@ -39,11 +39,11 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 
 	@Override
 	public void start(String[] args) {
-		System.out.printf("Generating OC Transpo bus data...\n");
+		System.out.printf("\nGenerating OC Transpo bus data...\n");
 		long start = System.currentTimeMillis();
 		this.serviceIds = extractUsefulServiceIds(args, this);
 		super.start(args);
-		System.out.printf("Generating OC Transpo bus data... DONE in %s.\n", Utils.getPrettyDuration(System.currentTimeMillis() - start));
+		System.out.printf("\nGenerating OC Transpo bus data... DONE in %s.\n", Utils.getPrettyDuration(System.currentTimeMillis() - start));
 	}
 
 	@Override
@@ -548,9 +548,9 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	@Override
 	public String cleanStopName(String gStopName) {
 		gStopName = gStopName.toLowerCase(Locale.ENGLISH);
-		gStopName = MSpec.cleanNumbers(gStopName);
-		gStopName = MSpec.cleanStreetTypes(gStopName);
-		return MSpec.cleanLabel(gStopName);
+		gStopName = CleanUtils.cleanNumbers(gStopName);
+		gStopName = CleanUtils.cleanStreetTypes(gStopName);
+		return CleanUtils.cleanLabel(gStopName);
 	}
 
 	private static final String EE = "EE";
