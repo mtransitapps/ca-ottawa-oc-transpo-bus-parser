@@ -39,7 +39,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 
 	@Override
 	public void start(String[] args) {
-		System.out.printf("\nGenerating OC Transpo bus data...\n");
+		System.out.printf("\nGenerating OC Transpo bus data...");
 		long start = System.currentTimeMillis();
 		this.serviceIds = extractUsefulServiceIds(args, this);
 		super.start(args);
@@ -538,7 +538,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	@Override
 	public boolean mergeHeadsign(MTrip mTrip, MTrip mTripToMerge) {
 		if (mTrip.getHeadsignValue() == null || mTrip.getHeadsignValue().equals(mTripToMerge.getHeadsignValue())) {
-			System.out.println("mergeHeadsign() > Can't merge headsign for trips " + mTrip + " and " + mTripToMerge);
+			System.out.printf("\nmergeHeadsign() > Can't merge headsign for trips %s and %s!\n", mTrip, mTripToMerge);
 			System.exit(-1);
 			return false; // DO NOT MERGE, USED TO IDENTIY TRIP IN REAL TIME API
 		}
