@@ -79,7 +79,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 
 	@Override
 	public long getRouteId(GRoute gRoute) {
-		Matcher matcher = DIGITS.matcher(gRoute.route_id);
+		Matcher matcher = DIGITS.matcher(gRoute.getRouteId());
 		matcher.find();
 		return Integer.parseInt(matcher.group());
 	}
@@ -252,7 +252,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 
 	@Override
 	public String getRouteLongName(GRoute gRoute) {
-		Matcher matcher = DIGITS.matcher(gRoute.route_id);
+		Matcher matcher = DIGITS.matcher(gRoute.getRouteId());
 		matcher.find();
 		int digits = Integer.parseInt(matcher.group());
 		switch (digits) {
@@ -423,7 +423,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		case 691: return ROUTE_691;
 		// @formatter:on
 		default:
-			System.out.printf("\n%s: getRouteLongName() > Unexpected route ID '%s' (%s)\n", gRoute.route_id, digits, gRoute);
+			System.out.printf("\n%s: getRouteLongName() > Unexpected route ID '%s' (%s)\n", gRoute.getRouteId(), digits, gRoute);
 			System.exit(-1);
 			return null;
 		}
@@ -504,7 +504,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 
 	@Override
 	public String getRouteColor(GRoute gRoute) {
-		Matcher matcher = DIGITS.matcher(gRoute.route_id);
+		Matcher matcher = DIGITS.matcher(gRoute.getRouteId());
 		matcher.find();
 		int routeId = Integer.parseInt(matcher.group());
 		// @formatter:off
@@ -519,7 +519,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		else if (TDP_ROUTES.contains(routeId)) { return ROUTE_COLOR_ORCHID; }
 		// @formatter:on
 		else {
-			System.out.printf("\n%s: getRouteColor() > No color for route '%s'!", gRoute.route_id, gRoute);
+			System.out.printf("\n%s: getRouteColor() > No color for route '%s'!", gRoute.getRouteId(), gRoute);
 			System.exit(-1);
 		}
 		return super.getRouteColor(gRoute);
@@ -527,7 +527,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 
 	@Override
 	public void setTripHeadsign(MRoute mRoute, MTrip mTrip, GTrip gTrip, GSpec gtfs) {
-		mTrip.setHeadsignString(cleanTripHeadsign(gTrip.trip_headsign), gTrip.direction_id);
+		mTrip.setHeadsignString(cleanTripHeadsign(gTrip.getTripHeadsign()), gTrip.getDirectionId());
 	}
 
 	@Override
@@ -571,31 +571,31 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		if (stopCode != null && stopCode.length() > 0 && Utils.isDigitsOnly(stopCode)) {
 			return Integer.valueOf(stopCode); // using stop code as stop ID
 		}
-		Matcher matcher = DIGITS.matcher(gStop.stop_id);
+		Matcher matcher = DIGITS.matcher(gStop.getStopId());
 		matcher.find();
 		int digits = Integer.parseInt(matcher.group());
 		int stopId = 0;
-		if (gStop.stop_id.startsWith(EE)) {
+		if (gStop.getStopId().startsWith(EE)) {
 			stopId = 100000;
-		} else if (gStop.stop_id.startsWith(EO)) {
+		} else if (gStop.getStopId().startsWith(EO)) {
 			stopId = 200000;
-		} else if (gStop.stop_id.startsWith(NG)) {
+		} else if (gStop.getStopId().startsWith(NG)) {
 			stopId = 300000;
-		} else if (gStop.stop_id.startsWith(NO)) {
+		} else if (gStop.getStopId().startsWith(NO)) {
 			stopId = 400000;
-		} else if (gStop.stop_id.startsWith(WA)) {
+		} else if (gStop.getStopId().startsWith(WA)) {
 			stopId = 500000;
-		} else if (gStop.stop_id.startsWith(WD)) {
+		} else if (gStop.getStopId().startsWith(WD)) {
 			stopId = 600000;
-		} else if (gStop.stop_id.startsWith(WH)) {
+		} else if (gStop.getStopId().startsWith(WH)) {
 			stopId = 700000;
-		} else if (gStop.stop_id.startsWith(WI)) {
+		} else if (gStop.getStopId().startsWith(WI)) {
 			stopId = 800000;
-		} else if (gStop.stop_id.startsWith(WL)) {
+		} else if (gStop.getStopId().startsWith(WL)) {
 			stopId = 900000;
-		} else if (gStop.stop_id.startsWith(PLACE)) {
+		} else if (gStop.getStopId().startsWith(PLACE)) {
 			stopId = 1000000;
-		} else if (gStop.stop_id.startsWith(RZ)) {
+		} else if (gStop.getStopId().startsWith(RZ)) {
 			stopId = 1100000;
 		} else {
 			System.out.println("getStopId() > Stop doesn't have an ID (start with)! " + gStop);
