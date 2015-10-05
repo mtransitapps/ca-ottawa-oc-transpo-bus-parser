@@ -151,6 +151,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String HAANEL = "Haanel";
 	private static final String HAMLET = "Hamlet";
 	private static final String HAWTHORNE = "Hawthorne";
+	private static final String HAWKESBURY = "Hawkesbury";
 	private static final String HERTZBERG = "Hertzberg";
 	private static final String HINES = "Hines";
 	private static final String HUNTMAR = "Huntmar";
@@ -184,7 +185,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String NEPEAN_CTR = "Nepean Ctr";
 	private static final String NORTH_GOWER = "North Gower";
 	private static final String ORLEANS = "Orléans";
-	private static final String OTTAWA_ROCKCLIFFE = "Ottawa-Rockcliffe";
+	private static final String OTTAWA = "Ottawa";
+	private static final String OTTAWA_ROCKCLIFFE = OTTAWA + "-Rockcliffe";
 	private static final String PETRIE_ISL = "Petrie Isl";
 	private static final String PINECREST = "Pinecrest";
 	private static final String PINEVIEW = "Pineview";
@@ -363,6 +365,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_454 = LANSDOWNE + RLN_SEP + TERRY_FOX;
 	private static final String ROUTE_455 = LANSDOWNE + RLN_SEP + TRIM;
 	private static final String ROUTE_456 = LANSDOWNE_PARK + RLN_SEP + BARRHAVEN_CTR;
+	private static final String ROUTE_520 = HAWKESBURY + RLN_SEP + OTTAWA + RLN_SEP + GATINEAU;
 	private static final String ROUTE_602 = É_S_DE_LA_SALLE + RLN_SEP + HURDMAN;
 	private static final String ROUTE_611 = É_S_GISELE_LALONDE + RLN_SEP + CHAPEL_HL;
 	private static final String ROUTE_612 = É_S_GISELE_LALONDE + RLN_SEP + CHAPEL_HL;
@@ -535,6 +538,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		case 454: return ROUTE_454;
 		case 455: return ROUTE_455;
 		case 456: return ROUTE_456;
+		case 520: return ROUTE_520;
 		case 602: return ROUTE_602;
 		case 611: return ROUTE_611;
 		case 612: return ROUTE_612;
@@ -732,7 +736,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		} else if (gStop.getStopId().startsWith(RZ)) {
 			stopId = 1100000;
 		} else {
-			System.out.println("getStopId() > Stop doesn't have an ID (start with)! " + gStop);
+			System.out.printf("\nStop doesn't have an ID (start with) %s!\n", gStop);
 			System.exit(-1);
 			stopId = -1;
 		}
