@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.mtransit.parser.DefaultAgencyTools;
 import org.mtransit.parser.Utils;
 import org.mtransit.parser.gtfs.data.GCalendar;
@@ -274,6 +275,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_98 = HAWTHORNE + RLN_SEP + GREENBORO + AND + TUNNEY_S_PASTURE;
 	private static final String ROUTE_99 = GREENBORO + RLN_SEP + BARRHAVEN + SLASH + MANOTICK;
 	private static final String ROUTE_101 = ST_LAURENT + RLN_SEP + BAYSHORE;
+	private static final String ROUTE_103 = PLACE_D_ORLEANS + RLN_SEP + BAYSHORE;
+	private static final String ROUTE_104 = PLACE_D_ORLEANS + RLN_SEP + CARLETON;
 	private static final String ROUTE_105 = GATINEAU + RLN_SEP + TUNNEY_S_PASTURE;
 	private static final String ROUTE_106 = ELMVALE + RLN_SEP + HURDMAN;
 	private static final String ROUTE_107 = BAYVIEW + RLN_SEP + SOUTHKEYS;
@@ -389,179 +392,182 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 
 	@Override
 	public String getRouteLongName(GRoute gRoute) {
-		Matcher matcher = DIGITS.matcher(gRoute.getRouteId());
-		matcher.find();
-		int digits = Integer.parseInt(matcher.group());
-		switch (digits) {
-		// @formatter:off
-		case 1: return ROUTE_1;
-		case 2: return ROUTE_2;
-		case 4: return ROUTE_4;
-		case 5: return ROUTE_5;
-		case 6: return ROUTE_6;
-		case 7: return ROUTE_7;
-		case 8: return ROUTE_8;
-		case 9: return ROUTE_9;
-		case 12: return ROUTE_12;
-		case 14: return ROUTE_14;
-		case 16: return ROUTE_16;
-		case 18: return ROUTE_28;
-		case 20: return ROUTE_20;
-		case 21: return ROUTE_21;
-		case 22: return ROUTE_22;
-		case 24: return ROUTE_24;
-		case 27: return ROUTE_27;
-		case 30: return ROUTE_30;
-		case 31: return ROUTE_31;
-		case 34: return ROUTE_34;
-		case 35: return ROUTE_35;
-		case 37: return ROUTE_37;
-		case 38: return ROUTE_38;
-		case 40: return ROUTE_40;
-		case 41: return ROUTE_41;
-		case 43: return ROUTE_43;
-		case 60: return ROUTE_60;
-		case 61: return ROUTE_61;
-		case 62: return ROUTE_62;
-		case 64: return ROUTE_64;
-		case 65: return ROUTE_65;
-		case 66: return ROUTE_66;
-		case 67: return ROUTE_67;
-		case 68: return ROUTE_68;
-		case 69: return ROUTE_69;
-		case 70: return ROUTE_70;
-		case 71: return ROUTE_71;
-		case 72: return ROUTE_72;
-		case 73: return ROUTE_73;
-		case 77: return ROUTE_77;
-		case 85: return ROUTE_85;
-		case 86: return ROUTE_86;
-		case 87: return ROUTE_87;
-		case 91: return ROUTE_91;
-		case 92: return ROUTE_92;
-		case 93: return ROUTE_93;
-		case 94: return ROUTE_94;
-		case 95: return ROUTE_95;
-		case 96: return ROUTE_96;
-		case 97: return ROUTE_97;
-		case 98: return ROUTE_98;
-		case 99: return ROUTE_99;
-		case 101: return ROUTE_101;
-		case 105: return ROUTE_105;
-		case 106: return ROUTE_106;
-		case 107: return ROUTE_107;
-		case 111: return ROUTE_111;
-		case 112: return ROUTE_112;
-		case 114: return ROUTE_114;
-		case 116: return ROUTE_116;
-		case 118: return ROUTE_118;
-		case 120: return ROUTE_120;
-		case 121: return ROUTE_121;
-		case 122: return ROUTE_122;
-		case 123: return ROUTE_123;
-		case 124: return ROUTE_124;
-		case 126: return ROUTE_126;
-		case 127: return ROUTE_127;
-		case 128: return ROUTE_128;
-		case 129: return ROUTE_129;
-		case 130: return ROUTE_130;
-		case 131: return ROUTE_131;
-		case 132: return ROUTE_132;
-		case 134: return ROUTE_134;
-		case 135: return ROUTE_135;
-		case 136: return ROUTE_136;
-		case 137: return ROUTE_137;
-		case 140: return ROUTE_140;
-		case 143: return ROUTE_143;
-		case 144: return ROUTE_144;
-		case 146: return ROUTE_146;
-		case 147: return ROUTE_147;
-		case 148: return ROUTE_148;
-		case 149: return ROUTE_149;
-		case 150: return ROUTE_150;
-		case 151: return ROUTE_151;
-		case 152: return ROUTE_152;
-		case 153: return ROUTE_153;
-		case 154: return ROUTE_154;
-		case 155: return ROUTE_155;
-		case 156: return ROUTE_156;
-		case 157: return ROUTE_157;
-		case 159: return ROUTE_159;
-		case 161: return ROUTE_161;
-		case 162: return ROUTE_162;
-		case 164: return ROUTE_164;
-		case 165: return ROUTE_165;
-		case 168: return ROUTE_168;
-		case 170: return ROUTE_170;
-		case 171: return ROUTE_171;
-		case 172: return ROUTE_172;
-		case 173: return ROUTE_173;
-		case 174: return ROUTE_174;
-		case 175: return ROUTE_175;
-		case 176: return ROUTE_176;
-		case 177: return ROUTE_177;
-		case 178: return ROUTE_178;
-		case 180: return ROUTE_180;
-		case 181: return ROUTE_181;
-		case 182: return ROUTE_182;
-		case 185: return ROUTE_185;
-		case 186: return ROUTE_186;
-		case 188: return ROUTE_188;
-		case 189: return ROUTE_189;
-		case 192: return ROUTE_192;
-		case 193: return ROUTE_193;
-		case 194: return ROUTE_194;
-		case 196: return ROUTE_196;
-		case 198: return ROUTE_198;
-		case 199: return ROUTE_199;
-		case 201: return ROUTE_201;
-		case 202: return ROUTE_202;
-		case 203: return ROUTE_203;
-		case 204: return ROUTE_204;
-		case 205: return ROUTE_205;
-		case 221: return ROUTE_221;
-		case 231: return ROUTE_231;
-		case 232: return ROUTE_232;
-		case 261: return ROUTE_261;
-		case 262: return ROUTE_262;
-		case 263: return ROUTE_263;
-		case 283: return ROUTE_283;
-		case 401: return ROUTE_401;
-		case 402: return ROUTE_402;
-		case 403: return ROUTE_403;
-		case 404: return ROUTE_404;
-		case 405: return ROUTE_405;
-		case 406: return ROUTE_406;
-		case 450: return ROUTE_450;
-		case 451: return ROUTE_451;
-		case 452: return ROUTE_452;
-		case 454: return ROUTE_454;
-		case 455: return ROUTE_455;
-		case 456: return ROUTE_456;
-		case 520: return ROUTE_520;
-		case 602: return ROUTE_602;
-		case 611: return ROUTE_611;
-		case 612: return ROUTE_612;
-		case 613: return ROUTE_613;
-		case 618: return ROUTE_618;
-		case 619: return ROUTE_619;
-		case 622: return ROUTE_622;
-		case 632: return ROUTE_632;
-		case 633: return ROUTE_633;
-		case 640: return ROUTE_640;
-		case 641: return ROUTE_641;
-		case 648: return ROUTE_648;
-		case 661: return ROUTE_661;
-		case 665: return ROUTE_665;
-		case 669: return ROUTE_669;
-		case 670: return ROUTE_670;
-		case 674: return ROUTE_674;
-		case 678: return ROUTE_678;
-		case 681: return ROUTE_681;
-		case 691: return ROUTE_691;
-		// @formatter:on
-		default:
-			System.out.printf("\n%s: getRouteLongName() > Unexpected route ID '%s' (%s)\n", gRoute.getRouteId(), digits, gRoute);
+		if (StringUtils.isEmpty(gRoute.getRouteLongName())) {
+			Matcher matcher = DIGITS.matcher(gRoute.getRouteId());
+			if (matcher.find()) {
+				int digits = Integer.parseInt(matcher.group());
+				switch (digits) {
+				// @formatter:off
+				case 1: return ROUTE_1;
+				case 2: return ROUTE_2;
+				case 4: return ROUTE_4;
+				case 5: return ROUTE_5;
+				case 6: return ROUTE_6;
+				case 7: return ROUTE_7;
+				case 8: return ROUTE_8;
+				case 9: return ROUTE_9;
+				case 12: return ROUTE_12;
+				case 14: return ROUTE_14;
+				case 16: return ROUTE_16;
+				case 18: return ROUTE_28;
+				case 20: return ROUTE_20;
+				case 21: return ROUTE_21;
+				case 22: return ROUTE_22;
+				case 24: return ROUTE_24;
+				case 27: return ROUTE_27;
+				case 30: return ROUTE_30;
+				case 31: return ROUTE_31;
+				case 34: return ROUTE_34;
+				case 35: return ROUTE_35;
+				case 37: return ROUTE_37;
+				case 38: return ROUTE_38;
+				case 40: return ROUTE_40;
+				case 41: return ROUTE_41;
+				case 43: return ROUTE_43;
+				case 60: return ROUTE_60;
+				case 61: return ROUTE_61;
+				case 62: return ROUTE_62;
+				case 64: return ROUTE_64;
+				case 65: return ROUTE_65;
+				case 66: return ROUTE_66;
+				case 67: return ROUTE_67;
+				case 68: return ROUTE_68;
+				case 69: return ROUTE_69;
+				case 70: return ROUTE_70;
+				case 71: return ROUTE_71;
+				case 72: return ROUTE_72;
+				case 73: return ROUTE_73;
+				case 77: return ROUTE_77;
+				case 85: return ROUTE_85;
+				case 86: return ROUTE_86;
+				case 87: return ROUTE_87;
+				case 91: return ROUTE_91;
+				case 92: return ROUTE_92;
+				case 93: return ROUTE_93;
+				case 94: return ROUTE_94;
+				case 95: return ROUTE_95;
+				case 96: return ROUTE_96;
+				case 97: return ROUTE_97;
+				case 98: return ROUTE_98;
+				case 99: return ROUTE_99;
+				case 101: return ROUTE_101;
+				case 103: return ROUTE_103;
+				case 104: return ROUTE_104;
+				case 105: return ROUTE_105;
+				case 106: return ROUTE_106;
+				case 107: return ROUTE_107;
+				case 111: return ROUTE_111;
+				case 112: return ROUTE_112;
+				case 114: return ROUTE_114;
+				case 116: return ROUTE_116;
+				case 118: return ROUTE_118;
+				case 120: return ROUTE_120;
+				case 121: return ROUTE_121;
+				case 122: return ROUTE_122;
+				case 123: return ROUTE_123;
+				case 124: return ROUTE_124;
+				case 126: return ROUTE_126;
+				case 127: return ROUTE_127;
+				case 128: return ROUTE_128;
+				case 129: return ROUTE_129;
+				case 130: return ROUTE_130;
+				case 131: return ROUTE_131;
+				case 132: return ROUTE_132;
+				case 134: return ROUTE_134;
+				case 135: return ROUTE_135;
+				case 136: return ROUTE_136;
+				case 137: return ROUTE_137;
+				case 140: return ROUTE_140;
+				case 143: return ROUTE_143;
+				case 144: return ROUTE_144;
+				case 146: return ROUTE_146;
+				case 147: return ROUTE_147;
+				case 148: return ROUTE_148;
+				case 149: return ROUTE_149;
+				case 150: return ROUTE_150;
+				case 151: return ROUTE_151;
+				case 152: return ROUTE_152;
+				case 153: return ROUTE_153;
+				case 154: return ROUTE_154;
+				case 155: return ROUTE_155;
+				case 156: return ROUTE_156;
+				case 157: return ROUTE_157;
+				case 159: return ROUTE_159;
+				case 161: return ROUTE_161;
+				case 162: return ROUTE_162;
+				case 164: return ROUTE_164;
+				case 165: return ROUTE_165;
+				case 168: return ROUTE_168;
+				case 170: return ROUTE_170;
+				case 171: return ROUTE_171;
+				case 172: return ROUTE_172;
+				case 173: return ROUTE_173;
+				case 174: return ROUTE_174;
+				case 175: return ROUTE_175;
+				case 176: return ROUTE_176;
+				case 177: return ROUTE_177;
+				case 178: return ROUTE_178;
+				case 180: return ROUTE_180;
+				case 181: return ROUTE_181;
+				case 182: return ROUTE_182;
+				case 185: return ROUTE_185;
+				case 186: return ROUTE_186;
+				case 188: return ROUTE_188;
+				case 189: return ROUTE_189;
+				case 192: return ROUTE_192;
+				case 193: return ROUTE_193;
+				case 194: return ROUTE_194;
+				case 196: return ROUTE_196;
+				case 198: return ROUTE_198;
+				case 199: return ROUTE_199;
+				case 201: return ROUTE_201;
+				case 202: return ROUTE_202;
+				case 203: return ROUTE_203;
+				case 204: return ROUTE_204;
+				case 205: return ROUTE_205;
+				case 221: return ROUTE_221;
+				case 231: return ROUTE_231;
+				case 232: return ROUTE_232;
+				case 261: return ROUTE_261;
+				case 262: return ROUTE_262;
+				case 263: return ROUTE_263;
+				case 283: return ROUTE_283;
+				case 401: return ROUTE_401;
+				case 402: return ROUTE_402;
+				case 403: return ROUTE_403;
+				case 404: return ROUTE_404;
+				case 405: return ROUTE_405;
+				case 406: return ROUTE_406;
+				case 450: return ROUTE_450;
+				case 451: return ROUTE_451;
+				case 452: return ROUTE_452;
+				case 454: return ROUTE_454;
+				case 455: return ROUTE_455;
+				case 456: return ROUTE_456;
+				case 520: return ROUTE_520;
+				case 602: return ROUTE_602;
+				case 611: return ROUTE_611;
+				case 612: return ROUTE_612;
+				case 613: return ROUTE_613;
+				case 618: return ROUTE_618;
+				case 619: return ROUTE_619;
+				case 622: return ROUTE_622;
+				case 632: return ROUTE_632;
+				case 633: return ROUTE_633;
+				case 640: return ROUTE_640;
+				case 641: return ROUTE_641;
+				case 648: return ROUTE_648;
+				case 661: return ROUTE_661;
+				case 665: return ROUTE_665;
+				case 669: return ROUTE_669;
+				case 670: return ROUTE_670;
+				case 674: return ROUTE_674;
+				case 678: return ROUTE_678;
+				case 681: return ROUTE_681;
+				case 691: return ROUTE_691;
+				}
+			}
+			System.out.printf("\nUnexpected route long name for '%s'!\n", gRoute);
 			System.exit(-1);
 			return null;
 		}
@@ -590,7 +596,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final Collection<Integer> BLACK_ROUTES = Arrays.asList(new Integer[] { //
 			1, 2, 4, 5, 7, 8, 9, 12, 14, 16, 18, //
 					85, 86, 87, 91, 92, 93, 94, 95, 96, 97, 98, 99, //
-					101, 106, 107, 111, 112, 114, 116, 118, 120, 121, 122, 123, 124, //
+					101, 103, 104, 106, 107, 111, 112, 114, 116, 118, 120, 121, 122, 123, 124, //
 					126, 127, 128, 129, 130, 131, 132, 134, 135, 137, 143, 144, 146, 147, 148, 149, //
 					150, 151, 152, 153, 154, 156, 159, 161, 162, 164, 165, 168, 170, 171, 172, 173, 174, //
 					175, 176, 177, 178, 185, 196, 198 //
@@ -642,23 +648,25 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 
 	@Override
 	public String getRouteColor(GRoute gRoute) {
-		Matcher matcher = DIGITS.matcher(gRoute.getRouteId());
-		matcher.find();
-		int routeId = Integer.parseInt(matcher.group());
-		// @formatter:off
-		if (SCHOOL_ROUTES.contains(routeId)) { return ROUTE_COLOR_CORAL; }
-		else if (CTC_C400_ROUTES.contains(routeId)) { return ROUTE_COLOR_DARK_ORCHID; }
-		else if (GREEN_ROUTES.contains(routeId)) { return ROUTE_COLOR_GREEN; }
-		else if (ORANGE_ROUTES.contains(routeId)) { return ROUTE_COLOR_ORANGE; }
-		else if (RED_ROUTES.contains(routeId)) { return ROUTE_COLOR_RED; }
-		else if (BLACK_ROUTES.contains(routeId)) { return ROUTE_COLOR_BLACK; }
-		else if (GRAY_ROUTES.contains(routeId)) { return ROUTE_COLOR_GRAY; }
-		else if (RP_ROUTES.contains(routeId)) { return ROUTE_COLOR_DARK_RED; }
-		else if (TDP_ROUTES.contains(routeId)) { return ROUTE_COLOR_ORCHID; }
-		// @formatter:on
-		else {
-			System.out.printf("\n%s: getRouteColor() > No color for route '%s'!", gRoute.getRouteId(), gRoute);
+		if (StringUtils.isEmpty(gRoute.getRouteColor())) {
+			Matcher matcher = DIGITS.matcher(gRoute.getRouteId());
+			if (matcher.find()) {
+				int routeId = Integer.parseInt(matcher.group());
+				// @formatter:off
+				if (SCHOOL_ROUTES.contains(routeId)) { return ROUTE_COLOR_CORAL; }
+				else if (CTC_C400_ROUTES.contains(routeId)) { return ROUTE_COLOR_DARK_ORCHID; }
+				else if (GREEN_ROUTES.contains(routeId)) { return ROUTE_COLOR_GREEN; }
+				else if (ORANGE_ROUTES.contains(routeId)) { return ROUTE_COLOR_ORANGE; }
+				else if (RED_ROUTES.contains(routeId)) { return ROUTE_COLOR_RED; }
+				else if (BLACK_ROUTES.contains(routeId)) { return ROUTE_COLOR_BLACK; }
+				else if (GRAY_ROUTES.contains(routeId)) { return ROUTE_COLOR_GRAY; }
+				else if (RP_ROUTES.contains(routeId)) { return ROUTE_COLOR_DARK_RED; }
+				else if (TDP_ROUTES.contains(routeId)) { return ROUTE_COLOR_ORCHID; }
+				// @formatter:on
+			}
+			System.out.printf("\nNo route color for '%s'!", gRoute);
 			System.exit(-1);
+			return null;
 		}
 		return super.getRouteColor(gRoute);
 	}
@@ -712,40 +720,44 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 			return Integer.valueOf(stopCode); // using stop code as stop ID
 		}
 		Matcher matcher = DIGITS.matcher(gStop.getStopId());
-		matcher.find();
-		int digits = Integer.parseInt(matcher.group());
-		int stopId = 0;
-		if (gStop.getStopId().startsWith(EE)) {
-			stopId = 100000;
-		} else if (gStop.getStopId().startsWith(EO)) {
-			stopId = 200000;
-		} else if (gStop.getStopId().startsWith(NG)) {
-			stopId = 300000;
-		} else if (gStop.getStopId().startsWith(NO)) {
-			stopId = 400000;
-		} else if (gStop.getStopId().startsWith(WA)) {
-			stopId = 500000;
-		} else if (gStop.getStopId().startsWith(WD)) {
-			stopId = 600000;
-		} else if (gStop.getStopId().startsWith(WH)) {
-			stopId = 700000;
-		} else if (gStop.getStopId().startsWith(WI)) {
-			stopId = 800000;
-		} else if (gStop.getStopId().startsWith(WL)) {
-			stopId = 900000;
-		} else if (gStop.getStopId().startsWith(PLACE)) {
-			stopId = 1000000;
-		} else if (gStop.getStopId().startsWith(RZ)) {
-			stopId = 1100000;
-		} else if (gStop.getStopId().startsWith(DT)) {
-			stopId = 1200000;
-		} else if (gStop.getStopId().startsWith(ER)) {
-			stopId = 1300000;
-		} else {
-			System.out.printf("\nStop doesn't have an ID (start with) %s!\n", gStop);
-			System.exit(-1);
-			stopId = -1;
+		if (matcher.find()) {
+			int digits = Integer.parseInt(matcher.group());
+			int stopId = 0;
+			if (gStop.getStopId().startsWith(EE)) {
+				stopId = 100000;
+			} else if (gStop.getStopId().startsWith(EO)) {
+				stopId = 200000;
+			} else if (gStop.getStopId().startsWith(NG)) {
+				stopId = 300000;
+			} else if (gStop.getStopId().startsWith(NO)) {
+				stopId = 400000;
+			} else if (gStop.getStopId().startsWith(WA)) {
+				stopId = 500000;
+			} else if (gStop.getStopId().startsWith(WD)) {
+				stopId = 600000;
+			} else if (gStop.getStopId().startsWith(WH)) {
+				stopId = 700000;
+			} else if (gStop.getStopId().startsWith(WI)) {
+				stopId = 800000;
+			} else if (gStop.getStopId().startsWith(WL)) {
+				stopId = 900000;
+			} else if (gStop.getStopId().startsWith(PLACE)) {
+				stopId = 1000000;
+			} else if (gStop.getStopId().startsWith(RZ)) {
+				stopId = 1100000;
+			} else if (gStop.getStopId().startsWith(DT)) {
+				stopId = 1200000;
+			} else if (gStop.getStopId().startsWith(ER)) {
+				stopId = 1300000;
+			} else {
+				System.out.printf("\nStop doesn't have an ID (start with) %s!\n", gStop);
+				System.exit(-1);
+				stopId = -1;
+			}
+			return stopId + digits;
 		}
-		return stopId + digits;
+		System.out.printf("\nUnexpected stop ID for %s!\n", gStop);
+		System.exit(-1);
+		return -1;
 	}
 }
