@@ -81,8 +81,12 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	@Override
 	public long getRouteId(GRoute gRoute) {
 		Matcher matcher = DIGITS.matcher(gRoute.getRouteId());
-		matcher.find();
-		return Integer.parseInt(matcher.group());
+		if (matcher.find()) {
+			return Integer.parseInt(matcher.group());
+		}
+		System.out.printf("\nUnexpected route ID for '%s'!\n", gRoute);
+		System.exit(-1);
+		return -1l;
 	}
 
 	private static final String RLN_SEPARATOR = "-";
@@ -368,6 +372,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_454 = LANSDOWNE + RLN_SEP + TERRY_FOX;
 	private static final String ROUTE_455 = LANSDOWNE + RLN_SEP + TRIM;
 	private static final String ROUTE_456 = LANSDOWNE_PARK + RLN_SEP + BARRHAVEN_CTR;
+	private static final String ROUTE_505 = StringUtils.EMPTY;
+	private static final String ROUTE_506 = StringUtils.EMPTY;
 	private static final String ROUTE_520 = HAWKESBURY + RLN_SEP + OTTAWA + RLN_SEP + GATINEAU;
 	private static final String ROUTE_602 = É_S_DE_LA_SALLE + RLN_SEP + HURDMAN;
 	private static final String ROUTE_611 = É_S_GISELE_LALONDE + RLN_SEP + CHAPEL_HL;
@@ -544,6 +550,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 454: return ROUTE_454;
 				case 455: return ROUTE_455;
 				case 456: return ROUTE_456;
+				case 505: return ROUTE_505;
+				case 506: return ROUTE_506;
 				case 520: return ROUTE_520;
 				case 602: return ROUTE_602;
 				case 611: return ROUTE_611;
@@ -637,7 +645,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 
 	@Deprecated
 	private static final Collection<Integer> RP_ROUTES = Arrays.asList(new Integer[] { //
-			500, 502, 503, 509, 515, 520, 523, 524, 525, 526, 530, 535, 538, 541, 542, 543, //
+			500, 502, 503, 505, 506, 509, 515, 520, 523, 524, 525, 526, 530, 535, 538, 541, 542, 543, //
 					551, 552, 553, 555, 556, 557, 558, 559, 565 //
 			});
 
@@ -712,12 +720,24 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String WL = "WL";
 	private static final String PLACE = "place";
 	private static final String RZ = "RZ";
+	private static final String SNOW = "SNOW";
 
 	@Override
 	public int getStopId(GStop gStop) {
 		String stopCode = getStopCode(gStop);
 		if (stopCode != null && stopCode.length() > 0 && Utils.isDigitsOnly(stopCode)) {
 			return Integer.valueOf(stopCode); // using stop code as stop ID
+		}
+		if ("SNO CAFÉ".equalsIgnoreCase(gStop.getStopId())) {
+			return 9900001;
+		} else if ("SNO-20B".equalsIgnoreCase(gStop.getStopId())) {
+			return 9900002;
+		} else if ("SNO -7B".equalsIgnoreCase(gStop.getStopId())) {
+			return 9900003;
+		} else if ("STOP - 8".equalsIgnoreCase(gStop.getStopId())) {
+			return 9900004;
+		} else if ("SNO-CAFÉ".equalsIgnoreCase(gStop.getStopId())) {
+			return 9900005;
 		}
 		Matcher matcher = DIGITS.matcher(gStop.getStopId());
 		if (matcher.find()) {
@@ -749,6 +769,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				stopId = 1200000;
 			} else if (gStop.getStopId().startsWith(ER)) {
 				stopId = 1300000;
+			} else if (gStop.getStopId().startsWith(SNOW)) {
+				stopId = 1400000;
 			} else {
 				System.out.printf("\nStop doesn't have an ID (start with) %s!\n", gStop);
 				System.exit(-1);
