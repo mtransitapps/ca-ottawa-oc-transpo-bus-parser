@@ -375,6 +375,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_505 = StringUtils.EMPTY;
 	private static final String ROUTE_506 = StringUtils.EMPTY;
 	private static final String ROUTE_520 = HAWKESBURY + RLN_SEP + OTTAWA + RLN_SEP + GATINEAU;
+	private static final String ROUTE_555 = "Casselman" + RLN_SEP + OTTAWA + RLN_SEP + GATINEAU;
 	private static final String ROUTE_602 = É_S_DE_LA_SALLE + RLN_SEP + HURDMAN;
 	private static final String ROUTE_611 = É_S_GISELE_LALONDE + RLN_SEP + CHAPEL_HL;
 	private static final String ROUTE_612 = É_S_GISELE_LALONDE + RLN_SEP + CHAPEL_HL;
@@ -553,6 +554,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 505: return ROUTE_505;
 				case 506: return ROUTE_506;
 				case 520: return ROUTE_520;
+				case 555: return ROUTE_555;
 				case 602: return ROUTE_602;
 				case 611: return ROUTE_611;
 				case 612: return ROUTE_612;
