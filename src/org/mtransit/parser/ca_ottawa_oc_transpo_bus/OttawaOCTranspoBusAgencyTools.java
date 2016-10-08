@@ -96,12 +96,14 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String HIGH_SCHOOL = "High School";
 	private static final String SCHOOLS = "Schools";
 	//
+	private static final String ALBERT = "Albert";
 	private static final String AIRPORT = "Airport";
 	private static final String ALL_STS_CATHOLIC_AND_STEPHEN_LEACOCK_SCHOOLS = "All Sts Catholic" + AND + "Stephen Leacock " + SCHOOLS;
 	private static final String AMBERWOOD = "Amberwood";
 	private static final String BARRHAVEN = "Barrhaven";
 	private static final String BARRHAVEN_CTR = BARRHAVEN + " Ctr";
 	private static final String BASELINE = "Baseline";
+	private static final String BAY = "Bay";
 	private static final String BAYSHORE = "Bayshore";
 	private static final String BAYSHORE_STA = BAYSHORE + " Sta";
 	private static final String BAYVIEW = "Bayview";
@@ -120,10 +122,13 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String BROOKFIELD_HIGH_SCHOOL = "Brookfield " + HIGH_SCHOOL;
 	private static final String CAMBRIAN = "Cambrian";
 	private static final String CANADIAN_TIRE_CTR = "Canadian Tire Ctr";
+	private static final String CANTERBURY = "Canterbury";
+	private static final String CANTERBURY_HIGH_SCHOOL = CANTERBURY + " " + HIGH_SCHOOL;
 	private static final String CARLETON = "Carleton";
 	private static final String CARLING = "Carling";
 	private static final String CARLINGTON = "Carlington";
 	private static final String CARLINGWOOD = "Carlingwood";
+
 	private static final String CARP = "Carp";
 	private static final String CARSON_S = "Carson's";
 	private static final String CHAPEL_HL = "Chapel Hl";
@@ -158,6 +163,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String HAWTHORNE = "Hawthorne";
 	private static final String HAWKESBURY = "Hawkesbury";
 	private static final String HERTZBERG = "Hertzberg";
+	private static final String HILLCREST = "Hillcrest";
+	private static final String HILLCREST_HIGH_SCHOOL = HILLCREST + " " + HIGH_SCHOOL;
 	private static final String HINES = "Hines";
 	private static final String HUNTMAR = "Huntmar";
 	private static final String HURDMAN = "Hurdman";
@@ -202,6 +209,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String RENAUD = "Renaud";
 	private static final String RICHMOND = "Richmond";
 	private static final String RIDEAU_CTR = "Rideau Ctr";
+	private static final String RIDGEMONT = "Ridgemont";
+	private static final String RIDGEMONT_HIGH_SCHOOL = RIDGEMONT + " " + HIGH_SCHOOL;
 	private static final String RIVERVIEW = "Riverview";
 	private static final String SADDLERIDGE = "Saddleridge";
 	private static final String SARSFIELD = "Sarsfield";
@@ -210,6 +219,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ST_JOSEPH = "St Joseph";
 	private static final String ST_LAURENT = "St Laurent";
 	private static final String ST_LAURENT_STA = ST_LAURENT + " Sta";
+	private static final String ST_PATRICK_S = "St. Patrick's";
+	private static final String ST_PATRICK_S_HIGH_SCHOOL = ST_PATRICK_S + " " + HIGH_SCHOOL;
 	private static final String ST_PIUS_X_HIGH_SCHOOL = "St Pius X " + HIGH_SCHOOL;
 	private static final String STITTSVILLE = "Stittsville";
 	private static final String SUNVIEW = "Sunview";
@@ -325,6 +336,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_162 = TERRY_FOX + RLN_SEP + STITTSVILLE;
 	private static final String ROUTE_165 = INNOVATION + RLN_SEP + TERRY_FOX;
 	private static final String ROUTE_164 = BRIDLEWOOD + RLN_SEP + TERRY_FOX;
+	private static final String ROUTE_167 = TERRY_FOX + RLN_SEP + "Blackstone";
 	private static final String ROUTE_168 = BEAVERBROOK + RLN_SEP + KATIMAVIK;
 	private static final String ROUTE_170 = FALLOWFIELD + RLN_SEP + BARRHAVEN_CTR;
 	private static final String ROUTE_171 = FALLOWFIELD + RLN_SEP + BARRHAVEN_CTR;
@@ -354,6 +366,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_204 = SOUTH_KEYS + SLASH + BILLINGS_BRIDGE + RLN_SEP + GREELY + SLASH + METCALFE;
 	private static final String ROUTE_205 = BARRHAVEN + SLASH + CARLINGWOOD + RLN_SEP + MANOTICK + SLASH + KARS + SLASH + NORTH_GOWER;
 	private static final String ROUTE_221 = DOWNTOWN + RLN_SEP + CUMBERLAND;
+	private static final String ROUTE_222 = ALBERT + SLASH + BAY + RLN_SEP + VARS;
+	private static final String ROUTE_228 = ALBERT + SLASH + BAY + RLN_SEP + NAVAN;
 	private static final String ROUTE_231 = DOWNTOWN + RLN_SEP + CUMBERLAND;
 	private static final String ROUTE_232 = DOWNTOWN + RLN_SEP + VARS;
 	private static final String ROUTE_261 = DOWNTOWN + RLN_SEP + STITTSVILLE;
@@ -374,6 +388,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_456 = LANSDOWNE_PARK + RLN_SEP + BARRHAVEN_CTR;
 	private static final String ROUTE_505 = StringUtils.EMPTY;
 	private static final String ROUTE_506 = StringUtils.EMPTY;
+	private static final String ROUTE_508 = StringUtils.EMPTY;
 	private static final String ROUTE_520 = HAWKESBURY + RLN_SEP + OTTAWA + RLN_SEP + GATINEAU;
 	private static final String ROUTE_555 = "Casselman" + RLN_SEP + OTTAWA + RLN_SEP + GATINEAU;
 	private static final String ROUTE_602 = É_S_DE_LA_SALLE + RLN_SEP + HURDMAN;
@@ -387,7 +402,9 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_633 = LESTER_B_PEARSON_HIGH_SCHOOL + RLN_SEP + ST_LAURENT_STA;
 	private static final String ROUTE_640 = BROOKFIELD_HIGH_SCHOOL + RLN_SEP + GREENBORO_STA;
 	private static final String ROUTE_641 = É_S_LOUIS_RIEL + RLN_SEP + MEADOWGLEN + SLASH + ORLEANS;
+	private static final String ROUTE_644 = CANTERBURY_HIGH_SCHOOL + RLN_SEP + GREENBORO;
 	private static final String ROUTE_648 = É_S_LOUIS_RIEL + RLN_SEP + YOUVILLE + SLASH + ST_JOSEPH;
+	private static final String ROUTE_649 = HILLCREST_HIGH_SCHOOL + RLN_SEP + GREENBORO;
 	private static final String ROUTE_661 = BELL_HIGH_SCHOOL + RLN_SEP + TERRY_FOX_STA;
 	private static final String ROUTE_665 = BELL_HIGH_SCHOOL + RLN_SEP + BRIDLEWOOD;
 	private static final String ROUTE_669 = BELL_HIGH_SCHOOL + RLN_SEP + BAYSHORE + SLASH + CARLING;
@@ -396,6 +413,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_678 = É_S_LOUIS_RIEL + RLN_SEP + JEANNE_D_ARC_STA;
 	private static final String ROUTE_681 = BELL_HIGH_SCHOOL + RLN_SEP + BRIDLEWOOD;
 	private static final String ROUTE_691 = É_S_DESLAURIERS + RLN_SEP + BAYSHORE_STA;
+	private static final String ROUTE_698 = RIDGEMONT_HIGH_SCHOOL + SLASH + ST_PATRICK_S_HIGH_SCHOOL + RLN_SEP + GREENBORO;
 
 	@Override
 	public String getRouteLongName(GRoute gRoute) {
@@ -504,6 +522,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 162: return ROUTE_162;
 				case 164: return ROUTE_164;
 				case 165: return ROUTE_165;
+				case 167: return ROUTE_167;
 				case 168: return ROUTE_168;
 				case 170: return ROUTE_170;
 				case 171: return ROUTE_171;
@@ -533,6 +552,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 204: return ROUTE_204;
 				case 205: return ROUTE_205;
 				case 221: return ROUTE_221;
+				case 222: return ROUTE_222;
+				case 228: return ROUTE_228;
 				case 231: return ROUTE_231;
 				case 232: return ROUTE_232;
 				case 261: return ROUTE_261;
@@ -553,6 +574,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 456: return ROUTE_456;
 				case 505: return ROUTE_505;
 				case 506: return ROUTE_506;
+				case 508: return ROUTE_508;
 				case 520: return ROUTE_520;
 				case 555: return ROUTE_555;
 				case 602: return ROUTE_602;
@@ -566,7 +588,9 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 633: return ROUTE_633;
 				case 640: return ROUTE_640;
 				case 641: return ROUTE_641;
+				case 644: return ROUTE_644;
 				case 648: return ROUTE_648;
+				case 649: return ROUTE_649;
 				case 661: return ROUTE_661;
 				case 665: return ROUTE_665;
 				case 669: return ROUTE_669;
@@ -575,12 +599,14 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 678: return ROUTE_678;
 				case 681: return ROUTE_681;
 				case 691: return ROUTE_691;
+				case 698: return ROUTE_698;
 				}
 			}
 			System.out.printf("\nUnexpected route long name for '%s'!\n", gRoute);
 			System.exit(-1);
 			return null;
 		}
+		return super.getRouteLongName(gRoute);
 	}
 
 	private static final String AGENCY_COLOR = "A2211F";
@@ -608,7 +634,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 					85, 86, 87, 91, 92, 93, 94, 95, 96, 97, 98, 99, //
 					101, 103, 104, 106, 107, 111, 112, 114, 116, 118, 120, 121, 122, 123, 124, //
 					126, 127, 128, 129, 130, 131, 132, 134, 135, 137, 143, 144, 146, 147, 148, 149, //
-					150, 151, 152, 153, 154, 156, 159, 161, 162, 164, 165, 168, 170, 171, 172, 173, 174, //
+					150, 151, 152, 153, 154, 156, 159, 161, 162, 164, 165, 167, 168, 170, 171, 172, 173, 174, //
 					175, 176, 177, 178, 185, 196, 198 //
 			});
 
@@ -632,7 +658,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final Collection<Integer> GREEN_ROUTES = Arrays.asList(new Integer[] { //
 			20, 21, 22, 27, 30, 31, 34, 35, 37, 38, //
 					60, 61, 62, 64, 65, 66, 68, 69, 70, 71, 72, 73, 77, //
-					221, 231, 232, //
+					221, 228, 231, 232, //
 					261, 262, 263, 283 //
 			});
 
@@ -709,6 +735,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		return CleanUtils.cleanLabel(gStopName);
 	}
 
+	private static final String CD = "CD";
 	private static final String DT = "DT";
 	private static final String EE = "EE";
 	private static final String EO = "EO";
@@ -773,6 +800,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				stopId = 1300000;
 			} else if (gStop.getStopId().startsWith(SNOW)) {
 				stopId = 1400000;
+			} else if (gStop.getStopId().startsWith(CD)) {
+				stopId = 1500000;
 			} else {
 				System.out.printf("\nStop doesn't have an ID (start with) %s!\n", gStop);
 				System.exit(-1);
