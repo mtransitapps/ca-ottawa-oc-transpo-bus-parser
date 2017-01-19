@@ -24,6 +24,7 @@ import org.mtransit.parser.mt.data.MTrip;
 // http://www.octranspo1.com/developers
 // http://data.ottawa.ca/en/dataset/oc-transpo-schedules
 // http://www.octranspo1.com/files/google_transit.zip
+// http://www.octranspo.com/files/google_transit.zip
 public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 
 	public static void main(String[] args) {
@@ -197,6 +198,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String NEPEAN_CTR = "Nepean Ctr";
 	private static final String NORTH_GOWER = "North Gower";
 	private static final String ORLEANS = "Orléans";
+	private static final String OSGOODE = "Osgoode";
 	private static final String OTTAWA = "Ottawa";
 	private static final String OTTAWA_ROCKCLIFFE = OTTAWA + "-Rockcliffe";
 	private static final String PETRIE_ISL = "Petrie Isl";
@@ -399,6 +401,11 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_290 = MC_CARTHY + RLN_SEP + HURDMAN;
 	private static final String ROUTE_293 = GATINEAU + RLN_SEP + BLOSSOM_PARK;
 	private static final String ROUTE_298 = HURDMAN + RLN_SEP + CONROY;
+	private static final String ROUTE_301 = CARLINGWOOD + RLN_SEP + RICHMOND + SLASH + STITTSVILLE;
+	private static final String ROUTE_302 = ST_LAURENT + RLN_SEP + CUMBERLAND + SLASH + SARSFIELD + SLASH + NAVAN;
+	private static final String ROUTE_303 = CARLINGWOOD + RLN_SEP + DUNROBIN + SLASH + CARP;
+	private static final String ROUTE_304 = BILLINGS_BRIDGE + RLN_SEP + METCALFE + SLASH + GREELY + SLASH + OSGOODE;
+	private static final String ROUTE_305 = CARLINGWOOD + RLN_SEP + MANOTICK + SLASH + NORTH_GOWER + SLASH + KARS;
 	private static final String ROUTE_401 = CANADIAN_TIRE_CTR;
 	private static final String ROUTE_402 = CANADIAN_TIRE_CTR;
 	private static final String ROUTE_403 = CANADIAN_TIRE_CTR;
@@ -612,6 +619,11 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 290: return ROUTE_290;
 				case 293: return ROUTE_293;
 				case 298: return ROUTE_298;
+				case 301: return ROUTE_301;
+				case 302: return ROUTE_302;
+				case 303: return ROUTE_303;
+				case 304: return ROUTE_304;
+				case 305: return ROUTE_305;
 				case 401: return ROUTE_401;
 				case 402: return ROUTE_402;
 				case 403: return ROUTE_403;
@@ -776,7 +788,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		if (mTrip.getHeadsignValue() == null || mTrip.getHeadsignValue().equals(mTripToMerge.getHeadsignValue())) {
 			System.out.printf("\nmergeHeadsign() > Can't merge headsign for trips %s and %s!\n", mTrip, mTripToMerge);
 			System.exit(-1);
-			return false; // DO NOT MERGE, USED TO IDENTIY TRIP IN REAL TIME API
+			return false; // DO NOT MERGE, USED TO IDENTIFY TRIP IN REAL TIME API
 		}
 		return super.mergeHeadsign(mTrip, mTripToMerge);
 	}
@@ -790,6 +802,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	}
 
 	private static final String CD = "CD";
+	private static final String CF = "CF";
 	private static final String DT = "DT";
 	private static final String EE = "EE";
 	private static final String EO = "EO";
@@ -803,6 +816,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String WL = "WL";
 	private static final String PLACE = "place";
 	private static final String RZ = "RZ";
+	private static final String SX = "SX";
 	private static final String SNOW = "SNOW";
 
 	@Override
@@ -856,6 +870,10 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				stopId = 1400000;
 			} else if (gStop.getStopId().startsWith(CD)) {
 				stopId = 1500000;
+			} else if (gStop.getStopId().startsWith(CF)) {
+				stopId = 1600000;
+			} else if (gStop.getStopId().startsWith(SX)) {
+				stopId = 1700000;
 			} else {
 				System.out.printf("\nStop doesn't have an ID (start with) %s!\n", gStop);
 				System.exit(-1);
