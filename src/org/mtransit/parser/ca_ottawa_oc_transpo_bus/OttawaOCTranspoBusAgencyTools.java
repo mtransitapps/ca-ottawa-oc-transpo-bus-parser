@@ -818,6 +818,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String RZ = "RZ";
 	private static final String SX = "SX";
 	private static final String SNOW = "SNOW";
+	private static final String SC = "SC";
+	private static final String SD = "SD";
 
 	@Override
 	public int getStopId(GStop gStop) {
@@ -874,6 +876,10 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				stopId = 1600000;
 			} else if (gStop.getStopId().startsWith(SX)) {
 				stopId = 1700000;
+			} else if (gStop.getStopId().startsWith(SC)) {
+				stopId = 1800000;
+			} else if (gStop.getStopId().startsWith(SD)) {
+				stopId = 1900000;
 			} else {
 				System.out.printf("\nStop doesn't have an ID (start with) %s!\n", gStop);
 				System.exit(-1);
