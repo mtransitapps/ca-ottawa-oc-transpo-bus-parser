@@ -135,7 +135,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String CHAPEL_HL = "Chapel Hl";
 	private static final String CLYDE = "Clyde";
 	private static final String COLONEL_BY = "Colonel By";
-	private static final String COLONEL_BY_AND_LESTER_B_PEARSON_SCHOOLS = COLONEL_BY + AND + "Lester B. Pearson " + SCHOOLS;
+	private static final String COLONEL_BY_HIGH_SCHOOL = COLONEL_BY + " " + HIGH_SCHOOL;
 	private static final String COLONNADE = "Colonnade";
 	private static final String CONROY = "Conroy";
 	private static final String CONVENT_GLN = "Convent Gln";
@@ -201,6 +201,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String OSGOODE = "Osgoode";
 	private static final String OTTAWA = "Ottawa";
 	private static final String OTTAWA_ROCKCLIFFE = OTTAWA + "-Rockcliffe";
+	private static final String PAGE = "Page";
 	private static final String PETRIE_ISL = "Petrie Isl";
 	private static final String PINECREST = "Pinecrest";
 	private static final String PINEVIEW = "Pineview";
@@ -214,7 +215,6 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String RIDGEMONT = "Ridgemont";
 	private static final String RIDGEMONT_HIGH_SCHOOL = RIDGEMONT + " " + HIGH_SCHOOL;
 	private static final String RIVERVIEW = "Riverview";
-	private static final String SADDLERIDGE = "Saddleridge";
 	private static final String SARSFIELD = "Sarsfield";
 	private static final String SOUTH_KEYS = "South Keys";
 	private static final String SOUTHKEYS = "Southkeys";
@@ -429,8 +429,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_613 = IMMACULATA_HIGH_SCHOOL + RLN_SEP + HURDMAN_STA;
 	private static final String ROUTE_618 = É_S_LOUIS_RIEL + RLN_SEP + MILLENNIUM_STA;
 	private static final String ROUTE_619 = É_S_LOUIS_RIEL + RLN_SEP + BLAIR_STA;
-	private static final String ROUTE_622 = COLONEL_BY_AND_LESTER_B_PEARSON_SCHOOLS + RLN_SEP + RENAUD + SLASH + SADDLERIDGE;
-	private static final String ROUTE_630 = StringUtils.EMPTY; // TODO ?
+	private static final String ROUTE_622 = COLONEL_BY_HIGH_SCHOOL + RLN_SEP + BLACKBURN + SLASH + PAGE;
+	private static final String ROUTE_630 = COLONEL_BY_HIGH_SCHOOL + RLN_SEP + MILLENNIUM;
 	private static final String ROUTE_632 = É_S_GISELE_LALONDE + RLN_SEP + QUEENSWOOD_HTS;
 	private static final String ROUTE_633 = LESTER_B_PEARSON_HIGH_SCHOOL + RLN_SEP + ST_LAURENT_STA;
 	private static final String ROUTE_640 = BROOKFIELD_HIGH_SCHOOL + RLN_SEP + GREENBORO_STA;
@@ -438,7 +438,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_644 = CANTERBURY_HIGH_SCHOOL + RLN_SEP + GREENBORO;
 	private static final String ROUTE_648 = É_S_LOUIS_RIEL + RLN_SEP + YOUVILLE + SLASH + ST_JOSEPH;
 	private static final String ROUTE_649 = HILLCREST_HIGH_SCHOOL + RLN_SEP + GREENBORO;
-	private static final String ROUTE_660 = StringUtils.EMPTY; // TODO ?
+	private static final String ROUTE_660 = BELL_HIGH_SCHOOL + RLN_SEP + INNOVATION;
 	private static final String ROUTE_661 = BELL_HIGH_SCHOOL + RLN_SEP + TERRY_FOX_STA;
 	private static final String ROUTE_665 = BELL_HIGH_SCHOOL + RLN_SEP + BRIDLEWOOD;
 	private static final String ROUTE_669 = BELL_HIGH_SCHOOL + RLN_SEP + BAYSHORE + SLASH + CARLING;
@@ -696,12 +696,16 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_COLOR_DARK_RED = "8B0000";
 
 	private static final Collection<Integer> BLACK_ROUTES = Arrays.asList(new Integer[] { //
-			1, 2, 4, 5, 7, 8, 9, 12, 14, 16, 18, //
-					85, 86, 87, 91, 92, 93, 94, 95, 96, 97, 98, 99, //
+			1, 2, 4, 5, 7, 8, 9, 12, 14, 16, 18, 19, 33, //
+					63, 85, 86, 87, 91, 92, 93, 94, 95, 96, 97, 98, 99, //
 					101, 103, 104, 106, 107, 111, 112, 114, 116, 118, 120, 121, 122, 123, 124, //
 					126, 127, 128, 129, 130, 131, 132, 134, 135, 137, 143, 144, 146, 147, 148, 149, //
-					150, 151, 152, 153, 154, 156, 159, 161, 162, 164, 165, 167, 168, 170, 171, 172, 173, 174, //
-					175, 176, 177, 178, 185, 196, 198 //
+					150, 151, 152, 153, 154, 156, 159, 161, 162, 164, 165, 166, 167, 168, 170, 171, 172, 173, 174, //
+					175, 176, 177, 178, 185, 196, 198, //
+					222, 224, 233, 234, 235, 237, //
+					252, 256, 264, 265, 267, 268, 269, //
+					270, 271, 272, 273, 277, 282, 290, 293, 298, //
+					301, 302, 303, 304, 305, //
 			});
 
 	private static final Collection<Integer> ORANGE_ROUTES = Arrays.asList(new Integer[] { //
@@ -744,8 +748,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 			});
 
 	private static final Collection<Integer> SCHOOL_ROUTES = Arrays.asList(new Integer[] { //
-					602, 611, 612, 613, 618, 619, 622, 632, 633, 640, 641, 648, //
-					661, 665, 669, 670, 674, 678, 681, 691 //
+			602, 611, 612, 613, 618, 619, 622, 630, 632, 633, 640, 641, 644, 648, 649, //
+					660, 661, 665, 669, 670, 674, 678, 681, 691, 698 //
 			});
 
 	@Override
