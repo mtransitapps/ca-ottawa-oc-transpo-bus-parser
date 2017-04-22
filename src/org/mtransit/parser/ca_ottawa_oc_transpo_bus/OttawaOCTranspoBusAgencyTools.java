@@ -247,6 +247,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_7 = CARLETON + RLN_SEP + ST_LAURENT;
 	private static final String ROUTE_8 = BILLINGS_BRIDGE + RLN_SEP + GATINEAU;
 	private static final String ROUTE_9 = RIDEAU_CTR + RLN_SEP + HURDMAN;
+	private static final String ROUTE_11 = DOWNTOWN + RLN_SEP + BAYSHORE;
 	private static final String ROUTE_12 = BLAIR + RLN_SEP + RIDEAU_CTR;
 	private static final String ROUTE_14 = ST_LAURENT + RLN_SEP + CARLINGTON;
 	private static final String ROUTE_16 = MAIN + RLN_SEP + BRITANNIA;
@@ -267,6 +268,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_40 = GATINEAU + RLN_SEP + BLOSSOM_PARK;
 	private static final String ROUTE_41 = HURDMAN + RLN_SEP + WALKLEY;
 	private static final String ROUTE_43 = HURDMAN + RLN_SEP + CONROY;
+	private static final String ROUTE_50 = TUNNEY_S_PASTURE + RLN_SEP + LINCOLN_FIELDS;
+	private static final String ROUTE_56 = HURDMAN + RLN_SEP + TUNNEY_S_PASTURE;
 	private static final String ROUTE_60 = MACKENZIE_KING + RLN_SEP + KANATA;
 	private static final String ROUTE_61 = MACKENZIE_KING + RLN_SEP + KANATA;
 	private static final String ROUTE_62 = MACKENZIE_KING + RLN_SEP + KANATA;
@@ -282,9 +285,15 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_72 = MACKENZIE_KING + RLN_SEP + BARRHAVEN;
 	private static final String ROUTE_73 = MACKENZIE_KING + RLN_SEP + BARRHAVEN;
 	private static final String ROUTE_77 = MACKENZIE_KING + RLN_SEP + BARRHAVEN;
+	private static final String ROUTE_80 = BARRHAVEN_CTR + RLN_SEP + TUNNEY_S_PASTURE;
+	private static final String ROUTE_81 = TUNNEY_S_PASTURE + RLN_SEP + CLYDE;
+	private static final String ROUTE_82 = LINCOLN_FIELDS + RLN_SEP + BAYSHORE;
+	private static final String ROUTE_83 = BASELINE + RLN_SEP + MERIVALE;
+	private static final String ROUTE_84 = LINCOLN_FIELDS + SLASH + CTRPOINTE;
 	private static final String ROUTE_85 = HURDMAN + RLN_SEP + BAYSHORE;
 	private static final String ROUTE_86 = ELMVALE + RLN_SEP + BASELINE + SLASH + COLONNADE;
 	private static final String ROUTE_87 = SOUTH_KEYS + RLN_SEP + BASELINE;
+	private static final String ROUTE_88 = HURDMAN + RLN_SEP + KANATA;
 	private static final String ROUTE_91 = ORLEANS + AND + TRIM + RLN_SEP + BASELINE;
 	private static final String ROUTE_92 = ST_LAURENT + RLN_SEP + TERRY_FOX + AND + STITTSVILLE;
 	private static final String ROUTE_93 = LINCOLN_FIELDS + RLN_SEP + KANATA + " North" + SLASH + LE_BRETON;
@@ -336,6 +345,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_155 = QUEENSWAY_TER + RLN_SEP + PINECREST + SLASH + BAYSHORE;
 	private static final String ROUTE_156 = BASELINE + RLN_SEP + MERIVALE;
 	private static final String ROUTE_157 = BASELINE + RLN_SEP + AMBERWOOD;
+	private static final String ROUTE_158 = BAYSHORE + RLN_SEP + HAANEL;
 	private static final String ROUTE_159 = TUNNEY_S_PASTURE + RLN_SEP + LOCAL;
 	private static final String ROUTE_161 = BRIDLEWOOD + RLN_SEP + TERRY_FOX;
 	private static final String ROUTE_162 = TERRY_FOX + RLN_SEP + STITTSVILLE;
@@ -358,6 +368,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_182 = KANATA + RLN_SEP + LINCOLN_FIELDS;
 	private static final String ROUTE_185 = LE_BRETON + SLASH + EXPERIMENTAL_FARM;
 	private static final String ROUTE_186 = MANOTICK + RLN_SEP + BARRHAVEN_CTR;
+	private static final String ROUTE_187 = BASELINE + RLN_SEP + AMBERWOOD;
 	private static final String ROUTE_188 = CANADIAN_TIRE_CTR + RLN_SEP + HUNTMAR;
 	private static final String ROUTE_189 = RIVERVIEW + RLN_SEP + GREENBORO;
 	private static final String ROUTE_192 = HAWTHORNE + RLN_SEP + HURDMAN;
@@ -465,6 +476,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 7: return ROUTE_7;
 				case 8: return ROUTE_8;
 				case 9: return ROUTE_9;
+				case 11: return ROUTE_11;
 				case 12: return ROUTE_12;
 				case 14: return ROUTE_14;
 				case 16: return ROUTE_16;
@@ -485,6 +497,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 40: return ROUTE_40;
 				case 41: return ROUTE_41;
 				case 43: return ROUTE_43;
+				case 50: return ROUTE_50;
+				case 56: return ROUTE_56;
 				case 60: return ROUTE_60;
 				case 61: return ROUTE_61;
 				case 62: return ROUTE_62;
@@ -500,9 +514,15 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 72: return ROUTE_72;
 				case 73: return ROUTE_73;
 				case 77: return ROUTE_77;
+				case 80: return ROUTE_80;
+				case 81: return ROUTE_81;
+				case 82: return ROUTE_82;
+				case 83: return ROUTE_83;
+				case 84: return ROUTE_84;
 				case 85: return ROUTE_85;
 				case 86: return ROUTE_86;
 				case 87: return ROUTE_87;
+				case 88: return ROUTE_88;
 				case 91: return ROUTE_91;
 				case 92: return ROUTE_92;
 				case 93: return ROUTE_93;
@@ -554,6 +574,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 155: return ROUTE_155;
 				case 156: return ROUTE_156;
 				case 157: return ROUTE_157;
+				case 158: return ROUTE_158;
 				case 159: return ROUTE_159;
 				case 161: return ROUTE_161;
 				case 162: return ROUTE_162;
@@ -576,6 +597,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 182: return ROUTE_182;
 				case 185: return ROUTE_185;
 				case 186: return ROUTE_186;
+				case 187: return ROUTE_187;
 				case 188: return ROUTE_188;
 				case 189: return ROUTE_189;
 				case 192: return ROUTE_192;
@@ -695,6 +717,23 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	@Deprecated
 	private static final String ROUTE_COLOR_DARK_RED = "8B0000";
 
+	private static final String ROUTE_COLOR_RAPID_BLUE_DARK = "293D9B";
+	private static final String ROUTE_COLOR_RAPID_BLUE_LIGHT = "3871C2";
+
+	private static final String ROUTE_COLOR_FREQUENT_ORANGE_DARK = "F14623";
+	private static final String ROUTE_COLOR_FREQUENT_ORANGE_LIGHT = "F68712";
+
+	private static final String ROUTE_COLOR_LOCAL_GRAY_DARK = "4F4C4C";
+	private static final String ROUTE_COLOR_LOCAL_GRAY_LIGHT = "7B7979";
+
+	private static final String ROUTE_COLOR_CONNEXION_PURPLE_DARK = "8D188F";
+	private static final String ROUTE_COLOR_CONNEXION_PURPLE_LIGHT = "5D2491";
+
+	private static final String ROUTE_COLOR_SHOPPER = null;
+	private static final String ROUTE_COLOR_EVENT = null;
+	private static final String ROUTE_COLOR_RURAL_PARTNERS = null;
+	private static final String ROUTE_COLOR_SCHOOL = "FFD800"; // School bus yellow
+
 	private static final Collection<Integer> BLACK_ROUTES = Arrays.asList(new Integer[] { //
 			1, 2, 4, 5, 7, 8, 9, 12, 14, 16, 18, 19, 33, //
 					63, 85, 86, 87, 91, 92, 93, 94, 95, 96, 97, 98, 99, //
@@ -758,6 +797,42 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 			Matcher matcher = DIGITS.matcher(gRoute.getRouteId());
 			if (matcher.find()) {
 				int routeId = Integer.parseInt(matcher.group());
+				switch (routeId) {
+				// @formatter:off
+				case 11: return ROUTE_COLOR_FREQUENT_ORANGE_DARK;
+				case 50: return ROUTE_COLOR_LOCAL_GRAY_DARK;
+				case 56: return ROUTE_COLOR_LOCAL_GRAY_LIGHT;
+				case 61: return ROUTE_COLOR_RAPID_BLUE_DARK;
+				case 62: return ROUTE_COLOR_RAPID_BLUE_DARK;
+				case 66: return ROUTE_COLOR_LOCAL_GRAY_LIGHT;
+				case 80: return ROUTE_COLOR_FREQUENT_ORANGE_DARK;
+				case 81: return ROUTE_COLOR_LOCAL_GRAY_DARK;
+				case 82: return ROUTE_COLOR_LOCAL_GRAY_DARK;
+				case 83: return ROUTE_COLOR_LOCAL_GRAY_DARK;
+				case 84: return ROUTE_COLOR_LOCAL_GRAY_DARK;
+				case 88: return ROUTE_COLOR_FREQUENT_ORANGE_DARK;
+				case 158: return ROUTE_COLOR_LOCAL_GRAY_LIGHT;
+				case 187: return ROUTE_COLOR_LOCAL_GRAY_LIGHT;
+				// @formatter:on
+				}
+				if (100 <= routeId && routeId <= 199) {
+					return ROUTE_COLOR_LOCAL_GRAY_DARK;
+				}
+				if (200 <= routeId && routeId <= 299) {
+					return ROUTE_COLOR_CONNEXION_PURPLE_DARK;
+				}
+				if (300 <= routeId && routeId <= 399) {
+					return ROUTE_COLOR_SHOPPER;
+				}
+				if (400 <= routeId && routeId <= 499) {
+					return ROUTE_COLOR_EVENT;
+				}
+				if (500 <= routeId && routeId <= 599) {
+					return ROUTE_COLOR_RURAL_PARTNERS;
+				}
+				if (600 <= routeId && routeId <= 699) {
+					return ROUTE_COLOR_SCHOOL;
+				}
 				// @formatter:off
 				if (SCHOOL_ROUTES.contains(routeId)) { return ROUTE_COLOR_CORAL; }
 				else if (CTC_C400_ROUTES.contains(routeId)) { return ROUTE_COLOR_DARK_ORCHID; }
