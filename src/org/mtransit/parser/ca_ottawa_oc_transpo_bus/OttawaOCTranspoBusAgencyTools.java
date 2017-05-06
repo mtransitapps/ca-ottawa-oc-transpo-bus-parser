@@ -459,6 +459,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_681 = BELL_HIGH_SCHOOL + RLN_SEP + BRIDLEWOOD;
 	private static final String ROUTE_691 = É_S_DESLAURIERS + RLN_SEP + BAYSHORE_STA;
 	private static final String ROUTE_698 = RIDGEMONT_HIGH_SCHOOL + SLASH + ST_PATRICK_S_HIGH_SCHOOL + RLN_SEP + GREENBORO;
+	private static final String ROUTE_970 = "null"; // TODO
+	private static final String ROUTE_975 = "null"; // TODO
 
 	@Override
 	public String getRouteLongName(GRoute gRoute) {
@@ -688,6 +690,9 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 681: return ROUTE_681;
 				case 691: return ROUTE_691;
 				case 698: return ROUTE_698;
+				case 970: return ROUTE_970;
+				case 975: return ROUTE_975;
+				// @formatter:on
 				}
 			}
 			System.out.printf("\nUnexpected route long name for '%s'!\n", gRoute);
@@ -813,6 +818,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 88: return ROUTE_COLOR_FREQUENT_ORANGE_DARK;
 				case 158: return ROUTE_COLOR_LOCAL_GRAY_LIGHT;
 				case 187: return ROUTE_COLOR_LOCAL_GRAY_LIGHT;
+				case 970: return null;
+				case 975: return null;
 				// @formatter:on
 				}
 				if (100 <= routeId && routeId <= 199) {
