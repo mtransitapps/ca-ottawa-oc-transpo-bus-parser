@@ -118,6 +118,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String BLACKBURN = "Blackburn";
 	private static final String BLAIR = "Blair";
 	private static final String BLAIR_STA = BLAIR + " Sta";
+	private static final String BLOHM = "Blohm";
 	private static final String BLOSSOM_PARK = "Blossom Pk";
 	private static final String BRIDLEWOOD = "Bridlewood";
 	private static final String BRITANNIA = "Britannia";
@@ -265,6 +266,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_28 = BLACKBURN + " " + HAMLET + RLN_SEP + BLAIR;
 	private static final String ROUTE_30 = ALBERT + SLASH + BAY + RLN_SEP + JEANNE_D_ARC;
 	private static final String ROUTE_31 = ALBERT + SLASH + BAY + RLN_SEP + JEANNE_D_ARC;
+	private static final String ROUTE_32 = ST_LAURENT + RLN_SEP + GREENBORO; // not official
 	private static final String ROUTE_33 = PLACE_D_ORLEANS + COLON + ALBERT + SLASH + BAY + RLN_SEP + ORLEANS;
 	private static final String ROUTE_34 = ALBERT + SLASH + BAY + RLN_SEP + JEANNE_D_ARC;
 	private static final String ROUTE_35 = ALBERT + SLASH + BAY + RLN_SEP + ORLEANS;
@@ -274,6 +276,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_41 = HURDMAN + RLN_SEP + WALKLEY;
 	private static final String ROUTE_42 = BLAIR + RLN_SEP + HURDMAN;
 	private static final String ROUTE_43 = HURDMAN + RLN_SEP + CONROY;
+	private static final String ROUTE_44 = GATINEAU + RLN_SEP + BILLINGS_BRIDGE; // not official
 	private static final String ROUTE_47 = HAWTHORNE + RLN_SEP + ST_LAURENT;
 	private static final String ROUTE_48 = ELMVALE + RLN_SEP + BILLINGS_BRIDGE + SLASH + HURDMAN;
 	private static final String ROUTE_49 = ELMVALE + RLN_SEP + HURDMAN;
@@ -473,8 +476,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_681 = BELL_HIGH_SCHOOL + RLN_SEP + BRIDLEWOOD;
 	private static final String ROUTE_691 = É_S_DESLAURIERS + RLN_SEP + BAYSHORE_STA;
 	private static final String ROUTE_698 = RIDGEMONT_HIGH_SCHOOL + SLASH + ST_PATRICK_S_HIGH_SCHOOL + RLN_SEP + GREENBORO;
-	private static final String ROUTE_970 = "null"; // TODO
-	private static final String ROUTE_975 = "null"; // TODO
+	private static final String ROUTE_970 = StringUtils.EMPTY; // TODO
+	private static final String ROUTE_975 = StringUtils.EMPTY; // TODO
 
 	@Override
 	public String getRouteLongName(GRoute gRoute) {
@@ -508,6 +511,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 28: return ROUTE_28;
 				case 30: return ROUTE_30;
 				case 31: return ROUTE_31;
+				case 32: return ROUTE_32;
 				case 33: return ROUTE_33;
 				case 34: return ROUTE_34;
 				case 35: return ROUTE_35;
@@ -517,6 +521,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 41: return ROUTE_41;
 				case 42: return ROUTE_42;
 				case 43: return ROUTE_43;
+				case 44: return ROUTE_44;
 				case 47: return ROUTE_47;
 				case 48: return ROUTE_48;
 				case 49: return ROUTE_49;
@@ -721,6 +726,9 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				// @formatter:on
 				}
 			}
+			if (isGoodEnoughAccepted()) {
+				return "Route " + gRoute.getRouteShortName();
+			}
 			System.out.printf("\nUnexpected route long name for '%s'!\n", gRoute);
 			System.exit(-1);
 			return null;
@@ -878,6 +886,9 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				else if (TDP_ROUTES.contains(routeId)) { return ROUTE_COLOR_ORCHID; }
 				// @formatter:on
 			}
+			if (isGoodEnoughAccepted()) {
+				return null;
+			}
 			System.out.printf("\nNo route color for '%s'!", gRoute);
 			System.exit(-1);
 			return null;
@@ -893,6 +904,22 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				return;
 			} else if (gTrip.getDirectionId() == 1 && "1".equals(gTrip.getTripHeadsign())) {
 				mTrip.setHeadsignString(FALLOWFIELD, gTrip.getDirectionId());
+				return;
+			}
+		} else if (mRoute.getId() == 660L) {
+			if (gTrip.getDirectionId() == 0 && "0".equals(gTrip.getTripHeadsign())) {
+				mTrip.setHeadsignString(BELL_HIGH_SCHOOL, gTrip.getDirectionId());
+				return;
+			} else if (gTrip.getDirectionId() == 1 && "1".equals(gTrip.getTripHeadsign())) {
+				mTrip.setHeadsignString(INNOVATION, gTrip.getDirectionId());
+				return;
+			}
+		} else if (mRoute.getId() == 698L) {
+			if (gTrip.getDirectionId() == 0 && "0".equals(gTrip.getTripHeadsign())) {
+				mTrip.setHeadsignString(ST_PATRICK_S_HIGH_SCHOOL, gTrip.getDirectionId());
+				return;
+			} else if (gTrip.getDirectionId() == 1 && "1".equals(gTrip.getTripHeadsign())) {
+				mTrip.setHeadsignString(BLOHM, gTrip.getDirectionId());
 				return;
 			}
 		}
