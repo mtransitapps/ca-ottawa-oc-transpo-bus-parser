@@ -73,6 +73,11 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	}
 
 	@Override
+	public boolean excludeRoute(GRoute gRoute) {
+		return super.excludeRoute(gRoute);
+	}
+
+	@Override
 	public Integer getAgencyRouteType() {
 		return MAgency.ROUTE_TYPE_BUS;
 	}
@@ -1050,6 +1055,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				stopId = 2000000;
 			} else if (gStop.getStopId().startsWith("EN")) {
 				stopId = 2100000;
+			} else if (gStop.getStopId().startsWith("CE")) {
+				stopId = 2200000;
 			} else {
 				System.out.printf("\nStop doesn't have an ID (start with) %s!\n", gStop);
 				System.exit(-1);
