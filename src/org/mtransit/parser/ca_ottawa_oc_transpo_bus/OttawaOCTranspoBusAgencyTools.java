@@ -3,6 +3,7 @@ package org.mtransit.parser.ca_ottawa_oc_transpo_bus;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -956,7 +957,57 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 
 	@Override
 	public boolean mergeHeadsign(MTrip mTrip, MTrip mTripToMerge) {
-		if (mTrip.getHeadsignValue() == null || mTrip.getHeadsignValue().equals(mTripToMerge.getHeadsignValue())) {
+		if (mTrip.getHeadsignValue() == null || !mTrip.getHeadsignValue().equals(mTripToMerge.getHeadsignValue())) {
+			List<String> headsignsValues = Arrays.asList(mTrip.getHeadsignValue(), mTripToMerge.getHeadsignValue());
+			if (mTrip.getRouteId() == 401L) {
+				if (Arrays.asList( //
+						"Canadian Tire Centre", //
+						"Canadian Tire Ctr" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Canadian Tire Ctr", mTrip.getHeadsignId());
+					return true;
+				}
+			} else if (mTrip.getRouteId() == 402L) {
+				if (Arrays.asList( //
+						"Canadian Tire Centre", //
+						"Canadian Tire Ctr" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Canadian Tire Ctr", mTrip.getHeadsignId());
+					return true;
+				}
+			} else if (mTrip.getRouteId() == 403L) {
+				if (Arrays.asList( //
+						"Canadian Tire Centre", //
+						"Canadian Tire Ctr" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Canadian Tire Ctr", mTrip.getHeadsignId());
+					return true;
+				}
+			} else if (mTrip.getRouteId() == 404L) {
+				if (Arrays.asList( //
+						"Canadian Tire Centre", //
+						"Canadian Tire Ctr" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Canadian Tire Ctr", mTrip.getHeadsignId());
+					return true;
+				}
+			} else if (mTrip.getRouteId() == 405L) {
+				if (Arrays.asList( //
+						"Canadian Tire Centre", //
+						"Canadian Tire Ctr" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Canadian Tire Ctr", mTrip.getHeadsignId());
+					return true;
+				}
+			} else if (mTrip.getRouteId() == 406L) {
+				if (Arrays.asList( //
+						"Canadian Tire Centre", //
+						"Canadian Tire Ctr" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Canadian Tire Ctr", mTrip.getHeadsignId());
+					return true;
+				}
+			}
 			System.out.printf("\nmergeHeadsign() > Can't merge headsign for trips %s and %s!\n", mTrip, mTripToMerge);
 			System.exit(-1);
 			return false; // DO NOT MERGE, USED TO IDENTIFY TRIP IN REAL TIME API
