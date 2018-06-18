@@ -161,6 +161,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ESPRIT = "Esprit";
 	private static final String EXPERIMENTAL_FARM = "Experimental Farm";
 	private static final String FALLOWFIELD = "Fallowfield";
+	private static final String GARDENWAY = "Gardenway";
 	private static final String GATINEAU = "Gatineau";
 	private static final String GLOUCESTER_NORTH = "Gloucester North";
 	private static final String GOLFLINKS = "Golflinks";
@@ -184,6 +185,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String JEANNE_D_ARC = "Jeanne d'Arc";
 	private static final String JEANNE_D_ARC_STA = JEANNE_D_ARC + " Sta";
 	private static final String KANATA = "Kanata";
+	private static final String KANATA_LAKES = KANATA + " Lks";
 	private static final String KARS = "Kars";
 	private static final String KATIMAVIK = "Katimavik";
 	private static final String KNOXDALE = "Knoxdale";
@@ -315,6 +317,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_86 = ELMVALE + RLN_SEP + BASELINE + SLASH + COLONNADE;
 	private static final String ROUTE_87 = SOUTH_KEYS + RLN_SEP + BASELINE;
 	private static final String ROUTE_88 = HURDMAN + RLN_SEP + KANATA;
+	private static final String ROUTE_89 = StringUtils.EMPTY; // TODO ?
 	private static final String ROUTE_91 = ORLEANS + AND + TRIM + RLN_SEP + BASELINE;
 	private static final String ROUTE_92 = ST_LAURENT + RLN_SEP + TERRY_FOX + AND + STITTSVILLE;
 	private static final String ROUTE_93 = LINCOLN_FIELDS + RLN_SEP + KANATA + " North" + SLASH + LE_BRETON;
@@ -351,6 +354,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_135 = ESPRIT + RLN_SEP + PLACE_D_ORLEANS;
 	private static final String ROUTE_136 = TENTH_LINE + RLN_SEP + PLACE_D_ORLEANS;
 	private static final String ROUTE_137 = QUEENSWOOD_HTS + SLASH + PLACE_D_ORLEANS;
+	private static final String ROUTE_139 = PETRIE_ISL + RLN_SEP + PLACE_D_ORLEANS;
 	private static final String ROUTE_140 = MC_CARTHY + RLN_SEP + HURDMAN;
 	private static final String ROUTE_143 = CONROY + RLN_SEP + SOUTH_KEYS;
 	private static final String ROUTE_144 = LEITRIM + RLN_SEP + SOUTH_KEYS;
@@ -408,37 +412,37 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_221 = ALBERT + SLASH + BAY + RLN_SEP + CUMBERLAND;
 	private static final String ROUTE_222 = ALBERT + SLASH + BAY + RLN_SEP + VARS;
 	private static final String ROUTE_224 = ALBERT + SLASH + BAY + RLN_SEP + BEACON_HILL;
-	private static final String ROUTE_225 = StringUtils.EMPTY; // TODO ?
+	private static final String ROUTE_225 = BLAIR + RLN_SEP + RENAUD;
 	private static final String ROUTE_228 = ALBERT + SLASH + BAY + RLN_SEP + NAVAN;
 	private static final String ROUTE_231 = ALBERT + SLASH + BAY + RLN_SEP + JEANNE_D_ARC;
 	private static final String ROUTE_232 = ALBERT + SLASH + BAY + RLN_SEP + ORLEANS;
 	private static final String ROUTE_233 = ALBERT + SLASH + BAY + RLN_SEP + ORLEANS;
 	private static final String ROUTE_234 = GATINEAU + RLN_SEP + ORLEANS;
-	private static final String ROUTE_235 = ALBERT + SLASH + BAY + RLN_SEP + ESPRIT;
-	private static final String ROUTE_236 = StringUtils.EMPTY; // TODO ?
+	private static final String ROUTE_235 = ALBERT + SLASH + BAY + RLN_SEP + GARDENWAY;
+	private static final String ROUTE_236 = ALBERT + SLASH + BAY + RLN_SEP + ESPRIT;
 	private static final String ROUTE_237 = ALBERT + SLASH + BANK + RLN_SEP + JEANNE_D_ARC;
 	private static final String ROUTE_252 = MACKENZIE_KING + RLN_SEP + BELLS_CORNERS;
 	private static final String ROUTE_256 = MACKENZIE_KING + RLN_SEP + KANATA;
-	private static final String ROUTE_261 = MACKENZIE_KING + RLN_SEP + STITTSVILLE;
-	private static final String ROUTE_262 = MACKENZIE_KING + RLN_SEP + STITTSVILLE;
-	private static final String ROUTE_263 = MACKENZIE_KING + RLN_SEP + STITTSVILLE;
+	private static final String ROUTE_261 = MACKENZIE_KING + RLN_SEP + STITTSVILLE + ", Main";
+	private static final String ROUTE_262 = MACKENZIE_KING + RLN_SEP + "West Ridge";
+	private static final String ROUTE_263 = MACKENZIE_KING + RLN_SEP + "Stanley Corner";
 	private static final String ROUTE_264 = MACKENZIE_KING + RLN_SEP + TERRY_FOX;
-	private static final String ROUTE_265 = MACKENZIE_KING + RLN_SEP + KANATA;
-	private static final String ROUTE_267 = MACKENZIE_KING + RLN_SEP + KANATA;
-	private static final String ROUTE_268 = MACKENZIE_KING + RLN_SEP + KANATA;
-	private static final String ROUTE_269 = MACKENZIE_KING + RLN_SEP + KANATA;
+	private static final String ROUTE_265 = MACKENZIE_KING + RLN_SEP + BEAVERBROOK;
+	private static final String ROUTE_267 = MACKENZIE_KING + RLN_SEP + "Glen Cairn";
+	private static final String ROUTE_268 = MACKENZIE_KING + RLN_SEP + KANATA_LAKES;
+	private static final String ROUTE_269 = MACKENZIE_KING + RLN_SEP + BRIDLEWOOD;
 	private static final String ROUTE_270 = MACKENZIE_KING + RLN_SEP + BARRHAVEN;
 	private static final String ROUTE_271 = MACKENZIE_KING + RLN_SEP + BARRHAVEN;
 	private static final String ROUTE_272 = MACKENZIE_KING + RLN_SEP + BARRHAVEN;
 	private static final String ROUTE_273 = MACKENZIE_KING + RLN_SEP + BARRHAVEN;
-	private static final String ROUTE_277 = MACKENZIE_KING + RLN_SEP + BARRHAVEN;
-	private static final String ROUTE_278 = StringUtils.EMPTY; // TODO ?
+	private static final String ROUTE_277 = MACKENZIE_KING + RLN_SEP + "Nepean Woods";
+	private static final String ROUTE_278 = MACKENZIE_KING + RLN_SEP + "Riverside South";
 	private static final String ROUTE_282 = MACKENZIE_KING + RLN_SEP + PINECREST;
 	private static final String ROUTE_283 = MACKENZIE_KING + RLN_SEP + RICHMOND;
 	private static final String ROUTE_290 = MC_CARTHY + RLN_SEP + HURDMAN;
 	private static final String ROUTE_291 = HURDMAN + RLN_SEP + HERONGATE;
 	private static final String ROUTE_293 = GATINEAU + RLN_SEP + BLOSSOM_PARK;
-	private static final String ROUTE_294 = StringUtils.EMPTY; // TODO ?
+	private static final String ROUTE_294 = HURDMAN + RLN_SEP + "Findlay Creek";
 	private static final String ROUTE_298 = HURDMAN + RLN_SEP + CONROY;
 	private static final String ROUTE_301 = CARLINGWOOD + RLN_SEP + RICHMOND + SLASH + STITTSVILLE;
 	private static final String ROUTE_302 = ST_LAURENT + RLN_SEP + CUMBERLAND + SLASH + SARSFIELD + SLASH + NAVAN;
@@ -569,6 +573,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 86: return ROUTE_86;
 				case 87: return ROUTE_87;
 				case 88: return ROUTE_88;
+				case 89: return ROUTE_89;
 				case 91: return ROUTE_91;
 				case 92: return ROUTE_92;
 				case 93: return ROUTE_93;
@@ -605,6 +610,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 135: return ROUTE_135;
 				case 136: return ROUTE_136;
 				case 137: return ROUTE_137;
+				case 139: return ROUTE_139;
 				case 140: return ROUTE_140;
 				case 143: return ROUTE_143;
 				case 144: return ROUTE_144;
@@ -959,7 +965,47 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	public boolean mergeHeadsign(MTrip mTrip, MTrip mTripToMerge) {
 		if (mTrip.getHeadsignValue() == null || !mTrip.getHeadsignValue().equals(mTripToMerge.getHeadsignValue())) {
 			List<String> headsignsValues = Arrays.asList(mTrip.getHeadsignValue(), mTripToMerge.getHeadsignValue());
-			if (mTrip.getRouteId() == 401L) {
+			if (mTrip.getRouteId() == 17L) {
+				if (Arrays.asList( //
+						"Rideau", //
+						"Parliament" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Parliament", mTrip.getHeadsignId());
+					return true;
+				}
+			} else if (mTrip.getRouteId() == 18L) {
+				if (Arrays.asList( //
+						"Rideau", //
+						"Parliament" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Parliament", mTrip.getHeadsignId());
+					return true;
+				}
+			} else if (mTrip.getRouteId() == 33L) {
+				if (Arrays.asList( //
+						"Orléans", //
+						"Portobello" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Portobello", mTrip.getHeadsignId());
+					return true;
+				}
+			} else if (mTrip.getRouteId() == 86L) {
+				if (Arrays.asList( //
+						"Baseline", //
+						"Baseline  Colonnade" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Baseline  Colonnade", mTrip.getHeadsignId());
+					return true;
+				}
+			} else if (mTrip.getRouteId() == 186L) {
+				if (Arrays.asList( //
+						"Merivale", //
+						"Merivale / Slack" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Merivale / Slack", mTrip.getHeadsignId());
+					return true;
+				}
+			} else if (mTrip.getRouteId() == 401L) {
 				if (Arrays.asList( //
 						"Canadian Tire Centre", //
 						"Canadian Tire Ctr" //
