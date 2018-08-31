@@ -1050,6 +1050,13 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 					mTrip.setHeadsignString("Albert Bay", mTrip.getHeadsignId());
 					return true;
 				}
+				if (Arrays.asList( //
+						"Place d'Orléans", //
+						"Jeanne d'Arc" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Jeanne d'Arc", mTrip.getHeadsignId());
+					return true;
+				}
 			} else if (mTrip.getRouteId() == 86L) {
 				if (Arrays.asList( //
 						"Baseline", //
@@ -1142,6 +1149,14 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 						"Canadian Tire Ctr" //
 				).containsAll(headsignsValues)) {
 					mTrip.setHeadsignString("Canadian Tire Ctr", mTrip.getHeadsignId());
+					return true;
+				}
+			} else if (mTrip.getRouteId() == 691L) {
+				if (Arrays.asList( //
+						"Deslauriers", //
+						"Omer-Deslaurier H.S" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Omer-Deslaurier H.S", mTrip.getHeadsignId());
 					return true;
 				}
 			}
