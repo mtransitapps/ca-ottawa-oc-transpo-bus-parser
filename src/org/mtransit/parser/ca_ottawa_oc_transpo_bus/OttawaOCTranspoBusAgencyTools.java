@@ -1057,6 +1057,13 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 					return true;
 				}
 				if (Arrays.asList( //
+						"Blair", //
+						"Albert / Bay" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Albert / Bay", mTrip.getHeadsignId());
+					return true;
+				}
+				if (Arrays.asList( //
 						"Place d'Orléans", //
 						"Jeanne d'Arc" //
 				).containsAll(headsignsValues)) {
@@ -1099,6 +1106,21 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 						"Chapel Hill" // <>
 				).containsAll(headsignsValues)) {
 					mTrip.setHeadsignString("Chapel Hill", mTrip.getHeadsignId());
+					return true;
+				}
+			} else if (mTrip.getRouteId() == 153L) {
+				if (Arrays.asList( //
+						"Tunney's Pasture", //
+						"Carlingwood" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Carlingwood", mTrip.getHeadsignId());
+					return true;
+				}
+				if (Arrays.asList( //
+						"Bayshore", //
+						"Lincoln Fields" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Lincoln Fields", mTrip.getHeadsignId());
 					return true;
 				}
 			} else if (mTrip.getRouteId() == 186L) {
@@ -1155,6 +1177,22 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 						"Canadian Tire Ctr" //
 				).containsAll(headsignsValues)) {
 					mTrip.setHeadsignString("Canadian Tire Ctr", mTrip.getHeadsignId());
+					return true;
+				}
+			} else if (mTrip.getRouteId() == 620L) {
+				if (Arrays.asList( //
+						"St- Laurent", //
+						"St-Laurent" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("St-Laurent", mTrip.getHeadsignId());
+					return true;
+				}
+			} else if (mTrip.getRouteId() == 622L) {
+				if (Arrays.asList( //
+						"Special", //
+						"Colonel By / Gloucester" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Colonel By / Gloucester", mTrip.getHeadsignId());
 					return true;
 				}
 			} else if (mTrip.getRouteId() == 691L) {
