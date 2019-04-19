@@ -440,6 +440,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_237 = ALBERT + SLASH + BANK + RLN_SEP + JEANNE_D_ARC;
 	private static final String ROUTE_252 = MACKENZIE_KING + RLN_SEP + BELLS_CORNERS;
 	private static final String ROUTE_256 = MACKENZIE_KING + RLN_SEP + KANATA;
+	private static final String ROUTE_257 = BRIDLEWOOD + RLN_SEP + MACKENZIE_KING;
 	private static final String ROUTE_261 = MACKENZIE_KING + RLN_SEP + STITTSVILLE + ", Main";
 	private static final String ROUTE_262 = MACKENZIE_KING + RLN_SEP + "West Ridge";
 	private static final String ROUTE_263 = MACKENZIE_KING + RLN_SEP + "Stanley Corner";
@@ -704,6 +705,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 237: return ROUTE_237;
 				case 252: return ROUTE_252;
 				case 256: return ROUTE_256;
+				case 257: return ROUTE_257;
 				case 261: return ROUTE_261;
 				case 262: return ROUTE_262;
 				case 263: return ROUTE_263;
@@ -1046,6 +1048,14 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 						"Portobello" //
 				).containsAll(headsignsValues)) {
 					mTrip.setHeadsignString("Portobello", mTrip.getHeadsignId());
+					return true;
+				}
+			} else if (mTrip.getRouteId() == 34L) {
+				if (Arrays.asList( //
+						"Albert Bay", //
+						"Albert / Bay" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Albert / Bay", mTrip.getHeadsignId());
 					return true;
 				}
 			} else if (mTrip.getRouteId() == 38L) {
