@@ -1075,6 +1075,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				}
 				if (Arrays.asList( //
 						"Place d'Orléans", //
+						" Jeanne D'Arc / Trim", //
 						"Jeanne d'Arc" //
 				).containsAll(headsignsValues)) {
 					mTrip.setHeadsignString("Jeanne d'Arc", mTrip.getHeadsignId());
@@ -1139,6 +1140,30 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 						"Merivale / Slack" //
 				).containsAll(headsignsValues)) {
 					mTrip.setHeadsignString("Merivale / Slack", mTrip.getHeadsignId());
+					return true;
+				}
+			} else if (mTrip.getRouteId() == 234L) {
+				if (Arrays.asList( //
+						"Tenth line", //
+						"Tenth Line" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Tenth Line", mTrip.getHeadsignId());
+					return true;
+				}
+			} else if (mTrip.getRouteId() == 301L) {
+				if (Arrays.asList( //
+						"Bayshore Carlingwd", //
+						"Bayshore Carlingwood" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Bayshore Carlingwood", mTrip.getHeadsignId());
+					return true;
+				}
+			} else if (mTrip.getRouteId() == 303L) {
+				if (Arrays.asList( //
+						"Dunrobin Stittsville", //
+						"Dunrobin Carp" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Dunrobin Carp", mTrip.getHeadsignId());
 					return true;
 				}
 			} else if (mTrip.getRouteId() == 401L) {
