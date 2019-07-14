@@ -521,6 +521,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_691 = É_S_DESLAURIERS + RLN_SEP + BAYSHORE_STA;
 	private static final String ROUTE_698 = RIDGEMONT_HIGH_SCHOOL + SLASH + ST_PATRICK_S_HIGH_SCHOOL + RLN_SEP + GREENBORO;
 	private static final String ROUTE_696 = BASELINE + RLN_SEP + GREENBORO;
+	private static final String ROUTE_702 = BAYVIEW + RLN_SEP + SOUTH_KEYS;
 
 	@Override
 	public String getRouteLongName(GRoute gRoute) {
@@ -786,6 +787,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 691: return ROUTE_691;
 				case 698: return ROUTE_698;
 				case 696: return ROUTE_696;
+				case 702: return ROUTE_702;
 				// @formatter:on
 				}
 			}
