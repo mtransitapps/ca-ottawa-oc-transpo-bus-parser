@@ -1,7 +1,9 @@
 package org.mtransit.parser.ca_ottawa_oc_transpo_bus;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -10,15 +12,21 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.mtransit.parser.DefaultAgencyTools;
+import org.mtransit.parser.Pair;
+import org.mtransit.parser.SplitUtils;
 import org.mtransit.parser.Utils;
+import org.mtransit.parser.SplitUtils.RouteTripSpec;
 import org.mtransit.parser.gtfs.data.GCalendar;
 import org.mtransit.parser.gtfs.data.GCalendarDate;
 import org.mtransit.parser.gtfs.data.GRoute;
 import org.mtransit.parser.gtfs.data.GSpec;
 import org.mtransit.parser.gtfs.data.GStop;
 import org.mtransit.parser.gtfs.data.GTrip;
+import org.mtransit.parser.gtfs.data.GTripStop;
 import org.mtransit.parser.mt.data.MAgency;
+import org.mtransit.parser.mt.data.MDirectionType;
 import org.mtransit.parser.mt.data.MRoute;
+import org.mtransit.parser.mt.data.MTripStop;
 import org.mtransit.parser.CleanUtils;
 import org.mtransit.parser.mt.data.MTrip;
 
@@ -276,6 +284,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_11 = DOWNTOWN + RLN_SEP + BAYSHORE;
 	private static final String ROUTE_12 = BLAIR + RLN_SEP + RIDEAU_CTR;
 	private static final String ROUTE_14 = ST_LAURENT + RLN_SEP + CARLINGTON;
+	private static final String ROUTE_15 = BLAIR + RLN_SEP + GATINEAU;
 	private static final String ROUTE_16 = MAIN + RLN_SEP + BRITANNIA;
 	private static final String ROUTE_17 = WATERIDGE + RLN_SEP + PARLIAMENT;
 	private static final String ROUTE_18 = ST_LAURENT + RLN_SEP + RIDEAU_CTR;
@@ -285,29 +294,37 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_22 = ALBERT + SLASH + BAY + RLN_SEP + MILLENNIUM;
 	private static final String ROUTE_23 = BLAIR + RLN_SEP + "Rothwell Hts";
 	private static final String ROUTE_24 = ALBERT + SLASH + BAY + RLN_SEP + BEACON_HILL;
+	private static final String ROUTE_25 = MILLENNIUM + RLN_SEP + "La Cité";
 	private static final String ROUTE_26 = BLAIR + RLN_SEP + PINEVIEW;
 	private static final String ROUTE_27 = GATINEAU + RLN_SEP + ORLEANS;
 	private static final String ROUTE_28 = BLACKBURN + " " + HAMLET + RLN_SEP + BLAIR;
 	private static final String ROUTE_30 = ALBERT + SLASH + BAY + RLN_SEP + JEANNE_D_ARC;
 	private static final String ROUTE_31 = ALBERT + SLASH + BAY + RLN_SEP + JEANNE_D_ARC;
-	private static final String ROUTE_32 = ST_LAURENT + RLN_SEP + GREENBORO; // not official
+	private static final String ROUTE_32 = SUNVIEW + RLN_SEP + BLAIR;
 	private static final String ROUTE_33 = PLACE_D_ORLEANS + COLON + ALBERT + SLASH + BAY + RLN_SEP + ORLEANS;
 	private static final String ROUTE_34 = ALBERT + SLASH + BAY + RLN_SEP + JEANNE_D_ARC;
 	private static final String ROUTE_35 = ALBERT + SLASH + BAY + RLN_SEP + ORLEANS;
 	private static final String ROUTE_37 = ALBERT + SLASH + BAY + RLN_SEP + JEANNE_D_ARC;
 	private static final String ROUTE_38 = ALBERT + SLASH + BAY + RLN_SEP + JEANNE_D_ARC;
+	private static final String ROUTE_39 = BLAIR + RLN_SEP + MILLENNIUM;
 	private static final String ROUTE_40 = GATINEAU + RLN_SEP + BLOSSOM_PARK;
 	private static final String ROUTE_41 = HURDMAN + RLN_SEP + WALKLEY;
 	private static final String ROUTE_42 = BLAIR + RLN_SEP + HURDMAN;
 	private static final String ROUTE_43 = HURDMAN + RLN_SEP + CONROY;
-	private static final String ROUTE_44 = GATINEAU + RLN_SEP + BILLINGS_BRIDGE; // not official
+	private static final String ROUTE_44 = GATINEAU + RLN_SEP + BILLINGS_BRIDGE;
 	private static final String ROUTE_45 = HURDMAN + RLN_SEP + HOSPITAL;
+	private static final String ROUTE_46 = HURDMAN + RLN_SEP + BILLINGS_BRIDGE;
 	private static final String ROUTE_47 = HAWTHORNE + RLN_SEP + ST_LAURENT;
 	private static final String ROUTE_48 = ELMVALE + RLN_SEP + BILLINGS_BRIDGE + SLASH + HURDMAN;
 	private static final String ROUTE_49 = ELMVALE + RLN_SEP + HURDMAN;
 	private static final String ROUTE_50 = TUNNEY_S_PASTURE + RLN_SEP + LINCOLN_FIELDS;
+	private static final String ROUTE_51 = TUNNEY_S_PASTURE + RLN_SEP + BRITANNIA;
+	private static final String ROUTE_53 = TUNNEY_S_PASTURE + RLN_SEP + CARLINGTON;
 	private static final String ROUTE_54 = TUNNEY_S_PASTURE + SLASH + LOCAL;
+	private static final String ROUTE_55 = ELMVALE + RLN_SEP + BAYSHORE;
 	private static final String ROUTE_56 = HURDMAN + RLN_SEP + TUNNEY_S_PASTURE;
+	private static final String ROUTE_57 = TUNNEY_S_PASTURE + RLN_SEP + BELLS_CORNERS;
+	private static final String ROUTE_58 = TUNNEY_S_PASTURE + RLN_SEP + "Moodie";
 	private static final String ROUTE_60 = MACKENZIE_KING + RLN_SEP + KANATA;
 	private static final String ROUTE_61 = MACKENZIE_KING + RLN_SEP + KANATA;
 	private static final String ROUTE_62 = MACKENZIE_KING + RLN_SEP + KANATA;
@@ -322,6 +339,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_71 = MACKENZIE_KING + RLN_SEP + BARRHAVEN;
 	private static final String ROUTE_72 = MACKENZIE_KING + RLN_SEP + BARRHAVEN;
 	private static final String ROUTE_73 = MACKENZIE_KING + RLN_SEP + BARRHAVEN;
+	private static final String ROUTE_74 = RIVERVIEW + RLN_SEP + TUNNEY_S_PASTURE;
+	private static final String ROUTE_75 = BARRHAVEN_CTR + RLN_SEP + TUNNEY_S_PASTURE;
 	private static final String ROUTE_77 = MACKENZIE_KING + RLN_SEP + BARRHAVEN;
 	private static final String ROUTE_80 = BARRHAVEN_CTR + RLN_SEP + TUNNEY_S_PASTURE;
 	private static final String ROUTE_81 = TUNNEY_S_PASTURE + RLN_SEP + CLYDE;
@@ -333,6 +352,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_87 = SOUTH_KEYS + RLN_SEP + BASELINE;
 	private static final String ROUTE_88 = HURDMAN + RLN_SEP + KANATA;
 	private static final String ROUTE_89 = TUNNEY_S_PASTURE + RLN_SEP + COLONNADE;
+	private static final String ROUTE_90 = GREENBORO + RLN_SEP + HURDMAN;
 	private static final String ROUTE_91 = ORLEANS + AND + TRIM + RLN_SEP + BASELINE;
 	private static final String ROUTE_92 = ST_LAURENT + RLN_SEP + TERRY_FOX + AND + STITTSVILLE;
 	private static final String ROUTE_93 = LINCOLN_FIELDS + RLN_SEP + KANATA + " North" + SLASH + LE_BRETON;
@@ -372,6 +392,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_138 = ST_LOUIS + RLN_SEP + PLACE_D_ORLEANS;
 	private static final String ROUTE_139 = PETRIE_ISL + RLN_SEP + PLACE_D_ORLEANS;
 	private static final String ROUTE_140 = MC_CARTHY + RLN_SEP + HURDMAN;
+	private static final String ROUTE_141 = "Kaladar";
 	private static final String ROUTE_143 = CONROY + RLN_SEP + SOUTH_KEYS;
 	private static final String ROUTE_144 = LEITRIM + RLN_SEP + SOUTH_KEYS;
 	private static final String ROUTE_146 = SOUTH_KEYS + RLN_SEP + HURDMAN;
@@ -413,6 +434,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_187 = BASELINE + RLN_SEP + AMBERWOOD;
 	private static final String ROUTE_188 = CANADIAN_TIRE_CTR + RLN_SEP + HUNTMAR;
 	private static final String ROUTE_189 = RIVERVIEW + RLN_SEP + GREENBORO;
+	private static final String ROUTE_190 = HURDMAN + RLN_SEP + "Mooney's Bay";
 	private static final String ROUTE_192 = HAWTHORNE + RLN_SEP + HURDMAN;
 	private static final String ROUTE_193 = PLACE_D_ORLEANS + RLN_SEP + BLAIR;
 	private static final String ROUTE_194 = GLOUCESTER_NORTH + RLN_SEP + BLAIR;
@@ -437,14 +459,17 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_235 = ALBERT + SLASH + BAY + RLN_SEP + GARDENWAY;
 	private static final String ROUTE_236 = ALBERT + SLASH + BAY + RLN_SEP + ESPRIT;
 	private static final String ROUTE_237 = ALBERT + SLASH + BANK + RLN_SEP + JEANNE_D_ARC;
+	private static final String ROUTE_251 = TUNNEY_S_PASTURE + RLN_SEP + BELLS_CORNERS;
 	private static final String ROUTE_252 = MACKENZIE_KING + RLN_SEP + BELLS_CORNERS;
 	private static final String ROUTE_256 = MACKENZIE_KING + RLN_SEP + KANATA;
 	private static final String ROUTE_257 = BRIDLEWOOD + RLN_SEP + MACKENZIE_KING;
+	private static final String ROUTE_258 = GRANDVIEW + RLN_SEP + TUNNEY_S_PASTURE;
 	private static final String ROUTE_261 = MACKENZIE_KING + RLN_SEP + STITTSVILLE + ", Main";
 	private static final String ROUTE_262 = MACKENZIE_KING + RLN_SEP + "West Ridge";
 	private static final String ROUTE_263 = MACKENZIE_KING + RLN_SEP + "Stanley Corner";
 	private static final String ROUTE_264 = MACKENZIE_KING + RLN_SEP + TERRY_FOX;
 	private static final String ROUTE_265 = MACKENZIE_KING + RLN_SEP + BEAVERBROOK;
+	private static final String ROUTE_266 = TUNNEY_S_PASTURE + RLN_SEP + "Maxwell Bridge";
 	private static final String ROUTE_267 = MACKENZIE_KING + RLN_SEP + "Glen Cairn";
 	private static final String ROUTE_268 = MACKENZIE_KING + RLN_SEP + KANATA_LAKES;
 	private static final String ROUTE_269 = MACKENZIE_KING + RLN_SEP + BRIDLEWOOD;
@@ -452,11 +477,12 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_271 = MACKENZIE_KING + RLN_SEP + BARRHAVEN;
 	private static final String ROUTE_272 = MACKENZIE_KING + RLN_SEP + BARRHAVEN;
 	private static final String ROUTE_273 = MACKENZIE_KING + RLN_SEP + BARRHAVEN;
-	private static final String ROUTE_275 = MACKENZIE_KING + RLN_SEP + CAMBRIAN; // TODO check
+	private static final String ROUTE_275 = MACKENZIE_KING + RLN_SEP + CAMBRIAN;
 	private static final String ROUTE_277 = MACKENZIE_KING + RLN_SEP + "Nepean Woods";
 	private static final String ROUTE_278 = MACKENZIE_KING + RLN_SEP + "Riverside South";
 	private static final String ROUTE_282 = MACKENZIE_KING + RLN_SEP + PINECREST;
 	private static final String ROUTE_283 = MACKENZIE_KING + RLN_SEP + RICHMOND;
+	private static final String ROUTE_284 = TUNNEY_S_PASTURE + RLN_SEP + KNOXDALE;
 	private static final String ROUTE_290 = MC_CARTHY + RLN_SEP + HURDMAN;
 	private static final String ROUTE_291 = HURDMAN + RLN_SEP + HERONGATE;
 	private static final String ROUTE_293 = GATINEAU + RLN_SEP + BLOSSOM_PARK;
@@ -489,7 +515,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_613 = IMMACULATA_HIGH_SCHOOL + RLN_SEP + HURDMAN_STA;
 	private static final String ROUTE_618 = É_S_LOUIS_RIEL + RLN_SEP + MILLENNIUM_STA;
 	private static final String ROUTE_619 = É_S_LOUIS_RIEL + RLN_SEP + BLAIR_STA;
-	private static final String ROUTE_620 = null; // TODO
+	private static final String ROUTE_620 = OTTAWA + " Technical " + " S.S." + RLN_SEP + ST_LAURENT;
 	private static final String ROUTE_622 = COLONEL_BY_HIGH_SCHOOL + RLN_SEP + BLACKBURN + SLASH + PAGE;
 	private static final String ROUTE_624 = GLOUCESTER_HIGH_SCHOOL + RLN_SEP + RIDEAU;
 	private static final String ROUTE_630 = COLONEL_BY_HIGH_SCHOOL + RLN_SEP + MILLENNIUM;
@@ -499,11 +525,12 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_634 = PLACE_D_ORLEANS + RLN_SEP + "Collège Catholique Mer Bleue";
 	private static final String ROUTE_635 = CAIRINE_WILSON_HIGH_SCHOOL + RLN_SEP + ORLEANS;
 	private static final String ROUTE_636 = PLACE_D_ORLEANS + RLN_SEP + "Sir Wilfrid Laurier SS";
-	private static final String ROUTE_638 = ORLEANS; // TODO ?
+	private static final String ROUTE_638 = ORLEANS;
+	private static final String ROUTE_639 = PLACE_D_ORLEANS + RLN_SEP + "Gisèle Lalonde";
 	private static final String ROUTE_640 = BROOKFIELD_HIGH_SCHOOL + RLN_SEP + GREENBORO_STA;
 	private static final String ROUTE_641 = É_S_LOUIS_RIEL + RLN_SEP + MEADOWGLEN + SLASH + ORLEANS;
 	private static final String ROUTE_644 = CANTERBURY_HIGH_SCHOOL + RLN_SEP + GREENBORO;
-	private static final String ROUTE_645 = HURDMAN; // TODO ?
+	private static final String ROUTE_645 = HURDMAN;
 	private static final String ROUTE_648 = É_S_LOUIS_RIEL + RLN_SEP + YOUVILLE + SLASH + ST_JOSEPH;
 	private static final String ROUTE_649 = HILLCREST_HIGH_SCHOOL + RLN_SEP + GREENBORO;
 	private static final String ROUTE_658 = BELL_HIGH_SCHOOL + RLN_SEP + GRANDVIEW;
@@ -515,7 +542,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_674 = ALL_STS_CATHOLIC_AND_STEPHEN_LEACOCK_SCHOOLS + RLN_SEP + INNOVATION + SLASH + HINES;
 	private static final String ROUTE_678 = É_S_LOUIS_RIEL + RLN_SEP + JEANNE_D_ARC_STA;
 	private static final String ROUTE_681 = BELL_HIGH_SCHOOL + RLN_SEP + BRIDLEWOOD;
-	private static final String ROUTE_686 = BASELINE; // TODO ?
+	private static final String ROUTE_686 = OMER_DESLAURIER_HIGH_SCHOOL + RLN_SEP + BASELINE;
 	private static final String ROUTE_689 = OMER_DESLAURIER_HIGH_SCHOOL + RLN_SEP + BILLINGS_BRIDGE;
 	private static final String ROUTE_691 = É_S_DESLAURIERS + RLN_SEP + BAYSHORE_STA;
 	private static final String ROUTE_698 = RIDGEMONT_HIGH_SCHOOL + SLASH + ST_PATRICK_S_HIGH_SCHOOL + RLN_SEP + GREENBORO;
@@ -542,6 +569,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 11: return ROUTE_11;
 				case 12: return ROUTE_12;
 				case 14: return ROUTE_14;
+				case 15: return ROUTE_15;
 				case 16: return ROUTE_16;
 				case 17: return ROUTE_17;
 				case 18: return ROUTE_18;
@@ -551,6 +579,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 22: return ROUTE_22;
 				case 23: return ROUTE_23;
 				case 24: return ROUTE_24;
+				case 25: return ROUTE_25;
 				case 26: return ROUTE_26;
 				case 27: return ROUTE_27;
 				case 28: return ROUTE_28;
@@ -562,18 +591,25 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 35: return ROUTE_35;
 				case 37: return ROUTE_37;
 				case 38: return ROUTE_38;
+				case 39: return ROUTE_39;
 				case 40: return ROUTE_40;
 				case 41: return ROUTE_41;
 				case 42: return ROUTE_42;
 				case 43: return ROUTE_43;
 				case 44: return ROUTE_44;
 				case 45: return ROUTE_45;
+				case 46: return ROUTE_46;
 				case 47: return ROUTE_47;
 				case 48: return ROUTE_48;
 				case 49: return ROUTE_49;
 				case 50: return ROUTE_50;
+				case 51: return ROUTE_51;
+				case 53: return ROUTE_53;
 				case 54: return ROUTE_54;
+				case 55: return ROUTE_55;
 				case 56: return ROUTE_56;
+				case 57: return ROUTE_57;
+				case 58: return ROUTE_58;
 				case 60: return ROUTE_60;
 				case 61: return ROUTE_61;
 				case 62: return ROUTE_62;
@@ -588,6 +624,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 71: return ROUTE_71;
 				case 72: return ROUTE_72;
 				case 73: return ROUTE_73;
+				case 74: return ROUTE_74;
+				case 75: return ROUTE_75;
 				case 77: return ROUTE_77;
 				case 80: return ROUTE_80;
 				case 81: return ROUTE_81;
@@ -599,6 +637,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 87: return ROUTE_87;
 				case 88: return ROUTE_88;
 				case 89: return ROUTE_89;
+				case 90: return ROUTE_90;
 				case 91: return ROUTE_91;
 				case 92: return ROUTE_92;
 				case 93: return ROUTE_93;
@@ -638,6 +677,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 138: return ROUTE_138;
 				case 139: return ROUTE_139;
 				case 140: return ROUTE_140;
+				case 141: return ROUTE_141;
 				case 143: return ROUTE_143;
 				case 144: return ROUTE_144;
 				case 146: return ROUTE_146;
@@ -679,6 +719,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 187: return ROUTE_187;
 				case 188: return ROUTE_188;
 				case 189: return ROUTE_189;
+				case 190: return ROUTE_190;
 				case 192: return ROUTE_192;
 				case 193: return ROUTE_193;
 				case 194: return ROUTE_194;
@@ -703,14 +744,17 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 235: return ROUTE_235;
 				case 236: return ROUTE_236;
 				case 237: return ROUTE_237;
+				case 251: return ROUTE_251;
 				case 252: return ROUTE_252;
 				case 256: return ROUTE_256;
 				case 257: return ROUTE_257;
+				case 258: return ROUTE_258;
 				case 261: return ROUTE_261;
 				case 262: return ROUTE_262;
 				case 263: return ROUTE_263;
 				case 264: return ROUTE_264;
 				case 265: return ROUTE_265;
+				case 266: return ROUTE_266;
 				case 267: return ROUTE_267;
 				case 268: return ROUTE_268;
 				case 269: return ROUTE_269;
@@ -723,6 +767,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 278: return ROUTE_278;
 				case 282: return ROUTE_282;
 				case 283: return ROUTE_283;
+				case 284: return ROUTE_284;
 				case 290: return ROUTE_290;
 				case 291: return ROUTE_291;
 				case 293: return ROUTE_293;
@@ -766,6 +811,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 635: return ROUTE_635;
 				case 636: return ROUTE_636;
 				case 638: return ROUTE_638;
+				case 639: return ROUTE_639;
 				case 640: return ROUTE_640;
 				case 641: return ROUTE_641;
 				case 644: return ROUTE_644;
@@ -957,8 +1003,138 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		return super.getRouteColor(gRoute);
 	}
 
+	private static HashMap<Long, RouteTripSpec> ALL_ROUTE_TRIPS2;
+	static {
+		HashMap<Long, RouteTripSpec> map2 = new HashMap<Long, RouteTripSpec>();
+		map2.put(27L, new RouteTripSpec(27L, //
+				MDirectionType.NORTH.intValue(), MTrip.HEADSIGN_TYPE_STRING, "St-Laurent", //
+				MDirectionType.SOUTH.intValue(), MTrip.HEADSIGN_TYPE_STRING, WATERIDGE) //
+				.addTripSort(MDirectionType.NORTH.intValue(), //
+						Arrays.asList(new String[] { //
+						"EE240", // "4994", // MIKINAK / DU VEDETTE #WATERIDGE
+								"EB520", // ++
+								"EB275", // ==
+								"EB930", "EB940", // "3025", // ST-LAURENT D
+						})) //
+				.addTripSort(MDirectionType.SOUTH.intValue(), //
+						Arrays.asList(new String[] { //
+						"EB935", // "3025", // ST-LAURENT D
+								"EB510", // ++
+								"EE240", // "4994", // MIKINAK / DU VEDETTE #WATERIDGE
+						})) //
+				.compileBothTripSort());
+		map2.put(84L, new RouteTripSpec(84L, //
+				MDirectionType.EAST.intValue(), MTrip.HEADSIGN_TYPE_STRING, "Tunney's Pasture", //
+				MDirectionType.WEST.intValue(), MTrip.HEADSIGN_TYPE_STRING, "Centrepointe") //
+				.addTripSort(MDirectionType.EAST.intValue(), //
+						Arrays.asList(new String[] { //
+						"SH570", // "8072", // CENTREPOINTE / NORWICH
+								"SH935", // "3017", // BASELINE 2B
+								"NI925", // "3014", // LINCOLN FIELDS 3A =>
+								"NA931", // "3011", // TUNNEY'S PASTURE C =>
+						})) //
+				.addTripSort(MDirectionType.WEST.intValue(), //
+						Arrays.asList(new String[] { //
+						"NA961", // != "3011", // TUNNEY'S PASTURE F <=
+								"NI910", // !=
+								"NI930", // != "3014", // LINCOLN FIELDS 4B <=
+								"SJ905", // ==
+								"SH905", // "3017", // BASELINE 1C
+								"SH570", // "8072", // CENTREPOINTE / NORWICH
+						})) //
+				.compileBothTripSort());
+		map2.put(99L, new RouteTripSpec(99L, //
+				MDirectionType.NORTH.intValue(), MTrip.HEADSIGN_TYPE_STRING, GREENBORO, //
+				MDirectionType.SOUTH.intValue(), MTrip.HEADSIGN_TYPE_STRING, BARRHAVEN) //
+				.addTripSort(MDirectionType.NORTH.intValue(), //
+						Arrays.asList(new String[] { //
+						"WA950", // "3045", // BARRHAVEN CENTRE 2A
+								"RF910", // "3037", // GREENBORO 2A
+								"AF920", // "3023", // HURDMAN B
+								"CJ903", // "3010", // PIMISI C
+						})) //
+				.addTripSort(MDirectionType.SOUTH.intValue(), //
+						Arrays.asList(new String[] { //
+						"CJ933", // "3010", // PIMISI D
+								"AF930", // "3023", // HURDMAN C
+								"RF900", // "3037", // GREENBORO 1A
+								"WA940", // "3045", // BARRHAVEN CENTRE 1A
+						})) //
+				.compileBothTripSort());
+		map2.put(636L, new RouteTripSpec(636L, //
+				MDirectionType.EAST.intValue(), MTrip.HEADSIGN_TYPE_STRING, StringUtils.EMPTY, //
+				MDirectionType.WEST.intValue(), MTrip.HEADSIGN_TYPE_STRING, "Place d'Orléans") //
+				.addTripSort(MDirectionType.EAST.intValue(), //
+						Arrays.asList(new String[] { //
+						/** no stops */
+						})) //
+				.addTripSort(MDirectionType.WEST.intValue(), //
+						Arrays.asList(new String[] { //
+						"EO102", // "6356", // TENTH LINE / AD. 1675
+								"EM055", // ++
+								"EP920", // "3028", // ORLÉANS 1C
+						})) //
+				.compileBothTripSort());
+		map2.put(638L, new RouteTripSpec(638L, //
+				MDirectionType.EAST.intValue(), MTrip.HEADSIGN_TYPE_STRING, "Orléans", //
+				MDirectionType.WEST.intValue(), MTrip.HEADSIGN_TYPE_STRING, StringUtils.EMPTY) //
+				.addTripSort(MDirectionType.EAST.intValue(), //
+						Arrays.asList(new String[] { //
+						"EL100", // "7914", // JEANNE D'ARC / BILBERRY
+								"EL160", // ++
+								"EP920", // "3028", // ORLÉANS 1C
+						})) //
+				.addTripSort(MDirectionType.WEST.intValue(), //
+						Arrays.asList(new String[] { //
+						/** no stops */
+						})) //
+				.compileBothTripSort());
+		map2.put(686L, new RouteTripSpec(686L, //
+				MDirectionType.EAST.intValue(), MTrip.HEADSIGN_TYPE_STRING, "Baseline", //
+				MDirectionType.WEST.intValue(), MTrip.HEADSIGN_TYPE_STRING, StringUtils.EMPTY) //
+				.addTripSort(MDirectionType.EAST.intValue(), //
+						Arrays.asList(new String[] { //
+						"SF210", // "6001", // CHESTERTON / OMER-DESLAURIERS
+								"SH470", // ++
+								"SH935", // "3017", // BASELINE 2B
+						})) //
+				.addTripSort(MDirectionType.WEST.intValue(), //
+						Arrays.asList(new String[] { //
+						/** no stops */
+						})) //
+				.compileBothTripSort());
+		ALL_ROUTE_TRIPS2 = map2;
+	}
+
+	@Override
+	public int compareEarly(long routeId, List<MTripStop> list1, List<MTripStop> list2, MTripStop ts1, MTripStop ts2, GStop ts1GStop, GStop ts2GStop) {
+		if (ALL_ROUTE_TRIPS2.containsKey(routeId)) {
+			return ALL_ROUTE_TRIPS2.get(routeId).compare(routeId, list1, list2, ts1, ts2, ts1GStop, ts2GStop, this);
+		}
+		return super.compareEarly(routeId, list1, list2, ts1, ts2, ts1GStop, ts2GStop);
+	}
+
+	@Override
+	public ArrayList<MTrip> splitTrip(MRoute mRoute, GTrip gTrip, GSpec gtfs) {
+		if (ALL_ROUTE_TRIPS2.containsKey(mRoute.getId())) {
+			return ALL_ROUTE_TRIPS2.get(mRoute.getId()).getAllTrips();
+		}
+		return super.splitTrip(mRoute, gTrip, gtfs);
+	}
+
+	@Override
+	public Pair<Long[], Integer[]> splitTripStop(MRoute mRoute, GTrip gTrip, GTripStop gTripStop, ArrayList<MTrip> splitTrips, GSpec routeGTFS) {
+		if (ALL_ROUTE_TRIPS2.containsKey(mRoute.getId())) {
+			return SplitUtils.splitTripStop(mRoute, gTrip, gTripStop, routeGTFS, ALL_ROUTE_TRIPS2.get(mRoute.getId()), this);
+		}
+		return super.splitTripStop(mRoute, gTrip, gTripStop, splitTrips, routeGTFS);
+	}
+
 	@Override
 	public void setTripHeadsign(MRoute mRoute, MTrip mTrip, GTrip gTrip, GSpec gtfs) {
+		if (ALL_ROUTE_TRIPS2.containsKey(mRoute.getId())) {
+			return; // split
+		}
 		if (mRoute.getId() == 179L) {
 			if (gTrip.getDirectionId() == 0 && "0".equals(gTrip.getTripHeadsign())) {
 				mTrip.setHeadsignString(CITIGATE, gTrip.getDirectionId());
@@ -987,8 +1163,22 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		mTrip.setHeadsignString(cleanTripHeadsign(gTrip.getTripHeadsign()), gTrip.getDirectionId());
 	}
 
+	private static final Pattern CAIRINE_WILSON_ = Pattern.compile("((^|\\W){1}(carine wilson)(\\W|$){1})", Pattern.CASE_INSENSITIVE);
+	private static final String CAIRINE_WILSON_REPLACEMENT = "$2" + "Cairine Wilson" + "$4";
+
+	private static final Pattern SARSFIELD_ = Pattern.compile("((^|\\W){1}(sarfield)(\\W|$){1})", Pattern.CASE_INSENSITIVE);
+	private static final String SARSFIELD_REPLACEMENT = "$2" + "Sarsfield" + "$4";
+
+	private static final Pattern ST_LAURENT_ = Pattern.compile("((^|\\W){1}(st\\- laurent)(\\W|$){1})", Pattern.CASE_INSENSITIVE);
+	private static final String ST_LAURENT_REPLACEMENT = "$2" + "St-Laurent" + "$4";
+
 	@Override
 	public String cleanTripHeadsign(String tripHeadsign) {
+		tripHeadsign = CAIRINE_WILSON_.matcher(tripHeadsign).replaceAll(CAIRINE_WILSON_REPLACEMENT);
+		tripHeadsign = SARSFIELD_.matcher(tripHeadsign).replaceAll(SARSFIELD_REPLACEMENT);
+		tripHeadsign = ST_LAURENT_.matcher(tripHeadsign).replaceAll(ST_LAURENT_REPLACEMENT);
+		tripHeadsign = CleanUtils.cleanSlashes(tripHeadsign);
+		tripHeadsign = CleanUtils.cleanLabel(tripHeadsign);
 		return tripHeadsign; // DO NOT CLEAN, USED TO IDENTIFY TRIP IN REAL TIME API
 	}
 
@@ -996,21 +1186,64 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	public boolean mergeHeadsign(MTrip mTrip, MTrip mTripToMerge) {
 		if (mTrip.getHeadsignValue() == null || !mTrip.getHeadsignValue().equals(mTripToMerge.getHeadsignValue())) {
 			List<String> headsignsValues = Arrays.asList(mTrip.getHeadsignValue(), mTripToMerge.getHeadsignValue());
+			if (mTrip.getRouteId() == 10L) {
+				if (Arrays.asList( //
+						"Lyon", //
+						"Rideau" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Rideau", mTrip.getHeadsignId());
+					return true;
+				}
+				if (Arrays.asList( //
+						"Carleton", //
+						"Hurdman" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Hurdman", mTrip.getHeadsignId());
+					return true;
+				}
+			}
 			if (mTrip.getRouteId() == 11L) {
+				if (Arrays.asList( //
+						"Parliament", //
+						"Parliament / Parlement" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Parliament / Parlement", mTrip.getHeadsignId());
+					return true;
+				}
 				if (Arrays.asList( //
 						"Parliament / Parlement", //
 						"Rideau" //
 				).containsAll(headsignsValues)) {
 					mTrip.setHeadsignString("Rideau", mTrip.getHeadsignId());
 					return true;
-				} else if (Arrays.asList( //
+				}
+				if (Arrays.asList( //
 						"Lincoln Fields", //
 						"Bayshore" //
 				).containsAll(headsignsValues)) {
 					mTrip.setHeadsignString("Bayshore", mTrip.getHeadsignId());
 					return true;
 				}
-			} else if (mTrip.getRouteId() == 17L) {
+			}
+			if (mTrip.getRouteId() == 14L) {
+				if (Arrays.asList( //
+						"Tunney's Pasture", //
+						"Carlington" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Carlington", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 16L) {
+				if (Arrays.asList( //
+						"Westboro", //
+						"Britannia" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Britannia", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 17L) {
 				if (Arrays.asList( //
 						"Rideau", //
 						"Parliament / Parlement", //
@@ -1019,7 +1252,15 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 					mTrip.setHeadsignString("Parliament", mTrip.getHeadsignId());
 					return true;
 				}
-			} else if (mTrip.getRouteId() == 18L) {
+				if (Arrays.asList( //
+						"Parliament / Parlement", //
+						"Gatineau" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Gatineau", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 18L) {
 				if (Arrays.asList( //
 						"Parliament / Parlement", //
 						"Parliament" //
@@ -1027,7 +1268,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 					mTrip.setHeadsignString("Parliament", mTrip.getHeadsignId());
 					return true;
 				}
-			} else if (mTrip.getRouteId() == 19L) {
+			}
+			if (mTrip.getRouteId() == 19L) {
 				if (Arrays.asList( //
 						"Parliament / Parlement", //
 						"Bank" //
@@ -1035,7 +1277,17 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 					mTrip.setHeadsignString("Bank", mTrip.getHeadsignId());
 					return true;
 				}
-			} else if (mTrip.getRouteId() == 32L) {
+			}
+			if (mTrip.getRouteId() == 30L) {
+				if (Arrays.asList( //
+						"Blair", //
+						"Albert / Bay" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Albert / Bay", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 32L) {
 				if (Arrays.asList( //
 						"Blair", //
 						"Place d'Orléans" //
@@ -1043,7 +1295,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 					mTrip.setHeadsignString("Place d'Orléans", mTrip.getHeadsignId());
 					return true;
 				}
-			} else if (mTrip.getRouteId() == 33L) {
+			}
+			if (mTrip.getRouteId() == 33L) {
 				if (Arrays.asList( //
 						"Orléans", //
 						"Portobello" //
@@ -1051,7 +1304,15 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 					mTrip.setHeadsignString("Portobello", mTrip.getHeadsignId());
 					return true;
 				}
-			} else if (mTrip.getRouteId() == 34L) {
+				if (Arrays.asList( //
+						"Blair", //
+						"Place D'Orléans" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Place D'Orléans", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 34L) {
 				if (Arrays.asList( //
 						"Albert Bay", //
 						"Albert / Bay" //
@@ -1059,7 +1320,6 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 					mTrip.setHeadsignString("Albert / Bay", mTrip.getHeadsignId());
 					return true;
 				}
-			} else if (mTrip.getRouteId() == 38L) {
 				if (Arrays.asList( //
 						"Blair", //
 						"Albert Bay" //
@@ -1067,30 +1327,183 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 					mTrip.setHeadsignString("Albert Bay", mTrip.getHeadsignId());
 					return true;
 				}
+			}
+			if (mTrip.getRouteId() == 38L) {
 				if (Arrays.asList( //
-						"Blair", //
-						"Albert / Bay" //
+						"Place D'Orléans", //
+						"Jeanne D'Arc / Trim" //
 				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Albert / Bay", mTrip.getHeadsignId());
+					mTrip.setHeadsignString("Jeanne D'Arc / Trim", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 40L) {
+				if (Arrays.asList( //
+						"Greenboro / Hurdman", //
+						"Greenboro" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Greenboro", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 44L) {
+				if (Arrays.asList( //
+						"Hurdman", //
+						"Gatineau" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Gatineau", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 56L) {
+				if (Arrays.asList( //
+						"Hurdman", //
+						"King Edward" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("King Edward", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 61L) {
+				if (Arrays.asList( //
+						"Tunney's Pasture", //
+						"St-Laurent" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("St-Laurent", mTrip.getHeadsignId());
 					return true;
 				}
 				if (Arrays.asList( //
-						"Place d'Orléans", //
-						" Jeanne D'Arc / Trim", //
-						"Jeanne d'Arc" //
+						"Terry Fox", //
+						"Stittsville" //
 				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Jeanne d'Arc", mTrip.getHeadsignId());
+					mTrip.setHeadsignString("Stittsville", mTrip.getHeadsignId());
 					return true;
 				}
-			} else if (mTrip.getRouteId() == 86L) {
+			}
+			if (mTrip.getRouteId() == 62L) {
+				if (Arrays.asList( //
+						"Tunney's Pasture", //
+						"St-Laurent" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("St-Laurent", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 63L) {
+				if (Arrays.asList( //
+						"Mackenzie King Via Briarbrook", //
+						"Tunney's Pasture Via Briarbrook" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Tunney's Pasture Via Briarbrook", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 64L) {
+				if (Arrays.asList( //
+						"Mackenzie King Via Morgan's Grant", //
+						"Tunney's Pasture Via Morgan's Grant" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Tunney's Pasture Via Morgan's Grant", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 66L) {
+				if (Arrays.asList( //
+						"Tunney's Pasture", //
+						"Gatineau" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Gatineau", mTrip.getHeadsignId());
+					return true;
+				}
+				if (Arrays.asList( //
+						"Kanata-Solandt", //
+						"Kanata" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Kanata", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 83L) {
 				if (Arrays.asList( //
 						"Baseline", //
-						"Baseline  Colonnade" //
+						"Tunney's Pasture" //
 				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Baseline  Colonnade", mTrip.getHeadsignId());
+					mTrip.setHeadsignString("Tunney's Pasture", mTrip.getHeadsignId());
 					return true;
 				}
-			} else if (mTrip.getRouteId() == 101L) {
+			}
+			if (mTrip.getRouteId() == 85L) {
+				if (Arrays.asList( //
+						"Gatineau", //
+						"Lees", //
+						"Lees / Gatineau" // ++
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Lees / Gatineau", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 86L) {
+				if (Arrays.asList( //
+						"Tunney's Pasture", //
+						"Elmvale" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Elmvale", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 87L) {
+				if (Arrays.asList( //
+						"Tunney's Pasture", //
+						"Greenboro" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Greenboro", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 93L) {
+				if (Arrays.asList( //
+						"Greenboro", //
+						"Greenboro / Hurdman" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Greenboro / Hurdman", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 96L) {
+				if (Arrays.asList( //
+						"Hurdman / Greenboro", //
+						"Greenboro" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Greenboro", mTrip.getHeadsignId());
+					return true;
+				}
+				if (Arrays.asList( //
+						"Merivale / 96b Hunt Club", //
+						"Merivale" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Merivale", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 97L) {
+				if (Arrays.asList( //
+						"Hurdman", //
+						"Bells Corners" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Bells Corners", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 98L) {
+				if (Arrays.asList( //
+						"Hurdman", //
+						"Tunney's Pasture" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Tunney's Pasture", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 101L) {
 				if (Arrays.asList( //
 						"Moodie", //
 						"Bayshore" //
@@ -1098,7 +1511,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 					mTrip.setHeadsignString("Bayshore", mTrip.getHeadsignId());
 					return true;
 				}
-			} else if (mTrip.getRouteId() == 106L) {
+			}
+			if (mTrip.getRouteId() == 106L) {
 				if (Arrays.asList( //
 						"Riverside", //
 						"Hurdman" //
@@ -1106,21 +1520,35 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 					mTrip.setHeadsignString("Hurdman", mTrip.getHeadsignId());
 					return true;
 				}
-			} else if (mTrip.getRouteId() == 131L) {
+			}
+			if (mTrip.getRouteId() == 111L) {
 				if (Arrays.asList( //
-						"Chapel Hill", // <>
+						"Carleton", //
+						"Billings Bridge" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Billings Bridge", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 131L) {
+				if (Arrays.asList( //
+						"Fallingbrook", //
 						"Convent Glen" //
 				).containsAll(headsignsValues)) {
 					mTrip.setHeadsignString("Convent Glen", mTrip.getHeadsignId());
 					return true;
-				} else if (Arrays.asList( //
-						"Fallingbrook", //
-						"Chapel Hill" // <>
+				}
+			}
+			if (mTrip.getRouteId() == 138L) {
+				if (Arrays.asList( //
+						"St-Louis", //
+						"Innes" //
 				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Chapel Hill", mTrip.getHeadsignId());
+					mTrip.setHeadsignString("Innes", mTrip.getHeadsignId());
 					return true;
 				}
-			} else if (mTrip.getRouteId() == 153L) {
+			}
+			if (mTrip.getRouteId() == 153L) {
 				if (Arrays.asList( //
 						"Tunney's Pasture", //
 						"Carlingwood" //
@@ -1135,7 +1563,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 					mTrip.setHeadsignString("Lincoln Fields", mTrip.getHeadsignId());
 					return true;
 				}
-			} else if (mTrip.getRouteId() == 186L) {
+			}
+			if (mTrip.getRouteId() == 186L) {
 				if (Arrays.asList( //
 						"Merivale", //
 						"Merivale / Slack" //
@@ -1143,7 +1572,51 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 					mTrip.setHeadsignString("Merivale / Slack", mTrip.getHeadsignId());
 					return true;
 				}
-			} else if (mTrip.getRouteId() == 234L) {
+			}
+			if (mTrip.getRouteId() == 199L) {
+				if (Arrays.asList( //
+						"Leikin", //
+						"Barrhaven" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Barrhaven", mTrip.getHeadsignId());
+					return true;
+				}
+				if (Arrays.asList( //
+						"Hurdman", //
+						"Place D'Orléans" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Place D'Orléans", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 221L) {
+				if (Arrays.asList( //
+						"Blair", //
+						"Albert / Bay" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Albert / Bay", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 222L) {
+				if (Arrays.asList( //
+						"Blair", //
+						"Albert / Bay" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Albert / Bay", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 224L) {
+				if (Arrays.asList( //
+						"Blair", //
+						"Albert / Bay" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Albert / Bay", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 234L) {
 				if (Arrays.asList( //
 						"Tenth line", //
 						"Tenth Line" //
@@ -1151,7 +1624,260 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 					mTrip.setHeadsignString("Tenth Line", mTrip.getHeadsignId());
 					return true;
 				}
-			} else if (mTrip.getRouteId() == 301L) {
+			}
+			if (mTrip.getRouteId() == 228L) {
+				if (Arrays.asList( //
+						"Blair", //
+						"Albert / Bay" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Albert / Bay", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 231L) {
+				if (Arrays.asList( //
+						"Blair", //
+						"Albert / Bay" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Albert / Bay", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 232L) {
+				if (Arrays.asList( //
+						"Blair", //
+						"Albert / Bay" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Albert / Bay", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 233L) {
+				if (Arrays.asList( //
+						"Blair", //
+						"Albert / Bay" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Albert / Bay", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 234L) {
+				if (Arrays.asList( //
+						"Blair", //
+						"Gatineau" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Gatineau", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 235L) {
+				if (Arrays.asList( //
+						"Blair", //
+						"Albert / Bay" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Albert / Bay", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 236L) {
+				if (Arrays.asList( //
+						"Blair", //
+						"Albert / Bay" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Albert / Bay", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 237L) {
+				if (Arrays.asList( //
+						"Blair", //
+						"Albert / Bay" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Albert / Bay", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 252L) {
+				if (Arrays.asList( //
+						"Tunney's Pasture", //
+						"Mackenzie King" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 256L) {
+				if (Arrays.asList( //
+						"Tunney's Pasture", //
+						"Mackenzie King" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 257L) {
+				if (Arrays.asList( //
+						"Tunney's Pasture", //
+						"Mackenzie King" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 261L) {
+				if (Arrays.asList( //
+						"Tunney's Pasture", //
+						"Mackenzie King" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 262L) {
+				if (Arrays.asList( //
+						"Tunney's Pasture", //
+						"Mackenzie King" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 263L) {
+				if (Arrays.asList( //
+						"Tunney's Pasture", //
+						"Mackenzie King" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 264L) {
+				if (Arrays.asList( //
+						"Tunney's Pasture", //
+						"Mackenzie King" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 265L) {
+				if (Arrays.asList( //
+						"Tunney's Pasture", //
+						"Mackenzie King" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 267L) {
+				if (Arrays.asList( //
+						"Tunney's Pasture", //
+						"Mackenzie King" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 268L) {
+				if (Arrays.asList( //
+						"Tunney's Pasture", //
+						"Mackenzie King" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 270L) {
+				if (Arrays.asList( //
+						"Tunney's Pasture", //
+						"Mackenzie King" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 271L) {
+				if (Arrays.asList( //
+						"Tunney's Pasture", //
+						"Mackenzie King" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 272L) {
+				if (Arrays.asList( //
+						"Tunney's Pasture", //
+						"Mackenzie King" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 273L) {
+				if (Arrays.asList( //
+						"Tunney's Pasture", //
+						"Mackenzie King" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 275L) {
+				if (Arrays.asList( //
+						"Tunney's Pasture", //
+						"Mackenzie King" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 277L) {
+				if (Arrays.asList( //
+						"Tunney's Pasture", //
+						"Mackenzie King" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 278L) {
+				if (Arrays.asList( //
+						"Tunney's Pasture", //
+						"Mackenzie King" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 282L) {
+				if (Arrays.asList( //
+						"Tunney's Pasture", //
+						"Mackenzie King" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 283L) {
+				if (Arrays.asList( //
+						"Tunney's Pasture", //
+						"Mackenzie King" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 299L) {
+				if (Arrays.asList( //
+						"Hurdman", //
+						"LeBreton" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("LeBreton", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 301L) {
 				if (Arrays.asList( //
 						"Bayshore Carlingwd", //
 						"Bayshore Carlingwood" //
@@ -1159,7 +1885,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 					mTrip.setHeadsignString("Bayshore Carlingwood", mTrip.getHeadsignId());
 					return true;
 				}
-			} else if (mTrip.getRouteId() == 303L) {
+			}
+			if (mTrip.getRouteId() == 303L) {
 				if (Arrays.asList( //
 						"Dunrobin Stittsville", //
 						"Dunrobin Carp" //
@@ -1167,7 +1894,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 					mTrip.setHeadsignString("Dunrobin Carp", mTrip.getHeadsignId());
 					return true;
 				}
-			} else if (mTrip.getRouteId() == 401L) {
+			}
+			if (mTrip.getRouteId() == 401L) {
 				if (Arrays.asList( //
 						"Canadian Tire Centre", //
 						"Canadian Tire Ctr" //
@@ -1175,7 +1903,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 					mTrip.setHeadsignString("Canadian Tire Ctr", mTrip.getHeadsignId());
 					return true;
 				}
-			} else if (mTrip.getRouteId() == 402L) {
+			}
+			if (mTrip.getRouteId() == 402L) {
 				if (Arrays.asList( //
 						"Canadian Tire Centre", //
 						"Canadian Tire Ctr" //
@@ -1183,7 +1912,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 					mTrip.setHeadsignString("Canadian Tire Ctr", mTrip.getHeadsignId());
 					return true;
 				}
-			} else if (mTrip.getRouteId() == 403L) {
+			}
+			if (mTrip.getRouteId() == 403L) {
 				if (Arrays.asList( //
 						"Canadian Tire Centre", //
 						"Canadian Tire Ctr" //
@@ -1191,7 +1921,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 					mTrip.setHeadsignString("Canadian Tire Ctr", mTrip.getHeadsignId());
 					return true;
 				}
-			} else if (mTrip.getRouteId() == 404L) {
+			}
+			if (mTrip.getRouteId() == 404L) {
 				if (Arrays.asList( //
 						"Canadian Tire Centre", //
 						"Canadian Tire Ctr" //
@@ -1199,7 +1930,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 					mTrip.setHeadsignString("Canadian Tire Ctr", mTrip.getHeadsignId());
 					return true;
 				}
-			} else if (mTrip.getRouteId() == 405L) {
+			}
+			if (mTrip.getRouteId() == 405L) {
 				if (Arrays.asList( //
 						"Canadian Tire Centre", //
 						"Canadian Tire Ctr" //
@@ -1207,7 +1939,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 					mTrip.setHeadsignString("Canadian Tire Ctr", mTrip.getHeadsignId());
 					return true;
 				}
-			} else if (mTrip.getRouteId() == 406L) {
+			}
+			if (mTrip.getRouteId() == 406L) {
 				if (Arrays.asList( //
 						"Canadian Tire Centre", //
 						"Canadian Tire Ctr" //
@@ -1215,15 +1948,24 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 					mTrip.setHeadsignString("Canadian Tire Ctr", mTrip.getHeadsignId());
 					return true;
 				}
-			} else if (mTrip.getRouteId() == 620L) {
+			}
+			if (mTrip.getRouteId() == 609L) {
 				if (Arrays.asList( //
-						"St- Laurent", //
-						"St-Laurent" //
+						"Hurdman", //
+						"Elmvale" //
 				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("St-Laurent", mTrip.getHeadsignId());
+					mTrip.setHeadsignString("Elmvale", mTrip.getHeadsignId());
 					return true;
 				}
-			} else if (mTrip.getRouteId() == 622L) {
+				if (Arrays.asList( //
+						"De La Salle H.S", //
+						"De La Salle" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("De La Salle", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 622L) {
 				if (Arrays.asList( //
 						"Special", //
 						"Colonel By / Gloucester" //
@@ -1231,7 +1973,44 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 					mTrip.setHeadsignString("Colonel By / Gloucester", mTrip.getHeadsignId());
 					return true;
 				}
-			} else if (mTrip.getRouteId() == 691L) {
+			}
+			if (mTrip.getRouteId() == 649L) {
+				if (Arrays.asList( //
+						"Hillcrest H.S", //
+						"Hillcrest" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Hillcrest", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 661L) {
+				if (Arrays.asList( //
+						"Bell H.S", //
+						"Bell" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Bell", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 665L) {
+				if (Arrays.asList( //
+						"Bell H.S", //
+						"Bell" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Bell", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 669L) {
+				if (Arrays.asList( //
+						"Bell H.S", //
+						"Bell" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Bell", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 691L) {
 				if (Arrays.asList( //
 						"Deslauriers", //
 						"Omer-Deslaurier H.S" //
@@ -1297,49 +2076,53 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 			int digits = Integer.parseInt(matcher.group());
 			int stopId = 0;
 			if (gStop.getStopId().startsWith(EE)) {
-				stopId = 100000;
+				stopId = 100_000;
 			} else if (gStop.getStopId().startsWith(EO)) {
-				stopId = 200000;
+				stopId = 200_000;
 			} else if (gStop.getStopId().startsWith(NG)) {
-				stopId = 300000;
+				stopId = 300_000;
 			} else if (gStop.getStopId().startsWith(NO)) {
-				stopId = 400000;
+				stopId = 400_000;
 			} else if (gStop.getStopId().startsWith(WA)) {
-				stopId = 500000;
+				stopId = 500_000;
 			} else if (gStop.getStopId().startsWith(WD)) {
-				stopId = 600000;
+				stopId = 600_000;
 			} else if (gStop.getStopId().startsWith(WH)) {
-				stopId = 700000;
+				stopId = 700_000;
 			} else if (gStop.getStopId().startsWith(WI)) {
-				stopId = 800000;
+				stopId = 800_000;
 			} else if (gStop.getStopId().startsWith(WL)) {
-				stopId = 900000;
+				stopId = 900_000;
 			} else if (gStop.getStopId().startsWith(PLACE)) {
-				stopId = 1000000;
+				stopId = 1_000_000;
 			} else if (gStop.getStopId().startsWith(RZ)) {
-				stopId = 1100000;
+				stopId = 1_100_000;
 			} else if (gStop.getStopId().startsWith(DT)) {
-				stopId = 1200000;
+				stopId = 1_200_000;
 			} else if (gStop.getStopId().startsWith(ER)) {
-				stopId = 1300000;
+				stopId = 1_300_000;
 			} else if (gStop.getStopId().startsWith(SNOW)) {
-				stopId = 1400000;
+				stopId = 1_400_000;
 			} else if (gStop.getStopId().startsWith(CD)) {
-				stopId = 1500000;
+				stopId = 1_500_000;
 			} else if (gStop.getStopId().startsWith(CF)) {
-				stopId = 1600000;
+				stopId = 1_600_000;
 			} else if (gStop.getStopId().startsWith(SX)) {
-				stopId = 1700000;
+				stopId = 1_700_000;
 			} else if (gStop.getStopId().startsWith(SC)) {
-				stopId = 1800000;
+				stopId = 1_800_000;
 			} else if (gStop.getStopId().startsWith(SD)) {
-				stopId = 1900000;
+				stopId = 1_900_000;
 			} else if (gStop.getStopId().startsWith("CB")) {
-				stopId = 2000000;
+				stopId = 2_000_000;
 			} else if (gStop.getStopId().startsWith("EN")) {
-				stopId = 2100000;
+				stopId = 2_100_000;
 			} else if (gStop.getStopId().startsWith("CE")) {
-				stopId = 2200000;
+				stopId = 2_200_000;
+			} else if (gStop.getStopId().startsWith("CA")) {
+				stopId = 2_300_000;
+			} else if (gStop.getStopId().startsWith("CK")) {
+				stopId = 2_400_000;
 			} else {
 				System.out.printf("\nStop doesn't have an ID (start with) %s!\n", gStop);
 				System.exit(-1);
