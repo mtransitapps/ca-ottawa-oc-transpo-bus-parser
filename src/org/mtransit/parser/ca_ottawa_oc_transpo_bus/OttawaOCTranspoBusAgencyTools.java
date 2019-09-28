@@ -1182,10 +1182,22 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		return tripHeadsign; // DO NOT CLEAN, USED TO IDENTIFY TRIP IN REAL TIME API
 	}
 
+	private static final String N_ = "N ";
+
 	@Override
 	public boolean mergeHeadsign(MTrip mTrip, MTrip mTripToMerge) {
 		if (mTrip.getHeadsignValue() == null || !mTrip.getHeadsignValue().equals(mTripToMerge.getHeadsignValue())) {
 			List<String> headsignsValues = Arrays.asList(mTrip.getHeadsignValue(), mTripToMerge.getHeadsignValue());
+			if (mTrip.getHeadsignValue().startsWith(N_) //
+					&& mTrip.getHeadsignValue().equals(N_ + mTripToMerge.getHeadsignValue())) {
+				mTrip.setHeadsignString(mTripToMerge.getHeadsignValue(), mTrip.getHeadsignId());
+				return true;
+			}
+			if (mTripToMerge.getHeadsignValue().startsWith(N_) //
+					&& mTripToMerge.getHeadsignValue().equals(N_ + mTrip.getHeadsignValue())) {
+				mTripToMerge.setHeadsignString(mTrip.getHeadsignValue(), mTripToMerge.getHeadsignId());
+				return true;
+			}
 			if (mTrip.getRouteId() == 10L) {
 				if (Arrays.asList( //
 						"Lyon", //
