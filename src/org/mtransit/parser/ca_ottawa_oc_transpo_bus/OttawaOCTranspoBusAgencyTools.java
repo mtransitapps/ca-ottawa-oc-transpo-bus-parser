@@ -1163,6 +1163,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		mTrip.setHeadsignString(cleanTripHeadsign(gTrip.getTripHeadsign()), gTrip.getDirectionId());
 	}
 
+	private static final Pattern STARTS_WITH_TO_VERS = Pattern.compile("((^.* |^)(to/vers|to / vers))", Pattern.CASE_INSENSITIVE);
+
 	private static final Pattern CAIRINE_WILSON_ = Pattern.compile("((^|\\W){1}(carine wilson)(\\W|$){1})", Pattern.CASE_INSENSITIVE);
 	private static final String CAIRINE_WILSON_REPLACEMENT = "$2" + "Cairine Wilson" + "$4";
 
@@ -1174,6 +1176,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 
 	@Override
 	public String cleanTripHeadsign(String tripHeadsign) {
+		tripHeadsign = STARTS_WITH_TO_VERS.matcher(tripHeadsign).replaceAll(StringUtils.EMPTY);
 		tripHeadsign = CAIRINE_WILSON_.matcher(tripHeadsign).replaceAll(CAIRINE_WILSON_REPLACEMENT);
 		tripHeadsign = SARSFIELD_.matcher(tripHeadsign).replaceAll(SARSFIELD_REPLACEMENT);
 		tripHeadsign = ST_LAURENT_.matcher(tripHeadsign).replaceAll(ST_LAURENT_REPLACEMENT);
