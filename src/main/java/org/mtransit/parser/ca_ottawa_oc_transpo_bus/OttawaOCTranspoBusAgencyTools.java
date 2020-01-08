@@ -1311,6 +1311,15 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 					return true;
 				}
 			}
+			if (mTrip.getRouteId() == 58L) {
+				if (Arrays.asList( //
+						"Tunney's Pasture", //
+						"Lincoln Fields" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Lincoln Fields", mTrip.getHeadsignId());
+					return true;
+				}
+			}
 			if (mTrip.getRouteId() == 61L) {
 				if (Arrays.asList( //
 						"Tunney's Pasture", //
@@ -1895,6 +1904,13 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 					mTrip.setHeadsignString("Canadian Tire Ctr", mTrip.getHeadsignId());
 					return true;
 				}
+				if (Arrays.asList( //
+						"Scotiabank Place", //
+						"Canadian Tire Centre" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Canadian Tire Centre", mTrip.getHeadsignId());
+					return true;
+				}
 			}
 			if (mTrip.getRouteId() == 406L) {
 				if (Arrays.asList( //
@@ -1902,6 +1918,13 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 						"Canadian Tire Ctr" //
 				).containsAll(headsignsValues)) {
 					mTrip.setHeadsignString("Canadian Tire Ctr", mTrip.getHeadsignId());
+					return true;
+				}
+				if (Arrays.asList( //
+						"Scotiabank Place", //
+						"Canadian Tire Centre" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Canadian Tire Centre", mTrip.getHeadsignId());
 					return true;
 				}
 			}
