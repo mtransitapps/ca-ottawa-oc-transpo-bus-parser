@@ -504,6 +504,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_454 = LANSDOWNE + RLN_SEP + TERRY_FOX;
 	private static final String ROUTE_455 = LANSDOWNE + RLN_SEP + TRIM;
 	private static final String ROUTE_456 = LANSDOWNE_PARK + RLN_SEP + BARRHAVEN_CTR;
+	private static final String ROUTE_505 = null; // TODO
+	private static final String ROUTE_506 = null; // TODO
 	private static final String ROUTE_520 = HAWKESBURY + RLN_SEP + OTTAWA + RLN_SEP + GATINEAU;
 	private static final String ROUTE_555 = "Casselman" + RLN_SEP + OTTAWA + RLN_SEP + GATINEAU;
 	private static final String ROUTE_602 = E_S_DE_LA_SALLE + RLN_SEP + HURDMAN;
@@ -789,6 +791,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 454: return ROUTE_454;
 				case 455: return ROUTE_455;
 				case 456: return ROUTE_456;
+				case 505: return ROUTE_505;
+				case 506: return ROUTE_506;
 				case 520: return ROUTE_520;
 				case 555: return ROUTE_555;
 				case 602: return ROUTE_602;
