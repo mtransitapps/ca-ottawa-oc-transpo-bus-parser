@@ -2035,6 +2035,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String SNOW = "SNOW";
 	private static final String SC = "SC";
 	private static final String SD = "SD";
+	private static final String SL = "SL";
 
 	@Override
 	public int getStopId(GStop gStop) {
@@ -2105,6 +2106,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				stopId = 2_300_000;
 			} else if (gStop.getStopId().startsWith("CK")) {
 				stopId = 2_400_000;
+			} else if (gStop.getStopId().startsWith(SL)) {
+				stopId = 2_500_000;
 			} else {
 				MTLog.logFatal("Stop doesn't have an ID (start with) %s!", gStop);
 				stopId = -1;
