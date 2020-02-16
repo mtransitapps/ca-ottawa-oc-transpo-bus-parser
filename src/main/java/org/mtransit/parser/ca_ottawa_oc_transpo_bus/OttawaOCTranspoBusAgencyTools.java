@@ -1044,6 +1044,18 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		if (ALL_ROUTE_TRIPS2.containsKey(mRoute.getId())) {
 			return; // split
 		}
+		if (mRoute.getId() == 190L) {
+			if (gTrip.getServiceId().contains("FAMDAY20")) {
+				if (gTrip.getDirectionId() == 0 && gTrip.getTripHeadsign().equals("Hurdman")) {
+					mTrip.setHeadsignString("Mooney's Bay", gTrip.getDirectionId());
+					return;
+				}
+				if (gTrip.getDirectionId() == 1 && gTrip.getTripHeadsign().equals("Mooney's Bay")) {
+					mTrip.setHeadsignString("Hurdman", gTrip.getDirectionId());
+					return;
+				}
+			}
+		}
 		mTrip.setHeadsignString(cleanTripHeadsign(gTrip.getTripHeadsign()), gTrip.getDirectionId());
 	}
 
