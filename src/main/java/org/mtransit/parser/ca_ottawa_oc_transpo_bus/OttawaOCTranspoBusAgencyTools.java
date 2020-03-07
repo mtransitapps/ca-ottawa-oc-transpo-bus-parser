@@ -1045,7 +1045,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 			return; // split
 		}
 		if (mRoute.getId() == 190L) {
-			if (gTrip.getServiceId().contains("FAMDAY20")) {
+			if (gTrip.getServiceId().contains("MARBRK20")) {
 				if (gTrip.getDirectionId() == 0 && gTrip.getTripHeadsign().equals("Hurdman")) {
 					mTrip.setHeadsignString("Mooney's Bay", gTrip.getDirectionId());
 					return;
