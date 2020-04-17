@@ -1876,6 +1876,24 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 					return true;
 				}
 			}
+			if (mTrip.getRouteId() == 303L) {
+				if (Arrays.asList( //
+						"Dunrobin Stittsville", //
+						"Dunrobin Carp" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("Dunrobin Carp", mTrip.getHeadsignId());
+					return true;
+				}
+			}
+			if (mTrip.getRouteId() == 305L) {
+				if (Arrays.asList( //
+						"North Gower / Manotick", //
+						"North Gower" //
+				).containsAll(headsignsValues)) {
+					mTrip.setHeadsignString("North Gower", mTrip.getHeadsignId());
+					return true;
+				}
+			}
 			if (mTrip.getRouteId() == 401L) {
 				if (Arrays.asList( //
 						"Canadian Tire Centre", //
