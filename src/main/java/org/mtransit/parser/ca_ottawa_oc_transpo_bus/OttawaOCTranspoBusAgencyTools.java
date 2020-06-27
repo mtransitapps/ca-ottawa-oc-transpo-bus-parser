@@ -1214,6 +1214,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 			if (mTrip.getRouteId() == 12L) {
 				if (Arrays.asList( //
 						"Rideau", //
+						"Parliament ~ Parlement", //
 						"Parliament / Parlement" //
 				).containsAll(headsignsValues)) {
 					mTrip.setHeadsignString("Parliament / Parlement", mTrip.getHeadsignId());
@@ -1273,6 +1274,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 			}
 			if (mTrip.getRouteId() == 19L) {
 				if (Arrays.asList( //
+						"Parliament ~ Parlement", //
 						"Parliament / Parlement", //
 						"Bank" //
 				).containsAll(headsignsValues)) {
