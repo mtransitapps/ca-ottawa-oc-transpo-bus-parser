@@ -549,6 +549,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_669 = BELL_HIGH_SCHOOL + RLN_SEP + BAYSHORE + SLASH + CARLING;
 	private static final String ROUTE_670 = ST_PIUS_X_HIGH_SCHOOL + RLN_SEP + VAAN + SLASH + WOODROFFE;
 	private static final String ROUTE_674 = ALL_STS_CATHOLIC_AND_STEPHEN_LEACOCK_SCHOOLS + RLN_SEP + INNOVATION + SLASH + HINES;
+	private static final String ROUTE_675 = BELL_HIGH_SCHOOL + RLN_SEP + "Minto Rec";
 	private static final String ROUTE_678 = E_S_LOUIS_RIEL + RLN_SEP + JEANNE_D_ARC_STA;
 	private static final String ROUTE_681 = BELL_HIGH_SCHOOL + RLN_SEP + BRIDLEWOOD;
 	private static final String ROUTE_686 = OMER_DESLAURIER_HIGH_SCHOOL + RLN_SEP + BASELINE;
@@ -843,6 +844,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 669: return ROUTE_669;
 				case 670: return ROUTE_670;
 				case 674: return ROUTE_674;
+				case 675: return ROUTE_675;
 				case 678: return ROUTE_678;
 				case 681: return ROUTE_681;
 				case 686: return ROUTE_686;
@@ -855,7 +857,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				// @formatter:on
 				}
 			}
-			throw new MTLog.Fatal("Unexpected route long name for '%s'!", gRoute);
+			throw new MTLog.Fatal("Unexpected route long name for '%s'!", gRoute.toStringPlus());
 		}
 		return super.getRouteLongName(gRoute);
 	}
