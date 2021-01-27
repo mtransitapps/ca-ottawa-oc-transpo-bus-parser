@@ -5,9 +5,6 @@ import org.jetbrains.annotations.Nullable;
 import org.mtransit.parser.CleanUtils;
 import org.mtransit.parser.DefaultAgencyTools;
 import org.mtransit.parser.MTLog;
-import org.mtransit.parser.Pair;
-import org.mtransit.parser.SplitUtils;
-import org.mtransit.parser.SplitUtils.RouteTripSpec;
 import org.mtransit.parser.StringUtils;
 import org.mtransit.parser.Utils;
 import org.mtransit.parser.gtfs.data.GCalendar;
@@ -16,18 +13,13 @@ import org.mtransit.parser.gtfs.data.GRoute;
 import org.mtransit.parser.gtfs.data.GSpec;
 import org.mtransit.parser.gtfs.data.GStop;
 import org.mtransit.parser.gtfs.data.GTrip;
-import org.mtransit.parser.gtfs.data.GTripStop;
 import org.mtransit.parser.mt.data.MAgency;
 import org.mtransit.parser.mt.data.MRoute;
 import org.mtransit.parser.mt.data.MTrip;
-import org.mtransit.parser.mt.data.MTripStop;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -88,11 +80,6 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 			return excludeUselessTripInt(gTrip, this.serviceIds);
 		}
 		return super.excludeTrip(gTrip);
-	}
-
-	@Override
-	public boolean excludeRoute(@NotNull GRoute gRoute) {
-		return super.excludeRoute(gRoute);
 	}
 
 	@NotNull
@@ -1026,72 +1013,17 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		return super.getRouteColor(gRoute);
 	}
 
-	private static final HashMap<Long, RouteTripSpec> ALL_ROUTE_TRIPS2;
-
-	static {
-		HashMap<Long, RouteTripSpec> map2 = new HashMap<>();
-		//noinspection deprecation
-		map2.put(190L, new RouteTripSpec(190L, //
-				0, MTrip.HEADSIGN_TYPE_STRING, "Mooney's Bay", //
-				1, MTrip.HEADSIGN_TYPE_STRING, "Hurdman") //
-				.addTripSort(0, //
-						Arrays.asList( //
-								"AF930", // "3023", // HURDMAN C
-								"RB481", // ++
-								"RB070" // "1055" // ST. PATRICK'S HOME
-						)) //
-				.addTripSort(1, //
-						Arrays.asList( //
-								"RB070", //"1055", // ST. PATRICK'S HOME
-								"RA510", // ++
-								"AF920" // "3023" // HURDMAN B
-						)) //
-				.compileBothTripSort());
-		ALL_ROUTE_TRIPS2 = map2;
-	}
-
-	@Override
-	public int compareEarly(long routeId,
-							@NotNull List<MTripStop> list1, @NotNull List<MTripStop> list2,
-							@NotNull MTripStop ts1, @NotNull MTripStop ts2,
-							@NotNull GStop ts1GStop, @NotNull GStop ts2GStop) {
-		if (ALL_ROUTE_TRIPS2.containsKey(routeId)) {
-			return ALL_ROUTE_TRIPS2.get(routeId).compare(routeId, list1, list2, ts1, ts2, ts1GStop, ts2GStop, this);
-		}
-		return super.compareEarly(routeId, list1, list2, ts1, ts2, ts1GStop, ts2GStop);
-	}
-
-	@NotNull
-	@Override
-	public ArrayList<MTrip> splitTrip(@NotNull MRoute mRoute, @Nullable GTrip gTrip, @NotNull GSpec gtfs) {
-		if (ALL_ROUTE_TRIPS2.containsKey(mRoute.getId())) {
-			return ALL_ROUTE_TRIPS2.get(mRoute.getId()).getAllTrips();
-		}
-		return super.splitTrip(mRoute, gTrip, gtfs);
-	}
-
-	@NotNull
-	@Override
-	public Pair<Long[], Integer[]> splitTripStop(@NotNull MRoute mRoute,
-												 @NotNull GTrip gTrip,
-												 @NotNull GTripStop gTripStop,
-												 @NotNull ArrayList<MTrip> splitTrips,
-												 @NotNull GSpec routeGTFS) {
-		if (ALL_ROUTE_TRIPS2.containsKey(mRoute.getId())) {
-			return SplitUtils.splitTripStop(mRoute, gTrip, gTripStop, routeGTFS, ALL_ROUTE_TRIPS2.get(mRoute.getId()), this);
-		}
-		return super.splitTripStop(mRoute, gTrip, gTripStop, splitTrips, routeGTFS);
-	}
-
 	@Override
 	public void setTripHeadsign(@NotNull MRoute mRoute, @NotNull MTrip mTrip, @NotNull GTrip gTrip, @NotNull GSpec gtfs) {
-		if (ALL_ROUTE_TRIPS2.containsKey(mRoute.getId())) {
-			return; // split
-		}
 		mTrip.setHeadsignString(
 				cleanTripHeadsign(gTrip.getTripHeadsignOrDefault()),
 				gTrip.getDirectionId() == null ? 0 : gTrip.getDirectionId()
 		);
+	}
+
+	@Override
+	public boolean directionFinderEnabled() {
+		return true;
 	}
 
 	private static final Pattern STARTS_WITH_TO_VERS = Pattern.compile("((^.* |^)(to/vers|to / vers))", Pattern.CASE_INSENSITIVE);
@@ -1132,953 +1064,9 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		return tripHeadsign; // DO NOT CLEAN, USED TO IDENTIFY TRIP IN REAL TIME API // <= TODO REALLY ???
 	}
 
-	private static final String N_ = "N ";
-
 	@Override
 	public boolean mergeHeadsign(@NotNull MTrip mTrip, @NotNull MTrip mTripToMerge) {
-		if (!mTrip.getHeadsignValue().equals(mTripToMerge.getHeadsignValue())) {
-			List<String> headsignsValues = Arrays.asList(mTrip.getHeadsignValue(), mTripToMerge.getHeadsignValue());
-			if (mTrip.getHeadsignValue().startsWith(N_) //
-					&& mTrip.getHeadsignValue().equals(N_ + mTripToMerge.getHeadsignValue())) {
-				mTrip.setHeadsignString(mTripToMerge.getHeadsignValue(), mTrip.getHeadsignId());
-				return true;
-			}
-			if (mTripToMerge.getHeadsignValue().startsWith(N_) //
-					&& mTripToMerge.getHeadsignValue().equals(N_ + mTrip.getHeadsignValue())) {
-				mTripToMerge.setHeadsignString(mTrip.getHeadsignValue(), mTripToMerge.getHeadsignId());
-				return true;
-			}
-			if ("Special".equalsIgnoreCase(mTrip.getHeadsignValue()) //
-					&& !"Special".equalsIgnoreCase(mTripToMerge.getHeadsignValue())) {
-				mTrip.setHeadsignString(mTripToMerge.getHeadsignValue(), mTrip.getHeadsignId());
-				return true;
-			} else if ("Special".equalsIgnoreCase(mTripToMerge.getHeadsignValue()) //
-					&& !"Special".equalsIgnoreCase(mTrip.getHeadsignValue())) {
-				mTrip.setHeadsignString(mTrip.getHeadsignValue(), mTrip.getHeadsignId());
-				return true;
-			}
-			if (mTrip.getRouteId() == 5L) {
-				if (Arrays.asList( //
-						"Waller", //
-						"Rideau" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Rideau", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 9L) {
-				if (Arrays.asList( //
-						"Daly", //
-						"Rideau" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Rideau", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 10L) {
-				if (Arrays.asList( //
-						"Lyon", //
-						"Rideau" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Rideau", mTrip.getHeadsignId());
-					return true;
-				}
-				if (Arrays.asList( //
-						"Carleton", //
-						"Hurdman" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Hurdman", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 11L) {
-				if (Arrays.asList( //
-						"Parliament", //
-						"Parliament / Parlement" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Parliament / Parlement", mTrip.getHeadsignId());
-					return true;
-				}
-				if (Arrays.asList( //
-						"Parliament / Parlement", //
-						"Rideau" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Rideau", mTrip.getHeadsignId());
-					return true;
-				}
-				if (Arrays.asList( //
-						"Lincoln Fields", //
-						"Bayshore" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Bayshore", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 12L) {
-				if (Arrays.asList( //
-						"Rideau", //
-						"Parliament ~ Parlement", //
-						"Parliament / Parlement" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Parliament / Parlement", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 14L) {
-				if (Arrays.asList( //
-						"Tunney's Pasture", //
-						"Carlington" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Carlington", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 16L) {
-				if (Arrays.asList( //
-						"Westboro", //
-						"Britannia" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Britannia", mTrip.getHeadsignId());
-					return true;
-				}
-				if (Arrays.asList( //
-						"Tunney's Pasture", //
-						"Westboro" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Westboro", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 17L) {
-				if (Arrays.asList( //
-						"Rideau", //
-						"Parliament / Parlement", //
-						"Parliament" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Parliament", mTrip.getHeadsignId());
-					return true;
-				}
-				if (Arrays.asList( //
-						"Parliament / Parlement", //
-						"Gatineau" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Gatineau", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 18L) {
-				if (Arrays.asList( //
-						"Parliament / Parlement", //
-						"Parliament" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Parliament", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 19L) {
-				if (Arrays.asList( //
-						"Parliament ~ Parlement", //
-						"Parliament / Parlement", //
-						"Bank" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Bank", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 30L) {
-				if (Arrays.asList( //
-						"Blair", //
-						"Albert / Bay" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Albert / Bay", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 32L) {
-				if (Arrays.asList( //
-						"Blair", //
-						"Place d'Orléans" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Place d'Orléans", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 33L) {
-				if (Arrays.asList( //
-						"Orléans", //
-						"Portobello" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Portobello", mTrip.getHeadsignId());
-					return true;
-				}
-				if (Arrays.asList( //
-						"Blair", //
-						"Place D'Orléans" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Place D'Orléans", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 34L) {
-				if (Arrays.asList( //
-						"Albert Bay", //
-						"Albert / Bay" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Albert / Bay", mTrip.getHeadsignId());
-					return true;
-				}
-				if (Arrays.asList( //
-						"Blair", //
-						"Albert Bay" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Albert Bay", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 38L) {
-				if (Arrays.asList( //
-						"Place D'Orléans", //
-						"Jeanne D'Arc / Trim" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Jeanne D'Arc / Trim", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 40L) {
-				if (Arrays.asList( //
-						"Greenboro / Hurdman", //
-						"Greenboro" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Greenboro", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 44L) {
-				if (Arrays.asList( //
-						"Hurdman", //
-						"Gatineau" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Gatineau", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 56L) {
-				if (Arrays.asList( //
-						"Hurdman", //
-						"King Edward" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("King Edward", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 58L) {
-				if (Arrays.asList( //
-						"Tunney's Pasture", //
-						"Lincoln Fields" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Lincoln Fields", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 61L) {
-				if (Arrays.asList( //
-						"Tunney's Pasture", //
-						"St-Laurent" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("St-Laurent", mTrip.getHeadsignId());
-					return true;
-				}
-				if (Arrays.asList( //
-						"Terry Fox", //
-						"Stittsville" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Stittsville", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 62L) {
-				if (Arrays.asList( //
-						"Tunney's Pasture", //
-						"St-Laurent" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("St-Laurent", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 63L) {
-				if (Arrays.asList( //
-						"Mackenzie King Via Briarbrook", //
-						"Tunney's Pasture Via Briarbrook" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Tunney's Pasture Via Briarbrook", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 64L) {
-				if (Arrays.asList( //
-						"Mackenzie King Via Morgan's Grant", //
-						"Tunney's Pasture Via Morgan's Grant" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Tunney's Pasture Via Morgan's Grant", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 66L) {
-				if (Arrays.asList( //
-						"Tunney's Pasture", //
-						"Gatineau" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Gatineau", mTrip.getHeadsignId());
-					return true;
-				}
-				if (Arrays.asList( //
-						"Kanata-Solandt", //
-						"Kanata" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Kanata", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 82L) {
-				if (Arrays.asList( //
-						"Lincoln Fields & Tunney's Pasture", //
-						"Tunney's Pasture" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Tunney's Pasture", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 83L) {
-				if (Arrays.asList( //
-						"Baseline", //
-						"Tunney's Pasture" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Tunney's Pasture", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 85L) {
-				if (Arrays.asList( //
-						"Gatineau", //
-						"Lees", //
-						"Lees / Gatineau" // ++
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Lees / Gatineau", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 86L) {
-				if (Arrays.asList( //
-						"Tunney's Pasture", //
-						"Elmvale" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Elmvale", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 87L) {
-				if (Arrays.asList( //
-						"Tunney's Pasture", //
-						"Greenboro" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Greenboro", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 93L) {
-				if (Arrays.asList( //
-						"Greenboro", //
-						"Greenboro / Hurdman" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Greenboro / Hurdman", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 96L) {
-				if (Arrays.asList( //
-						"Hurdman / Greenboro", //
-						"Greenboro" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Greenboro", mTrip.getHeadsignId());
-					return true;
-				}
-				if (Arrays.asList( //
-						"Merivale / 96b Hunt Club", //
-						"Merivale" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Merivale", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 97L) {
-				if (Arrays.asList( //
-						"Hurdman", //
-						"Bells Corners" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Bells Corners", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 98L) {
-				if (Arrays.asList( //
-						"Hurdman", //
-						"Tunney's Pasture" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Tunney's Pasture", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 101L) {
-				if (Arrays.asList( //
-						"Moodie", //
-						"Bayshore" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Bayshore", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 106L) {
-				if (Arrays.asList( //
-						"Riverside", //
-						"Hurdman" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Hurdman", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 111L) {
-				if (Arrays.asList( //
-						"Carleton", //
-						"Billings Bridge" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Billings Bridge", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 131L) {
-				if (Arrays.asList( //
-						"Fallingbrook", //
-						"Convent Glen" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Convent Glen", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 138L) {
-				if (Arrays.asList( //
-						"St-Louis", //
-						"Innes" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Innes", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 153L) {
-				if (Arrays.asList( //
-						"Tunney's Pasture", //
-						"Carlingwood" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Carlingwood", mTrip.getHeadsignId());
-					return true;
-				}
-				if (Arrays.asList( //
-						"Bayshore", //
-						"Lincoln Fields" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Lincoln Fields", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 186L) {
-				if (Arrays.asList( //
-						"Merivale", //
-						"Merivale / Slack" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Merivale / Slack", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 199L) {
-				if (Arrays.asList( //
-						"Leikin", //
-						"Barrhaven" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Barrhaven", mTrip.getHeadsignId());
-					return true;
-				}
-				if (Arrays.asList( //
-						"Hurdman", //
-						"Place D'Orléans" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Place D'Orléans", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 221L) {
-				if (Arrays.asList( //
-						"Blair", //
-						"Albert / Bay" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Albert / Bay", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 222L) {
-				if (Arrays.asList( //
-						"Blair", //
-						"Albert / Bay" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Albert / Bay", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 224L) {
-				if (Arrays.asList( //
-						"Blair", //
-						"Albert / Bay" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Albert / Bay", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 234L) {
-				if (Arrays.asList( //
-						"Tenth line", //
-						"Tenth Line" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Tenth Line", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 228L) {
-				if (Arrays.asList( //
-						"Blair", //
-						"Albert / Bay" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Albert / Bay", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 231L) {
-				if (Arrays.asList( //
-						"Blair", //
-						"Albert / Bay" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Albert / Bay", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 232L) {
-				if (Arrays.asList( //
-						"Blair", //
-						"Albert / Bay" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Albert / Bay", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 233L) {
-				if (Arrays.asList( //
-						"Blair", //
-						"Albert / Bay" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Albert / Bay", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 234L) {
-				if (Arrays.asList( //
-						"Blair", //
-						"Gatineau" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Gatineau", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 235L) {
-				if (Arrays.asList( //
-						"Blair", //
-						"Albert / Bay" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Albert / Bay", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 236L) {
-				if (Arrays.asList( //
-						"Blair", //
-						"Albert / Bay" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Albert / Bay", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 237L) {
-				if (Arrays.asList( //
-						"Blair", //
-						"Albert / Bay" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Albert / Bay", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 252L) {
-				if (Arrays.asList( //
-						"Tunney's Pasture", //
-						"Mackenzie King" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 256L) {
-				if (Arrays.asList( //
-						"Tunney's Pasture", //
-						"Mackenzie King" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 257L) {
-				if (Arrays.asList( //
-						"Tunney's Pasture", //
-						"Mackenzie King" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 261L) {
-				if (Arrays.asList( //
-						"Tunney's Pasture", //
-						"Mackenzie King" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 262L) {
-				if (Arrays.asList( //
-						"Tunney's Pasture", //
-						"Mackenzie King" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 263L) {
-				if (Arrays.asList( //
-						"Tunney's Pasture", //
-						"Mackenzie King" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 264L) {
-				if (Arrays.asList( //
-						"Tunney's Pasture", //
-						"Mackenzie King" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 265L) {
-				if (Arrays.asList( //
-						"Tunney's Pasture", //
-						"Mackenzie King" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 267L) {
-				if (Arrays.asList( //
-						"Tunney's Pasture", //
-						"Mackenzie King" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 268L) {
-				if (Arrays.asList( //
-						"Tunney's Pasture", //
-						"Mackenzie King" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 270L) {
-				if (Arrays.asList( //
-						"Tunney's Pasture", //
-						"Mackenzie King" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 271L) {
-				if (Arrays.asList( //
-						"Tunney's Pasture", //
-						"Mackenzie King" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 272L) {
-				if (Arrays.asList( //
-						"Tunney's Pasture", //
-						"Mackenzie King" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 273L) {
-				if (Arrays.asList( //
-						"Tunney's Pasture", //
-						"Mackenzie King" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 275L) {
-				if (Arrays.asList( //
-						"Tunney's Pasture", //
-						"Mackenzie King" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 277L) {
-				if (Arrays.asList( //
-						"Tunney's Pasture", //
-						"Mackenzie King" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 278L) {
-				if (Arrays.asList( //
-						"Tunney's Pasture", //
-						"Mackenzie King" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 282L) {
-				if (Arrays.asList( //
-						"Tunney's Pasture", //
-						"Mackenzie King" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 283L) {
-				if (Arrays.asList( //
-						"Tunney's Pasture", //
-						"Mackenzie King" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Mackenzie King", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 299L) {
-				if (Arrays.asList( //
-						"Hurdman", //
-						"LeBreton" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("LeBreton", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 301L) {
-				if (Arrays.asList( //
-						"Bayshore Carlingwd", //
-						"Bayshore Carlingwood" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Bayshore Carlingwood", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 303L) {
-				if (Arrays.asList( //
-						"Dunrobin Stittsville", //
-						"Dunrobin Carp" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Dunrobin Carp", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 303L) {
-				if (Arrays.asList( //
-						"Dunrobin Stittsville", //
-						"Dunrobin Carp" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Dunrobin Carp", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 305L) {
-				if (Arrays.asList( //
-						"North Gower / Manotick", //
-						"North Gower" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("North Gower", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 401L) {
-				if (Arrays.asList( //
-						"Canadian Tire Centre", //
-						"Canadian Tire Ctr" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Canadian Tire Ctr", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 402L) {
-				if (Arrays.asList( //
-						"Canadian Tire Centre", //
-						"Canadian Tire Ctr" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Canadian Tire Ctr", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 403L) {
-				if (Arrays.asList( //
-						"Canadian Tire Centre", //
-						"Canadian Tire Ctr" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Canadian Tire Ctr", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 404L) {
-				if (Arrays.asList( //
-						"Canadian Tire Centre", //
-						"Canadian Tire Ctr" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Canadian Tire Ctr", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 405L) {
-				if (Arrays.asList( //
-						"Canadian Tire Centre", //
-						"Canadian Tire Ctr" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Canadian Tire Ctr", mTrip.getHeadsignId());
-					return true;
-				}
-				if (Arrays.asList( //
-						"Scotiabank Place", //
-						"Canadian Tire Centre" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Canadian Tire Centre", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 406L) {
-				if (Arrays.asList( //
-						"Canadian Tire Centre", //
-						"Canadian Tire Ctr" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Canadian Tire Ctr", mTrip.getHeadsignId());
-					return true;
-				}
-				if (Arrays.asList( //
-						"Scotiabank Place", //
-						"Canadian Tire Centre" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Canadian Tire Centre", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 602L) {
-				if (Arrays.asList( //
-						"Mackenzie King", //
-						"Rideau" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Rideau", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 609L) {
-				if (Arrays.asList( //
-						"Hurdman", //
-						"Elmvale" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Elmvale", mTrip.getHeadsignId());
-					return true;
-				}
-				if (Arrays.asList( //
-						"De La Salle H.S", //
-						"De La Salle" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("De La Salle", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 649L) {
-				if (Arrays.asList( //
-						"Hillcrest H.S", //
-						"Hillcrest" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Hillcrest", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 661L) {
-				if (Arrays.asList( //
-						"Bell H.S", //
-						"Bell" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Bell", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 665L) {
-				if (Arrays.asList( //
-						"Bell H.S", //
-						"Bell" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Bell", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 669L) {
-				if (Arrays.asList( //
-						"Bell H.S", //
-						"Bell" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Bell", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			if (mTrip.getRouteId() == 691L) {
-				if (Arrays.asList( //
-						"Deslauriers", //
-						"Omer-Deslaurier H.S" //
-				).containsAll(headsignsValues)) {
-					mTrip.setHeadsignString("Omer-Deslaurier H.S", mTrip.getHeadsignId());
-					return true;
-				}
-			}
-			throw new MTLog.Fatal("mergeHeadsign() > Can't merge headsign for trips %s and %s!", mTrip, mTripToMerge);
-		}
-		return super.mergeHeadsign(mTrip, mTripToMerge);
+		throw new MTLog.Fatal("Can't merge headsign for trips %s and %s!", mTrip, mTripToMerge);
 	}
 
 	@NotNull
@@ -2113,85 +1101,84 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String SD = "SD";
 	private static final String SL = "SL";
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public int getStopId(@NotNull GStop gStop) {
 		String stopCode = getStopCode(gStop);
 		if (stopCode.length() > 0 && Utils.isDigitsOnly(stopCode)) {
 			return Integer.parseInt(stopCode); // using stop code as stop ID
 		}
-		if ("SNO CAFÉ".equalsIgnoreCase(gStop.getStopId())) {
-			return 9900001;
-		} else if ("SNO-20B".equalsIgnoreCase(gStop.getStopId())) {
-			return 9900002;
-		} else if ("SNO -7B".equalsIgnoreCase(gStop.getStopId())) {
-			return 9900003;
-		} else if ("STOP - 8".equalsIgnoreCase(gStop.getStopId())) {
-			return 9900004;
-		} else if ("SNO-CAFÉ".equalsIgnoreCase(gStop.getStopId())) {
-			return 9900005;
+		//noinspection deprecation
+		final String stopId1 = gStop.getStopId();
+		if ("SNO CAFÉ".equalsIgnoreCase(stopId1)) {
+			return 9_900_001;
+		} else if ("SNO-20B".equalsIgnoreCase(stopId1)) {
+			return 9_900_002;
+		} else if ("SNO -7B".equalsIgnoreCase(stopId1)) {
+			return 9_900_003;
+		} else if ("STOP - 8".equalsIgnoreCase(stopId1)) {
+			return 9_900_004;
+		} else if ("SNO-CAFÉ".equalsIgnoreCase(stopId1)) {
+			return 9_900_005;
 		}
-		Matcher matcher = DIGITS.matcher(gStop.getStopId());
+		Matcher matcher = DIGITS.matcher(stopId1);
 		if (matcher.find()) {
 			int digits = Integer.parseInt(matcher.group());
 			int stopId;
-			if (gStop.getStopId().startsWith(EE)) {
+			if (stopId1.startsWith(EE)) {
 				stopId = 100_000;
-			} else if (gStop.getStopId().startsWith(EO)) {
+			} else if (stopId1.startsWith(EO)) {
 				stopId = 200_000;
-			} else if (gStop.getStopId().startsWith(NG)) {
+			} else if (stopId1.startsWith(NG)) {
 				stopId = 300_000;
-			} else if (gStop.getStopId().startsWith(NO)) {
+			} else if (stopId1.startsWith(NO)) {
 				stopId = 400_000;
-			} else if (gStop.getStopId().startsWith(WA)) {
+			} else if (stopId1.startsWith(WA)) {
 				stopId = 500_000;
-			} else if (gStop.getStopId().startsWith(WD)) {
+			} else if (stopId1.startsWith(WD)) {
 				stopId = 600_000;
-			} else if (gStop.getStopId().startsWith(WH)) {
+			} else if (stopId1.startsWith(WH)) {
 				stopId = 700_000;
-			} else if (gStop.getStopId().startsWith(WI)) {
+			} else if (stopId1.startsWith(WI)) {
 				stopId = 800_000;
-			} else if (gStop.getStopId().startsWith(WL)) {
+			} else if (stopId1.startsWith(WL)) {
 				stopId = 900_000;
-			} else if (gStop.getStopId().startsWith(PLACE)) {
+			} else if (stopId1.startsWith(PLACE)) {
 				stopId = 1_000_000;
-			} else if (gStop.getStopId().startsWith(RZ)) {
+			} else if (stopId1.startsWith(RZ)) {
 				stopId = 1_100_000;
-			} else if (gStop.getStopId().startsWith(DT)) {
+			} else if (stopId1.startsWith(DT)) {
 				stopId = 1_200_000;
-			} else if (gStop.getStopId().startsWith(ER)) {
+			} else if (stopId1.startsWith(ER)) {
 				stopId = 1_300_000;
-			} else if (gStop.getStopId().startsWith(SNOW)) {
+			} else if (stopId1.startsWith(SNOW)) {
 				stopId = 1_400_000;
-			} else if (gStop.getStopId().startsWith(CD)) {
+			} else if (stopId1.startsWith(CD)) {
 				stopId = 1_500_000;
-			} else if (gStop.getStopId().startsWith(CF)) {
+			} else if (stopId1.startsWith(CF)) {
 				stopId = 1_600_000;
-			} else if (gStop.getStopId().startsWith(SX)) {
+			} else if (stopId1.startsWith(SX)) {
 				stopId = 1_700_000;
-			} else if (gStop.getStopId().startsWith(SC)) {
+			} else if (stopId1.startsWith(SC)) {
 				stopId = 1_800_000;
-			} else if (gStop.getStopId().startsWith(SD)) {
+			} else if (stopId1.startsWith(SD)) {
 				stopId = 1_900_000;
-			} else if (gStop.getStopId().startsWith("CB")) {
+			} else if (stopId1.startsWith("CB")) {
 				stopId = 2_000_000;
-			} else if (gStop.getStopId().startsWith("EN")) {
+			} else if (stopId1.startsWith("EN")) {
 				stopId = 2_100_000;
-			} else if (gStop.getStopId().startsWith("CE")) {
+			} else if (stopId1.startsWith("CE")) {
 				stopId = 2_200_000;
-			} else if (gStop.getStopId().startsWith("CA")) {
+			} else if (stopId1.startsWith("CA")) {
 				stopId = 2_300_000;
-			} else if (gStop.getStopId().startsWith("CK")) {
+			} else if (stopId1.startsWith("CK")) {
 				stopId = 2_400_000;
-			} else if (gStop.getStopId().startsWith(SL)) {
+			} else if (stopId1.startsWith(SL)) {
 				stopId = 2_500_000;
 			} else {
-				MTLog.logFatal("Stop doesn't have an ID (start with) %s!", gStop);
-				stopId = -1;
+				throw new MTLog.Fatal("Stop doesn't have an ID (start with) %s!", gStop);
 			}
 			return stopId + digits;
 		}
-		MTLog.logFatal("Unexpected stop ID for %s!", gStop);
-		return -1;
+		throw new MTLog.Fatal("Unexpected stop ID for %s!", gStop);
 	}
 }
