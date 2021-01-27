@@ -3,7 +3,6 @@ package org.mtransit.parser.ca_ottawa_oc_transpo_bus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mtransit.parser.CleanUtils;
-import org.mtransit.parser.Constants;
 import org.mtransit.parser.DefaultAgencyTools;
 import org.mtransit.parser.MTLog;
 import org.mtransit.parser.Pair;
@@ -19,7 +18,6 @@ import org.mtransit.parser.gtfs.data.GStop;
 import org.mtransit.parser.gtfs.data.GTrip;
 import org.mtransit.parser.gtfs.data.GTripStop;
 import org.mtransit.parser.mt.data.MAgency;
-import org.mtransit.parser.mt.data.MDirectionType;
 import org.mtransit.parser.mt.data.MRoute;
 import org.mtransit.parser.mt.data.MTrip;
 import org.mtransit.parser.mt.data.MTripStop;
@@ -33,6 +31,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static org.mtransit.parser.StringUtils.EMPTY;
 
 // https://www.octranspo.com/en/plan-your-trip/travel-tools/developers/
 // https://www.octranspo.com/fr/planifiez/outils-dinformation/developpeurs/
@@ -49,6 +49,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		new OttawaOCTranspoBusAgencyTools().start(args);
 	}
 
+	@Nullable
 	private HashSet<Integer> serviceIds;
 
 	@Override
@@ -513,8 +514,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_454 = LANSDOWNE + RLN_SEP + TERRY_FOX;
 	private static final String ROUTE_455 = LANSDOWNE + RLN_SEP + TRIM;
 	private static final String ROUTE_456 = LANSDOWNE_PARK + RLN_SEP + BARRHAVEN_CTR;
-	private static final String ROUTE_505 = Constants.EMPTY; // TODO
-	private static final String ROUTE_506 = Constants.EMPTY; // TODO
+	private static final String ROUTE_505 = EMPTY; // TODO
+	private static final String ROUTE_506 = EMPTY; // TODO
 	private static final String ROUTE_520 = HAWKESBURY + RLN_SEP + OTTAWA + RLN_SEP + GATINEAU;
 	private static final String ROUTE_555 = "Casselman" + RLN_SEP + OTTAWA + RLN_SEP + GATINEAU;
 	private static final String ROUTE_602 = E_S_DE_LA_SALLE + RLN_SEP + HURDMAN;
@@ -884,19 +885,16 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_COLOR_DARK_RED = "8B0000";
 
 	private static final String ROUTE_COLOR_RAPID_BLUE_DARK = "293D9B";
-	@SuppressWarnings("unused")
-	private static final String ROUTE_COLOR_RAPID_BLUE_LIGHT = "3871C2";
+	// private static final String ROUTE_COLOR_RAPID_BLUE_LIGHT = "3871C2";
 
 	private static final String ROUTE_COLOR_FREQUENT_ORANGE_DARK = "F14623";
-	@SuppressWarnings("unused")
-	private static final String ROUTE_COLOR_FREQUENT_ORANGE_LIGHT = "F68712";
+	// private static final String ROUTE_COLOR_FREQUENT_ORANGE_LIGHT = "F68712";
 
 	private static final String ROUTE_COLOR_LOCAL_GRAY_DARK = "4F4C4C";
 	private static final String ROUTE_COLOR_LOCAL_GRAY_LIGHT = "7B7979";
 
 	private static final String ROUTE_COLOR_CONNEXION_PURPLE_DARK = "8D188F";
-	@SuppressWarnings("unused")
-	private static final String ROUTE_COLOR_CONNEXION_PURPLE_LIGHT = "5D2491";
+	// private static final String ROUTE_COLOR_CONNEXION_PURPLE_LIGHT = "5D2491";
 
 	private static final String ROUTE_COLOR_SHOPPER = null;
 	private static final String ROUTE_COLOR_EVENT = null;
@@ -1023,19 +1021,14 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				else if (TDP_ROUTES.contains(rsn)) { return ROUTE_COLOR_ORCHID; }
 				// @formatter:on
 			}
-			if (isGoodEnoughAccepted()) {
-				return null;
-			}
-			MTLog.logFatal("No route color for '%s'!", gRoute);
-			return null;
+			throw new MTLog.Fatal("No route color for '%s'!", gRoute);
 		}
 		return super.getRouteColor(gRoute);
 	}
 
-	private static HashMap<Long, RouteTripSpec> ALL_ROUTE_TRIPS2;
+	private static final HashMap<Long, RouteTripSpec> ALL_ROUTE_TRIPS2;
 
 	static {
-		//noinspection UnnecessaryLocalVariable
 		HashMap<Long, RouteTripSpec> map2 = new HashMap<>();
 		//noinspection deprecation
 		map2.put(190L, new RouteTripSpec(190L, //
@@ -1095,8 +1088,10 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		if (ALL_ROUTE_TRIPS2.containsKey(mRoute.getId())) {
 			return; // split
 		}
-		final int directionId = gTrip.getDirectionId() == null ? 0 : gTrip.getDirectionId();
-		mTrip.setHeadsignString(cleanTripHeadsign(gTrip.getTripHeadsign()), directionId);
+		mTrip.setHeadsignString(
+				cleanTripHeadsign(gTrip.getTripHeadsignOrDefault()),
+				gTrip.getDirectionId() == null ? 0 : gTrip.getDirectionId()
+		);
 	}
 
 	private static final Pattern STARTS_WITH_TO_VERS = Pattern.compile("((^.* |^)(to/vers|to / vers))", Pattern.CASE_INSENSITIVE);
@@ -1116,16 +1111,22 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final Pattern HS_ = CleanUtils.cleanWords("h\\.s", "hs");
 	private static final String HS_REPLACEMENT = CleanUtils.cleanWordsReplacement("HS");
 
+	private static final Pattern RIVERSIDE_SOUTH_ = Pattern.compile("riverside south ~ riverside sud", Pattern.CASE_INSENSITIVE);
+	private static final String RIVERSIDE_SOUTH_REPLACEMENT = "Riverside South"; // FIXME trip string trip head-sign i19n
+
 	@NotNull
 	@Override
 	public String cleanTripHeadsign(@NotNull String tripHeadsign) {
-		tripHeadsign = STARTS_WITH_TO_VERS.matcher(tripHeadsign).replaceAll(Constants.EMPTY);
+		tripHeadsign = STARTS_WITH_TO_VERS.matcher(tripHeadsign).replaceAll(EMPTY);
 		tripHeadsign = CleanUtils.keepToAndRemoveVia(tripHeadsign);
+		tripHeadsign = RIVERSIDE_SOUTH_.matcher(tripHeadsign).replaceAll(RIVERSIDE_SOUTH_REPLACEMENT);
 		tripHeadsign = CAIRINE_WILSON_.matcher(tripHeadsign).replaceAll(CAIRINE_WILSON_REPLACEMENT);
 		tripHeadsign = SARSFIELD_.matcher(tripHeadsign).replaceAll(SARSFIELD_REPLACEMENT);
 		tripHeadsign = ST_LAURENT_.matcher(tripHeadsign).replaceAll(ST_LAURENT_REPLACEMENT);
 		tripHeadsign = LB_PEARSON_.matcher(tripHeadsign).replaceAll(LB_PEARSON_REPLACEMENT);
 		tripHeadsign = HS_.matcher(tripHeadsign).replaceAll(HS_REPLACEMENT);
+		tripHeadsign = CleanUtils.fixMcXCase(tripHeadsign);
+		tripHeadsign = CleanUtils.cleanBounds(tripHeadsign);
 		tripHeadsign = CleanUtils.cleanSlashes(tripHeadsign);
 		tripHeadsign = CleanUtils.cleanLabel(tripHeadsign);
 		return tripHeadsign; // DO NOT CLEAN, USED TO IDENTIFY TRIP IN REAL TIME API // <= TODO REALLY ???
@@ -2075,8 +2076,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 					return true;
 				}
 			}
-			MTLog.logFatal("mergeHeadsign() > Can't merge headsign for trips %s and %s!", mTrip, mTripToMerge);
-			return false; // DO NOT MERGE, USED TO IDENTIFY TRIP IN REAL TIME API
+			throw new MTLog.Fatal("mergeHeadsign() > Can't merge headsign for trips %s and %s!", mTrip, mTripToMerge);
 		}
 		return super.mergeHeadsign(mTrip, mTripToMerge);
 	}
@@ -2084,7 +2084,9 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	@NotNull
 	@Override
 	public String cleanStopName(@NotNull String gStopName) {
-		gStopName = gStopName.toLowerCase(Locale.ENGLISH);
+		gStopName = CleanUtils.toLowerCaseUpperCaseWords(Locale.ENGLISH, gStopName);
+		gStopName = CleanUtils.fixMcXCase(gStopName);
+		gStopName = CleanUtils.cleanBounds(gStopName);
 		gStopName = CleanUtils.cleanNumbers(gStopName);
 		gStopName = CleanUtils.cleanStreetTypes(gStopName);
 		return CleanUtils.cleanLabel(gStopName);
