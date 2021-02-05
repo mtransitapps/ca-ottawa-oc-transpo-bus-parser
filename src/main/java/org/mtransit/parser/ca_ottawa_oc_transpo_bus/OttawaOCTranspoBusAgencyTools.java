@@ -2,10 +2,11 @@ package org.mtransit.parser.ca_ottawa_oc_transpo_bus;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mtransit.parser.CleanUtils;
+import org.mtransit.commons.CharUtils;
+import org.mtransit.commons.CleanUtils;
+import org.mtransit.commons.StringUtils;
 import org.mtransit.parser.DefaultAgencyTools;
 import org.mtransit.parser.MTLog;
-import org.mtransit.parser.StringUtils;
 import org.mtransit.parser.Utils;
 import org.mtransit.parser.gtfs.data.GCalendar;
 import org.mtransit.parser.gtfs.data.GCalendarDate;
@@ -92,7 +93,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 
 	@Override
 	public long getRouteId(@NotNull GRoute gRoute) {
-		if (!Utils.isDigitsOnly(gRoute.getRouteShortName())) {
+		if (!CharUtils.isDigitsOnly(gRoute.getRouteShortName())) {
 			if ("R1".equalsIgnoreCase(gRoute.getRouteShortName())) { // 701
 				return 701L;
 			} else if ("Hurd".equalsIgnoreCase(gRoute.getRouteShortName())) { // 104
@@ -552,14 +553,15 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	@Override
 	public String getRouteLongName(@NotNull GRoute gRoute) {
 		if (StringUtils.isEmpty(gRoute.getRouteLongName())) {
-			if (!Utils.isDigitsOnly(gRoute.getRouteShortName())) {
-				if ("R1".equalsIgnoreCase(gRoute.getRouteShortName())) { // 701
+			final String rsnS = gRoute.getRouteShortName();
+			if (!CharUtils.isDigitsOnly(rsnS)) {
+				if ("R1".equalsIgnoreCase(rsnS)) { // 701
 					return ROUTE_701;
-				} else if ("Hurd".equalsIgnoreCase(gRoute.getRouteShortName())) { // 104
+				} else if ("Hurd".equalsIgnoreCase(rsnS)) { // 104
 					return ROUTE_104;
 				}
 			} else {
-				int rsn = Integer.parseInt(gRoute.getRouteShortName());
+				int rsn = Integer.parseInt(rsnS);
 				switch (rsn) {
 				// @formatter:off
 				case 1: return ROUTE_1;
@@ -950,14 +952,15 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	@Override
 	public String getRouteColor(@NotNull GRoute gRoute) {
 		if (StringUtils.isEmpty(gRoute.getRouteColor())) {
-			if (!Utils.isDigitsOnly(gRoute.getRouteShortName())) {
-				if ("R1".equalsIgnoreCase(gRoute.getRouteShortName())) { // 701
+			final String rsnS = gRoute.getRouteShortName();
+			if (!CharUtils.isDigitsOnly(rsnS)) {
+				if ("R1".equalsIgnoreCase(rsnS)) { // 701
 					return null;
-				} else if ("Hurd".equalsIgnoreCase(gRoute.getRouteShortName())) { // 104
+				} else if ("Hurd".equalsIgnoreCase(rsnS)) { // 104
 					return ROUTE_COLOR_LOCAL_GRAY_DARK;
 				}
 			} else {
-				int rsn = Integer.parseInt(gRoute.getRouteShortName());
+				int rsn = Integer.parseInt(rsnS);
 				switch (rsn) {
 				// @formatter:off
 				case 11: return ROUTE_COLOR_FREQUENT_ORANGE_DARK;
@@ -1040,9 +1043,6 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final Pattern LB_PEARSON_ = CleanUtils.cleanWords("l\\. b\\. pearson", "lester b\\. pearson");
 	private static final String LB_PEARSON_REPLACEMENT = CleanUtils.cleanWordsReplacement("LB Pearson");
 
-	private static final Pattern HS_ = CleanUtils.cleanWords("h\\.s", "hs");
-	private static final String HS_REPLACEMENT = CleanUtils.cleanWordsReplacement("HS");
-
 	private static final Pattern RIVERSIDE_SOUTH_ = Pattern.compile("riverside south ~ riverside sud", Pattern.CASE_INSENSITIVE);
 	private static final String RIVERSIDE_SOUTH_REPLACEMENT = "Riverside South"; // FIXME trip string trip head-sign i19n
 
@@ -1056,7 +1056,6 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		tripHeadsign = SARSFIELD_.matcher(tripHeadsign).replaceAll(SARSFIELD_REPLACEMENT);
 		tripHeadsign = ST_LAURENT_.matcher(tripHeadsign).replaceAll(ST_LAURENT_REPLACEMENT);
 		tripHeadsign = LB_PEARSON_.matcher(tripHeadsign).replaceAll(LB_PEARSON_REPLACEMENT);
-		tripHeadsign = HS_.matcher(tripHeadsign).replaceAll(HS_REPLACEMENT);
 		tripHeadsign = CleanUtils.fixMcXCase(tripHeadsign);
 		tripHeadsign = CleanUtils.cleanBounds(tripHeadsign);
 		tripHeadsign = CleanUtils.cleanSlashes(tripHeadsign);
@@ -1104,7 +1103,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	@Override
 	public int getStopId(@NotNull GStop gStop) {
 		String stopCode = getStopCode(gStop);
-		if (stopCode.length() > 0 && Utils.isDigitsOnly(stopCode)) {
+		if (stopCode.length() > 0 && CharUtils.isDigitsOnly(stopCode)) {
 			return Integer.parseInt(stopCode); // using stop code as stop ID
 		}
 		//noinspection deprecation
