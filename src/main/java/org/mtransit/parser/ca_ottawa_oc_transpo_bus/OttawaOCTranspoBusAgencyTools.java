@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.mtransit.commons.CharUtils;
 import org.mtransit.commons.CleanUtils;
 import org.mtransit.commons.StringUtils;
+import org.mtransit.commons.provider.OttawaOCTranspoProviderCommons;
 import org.mtransit.parser.DefaultAgencyTools;
 import org.mtransit.parser.MTLog;
 import org.mtransit.parser.gtfs.data.GRoute;
@@ -977,44 +978,23 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		return true;
 	}
 
-	private static final Pattern STARTS_WITH_TO_VERS = Pattern.compile("((^.* |^)(to/vers|to / vers))", Pattern.CASE_INSENSITIVE);
-
-	private static final Pattern CAIRINE_WILSON_ = CleanUtils.cleanWords("carine wilson");
-	private static final String CAIRINE_WILSON_REPLACEMENT = CleanUtils.cleanWordsReplacement("Cairine Wilson");
-
-	private static final Pattern SARSFIELD_ = CleanUtils.cleanWords("sarfield");
-	private static final String SARSFIELD_REPLACEMENT = CleanUtils.cleanWordsReplacement("Sarsfield");
-
-	private static final Pattern ST_LAURENT_ = CleanUtils.cleanWords("st- laurent", "st laurent");
-	private static final String ST_LAURENT_REPLACEMENT = CleanUtils.cleanWordsReplacement("St-Laurent");
-
-	private static final Pattern LB_PEARSON_ = CleanUtils.cleanWords("l\\. b\\. pearson", "lester b\\. pearson");
-	private static final String LB_PEARSON_REPLACEMENT = CleanUtils.cleanWordsReplacement("LB Pearson");
-
-	private static final Pattern RIVERSIDE_SOUTH_ = Pattern.compile("riverside south ~ riverside sud", Pattern.CASE_INSENSITIVE);
-	private static final String RIVERSIDE_SOUTH_REPLACEMENT = "Riverside South"; // FIXME trip string trip head-sign i19n
-
 	@NotNull
 	@Override
 	public String cleanTripHeadsign(@NotNull String tripHeadsign) {
-		tripHeadsign = STARTS_WITH_TO_VERS.matcher(tripHeadsign).replaceAll(EMPTY);
-		tripHeadsign = CleanUtils.keepToAndRemoveVia(tripHeadsign);
-		tripHeadsign = RIVERSIDE_SOUTH_.matcher(tripHeadsign).replaceAll(RIVERSIDE_SOUTH_REPLACEMENT);
-		tripHeadsign = CAIRINE_WILSON_.matcher(tripHeadsign).replaceAll(CAIRINE_WILSON_REPLACEMENT);
-		tripHeadsign = SARSFIELD_.matcher(tripHeadsign).replaceAll(SARSFIELD_REPLACEMENT);
-		tripHeadsign = ST_LAURENT_.matcher(tripHeadsign).replaceAll(ST_LAURENT_REPLACEMENT);
-		tripHeadsign = LB_PEARSON_.matcher(tripHeadsign).replaceAll(LB_PEARSON_REPLACEMENT);
-		tripHeadsign = CleanUtils.fixMcXCase(tripHeadsign);
-		tripHeadsign = CleanUtils.cleanBounds(tripHeadsign);
-		tripHeadsign = CleanUtils.cleanSlashes(tripHeadsign);
-		tripHeadsign = CleanUtils.cleanLabel(tripHeadsign);
-		return tripHeadsign; // DO NOT CLEAN, USED TO IDENTIFY TRIP IN REAL TIME API // <= TODO REALLY ???
+		tripHeadsign = CleanUtils.removeVia(tripHeadsign);
+		return OttawaOCTranspoProviderCommons.cleanTripHeadsign(tripHeadsign);
+	}
+
+	private String[] getIgnoredWords() {
+		return new String[]{
+				"TOH"
+		};
 	}
 
 	@NotNull
 	@Override
 	public String cleanStopName(@NotNull String gStopName) {
-		gStopName = CleanUtils.toLowerCaseUpperCaseWords(Locale.ENGLISH, gStopName);
+		gStopName = CleanUtils.toLowerCaseUpperCaseWords(Locale.ENGLISH, gStopName, getIgnoredWords());
 		gStopName = CleanUtils.fixMcXCase(gStopName);
 		gStopName = CleanUtils.cleanBounds(gStopName);
 		gStopName = CleanUtils.cleanNumbers(gStopName);
