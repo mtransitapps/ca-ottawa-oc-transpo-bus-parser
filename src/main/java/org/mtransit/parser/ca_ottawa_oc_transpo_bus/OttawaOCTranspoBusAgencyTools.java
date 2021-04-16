@@ -468,6 +468,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_611 = E_S_GISELE_LALONDE + RLN_SEP + CHAPEL_HL;
 	private static final String ROUTE_612 = E_S_GISELE_LALONDE + RLN_SEP + CHAPEL_HL;
 	private static final String ROUTE_613 = IMMACULATA_HIGH_SCHOOL + RLN_SEP + HURDMAN_STA;
+	private static final String ROUTE_615 = EMPTY; // TODO
+	private static final String ROUTE_616 = EMPTY; // TODO
 	private static final String ROUTE_618 = E_S_LOUIS_RIEL + RLN_SEP + MILLENNIUM_STA;
 	private static final String ROUTE_619 = E_S_LOUIS_RIEL + RLN_SEP + BLAIR_STA;
 	private static final String ROUTE_620 = OTTAWA + " Technical " + " S.S." + RLN_SEP + ST_LAURENT;
@@ -764,6 +766,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 611: return ROUTE_611;
 				case 612: return ROUTE_612;
 				case 613: return ROUTE_613;
+				case 615: return ROUTE_615;
+				case 616: return ROUTE_616;
 				case 618: return ROUTE_618;
 				case 619: return ROUTE_619;
 				case 620: return ROUTE_620;
