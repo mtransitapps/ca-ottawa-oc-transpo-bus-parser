@@ -1029,7 +1029,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 
 	@Override
 	public int getStopId(@NotNull GStop gStop) {
-		String stopCode = getStopCode(gStop);
+		final String stopCode = getStopCode(gStop);
 		if (stopCode.length() > 0 && CharUtils.isDigitsOnly(stopCode)) {
 			return Integer.parseInt(stopCode); // using stop code as stop ID
 		}
@@ -1046,10 +1046,10 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		} else if ("SNO-CAFÉ".equalsIgnoreCase(stopId1)) {
 			return 9_900_005;
 		}
-		Matcher matcher = DIGITS.matcher(stopId1);
+		final Matcher matcher = DIGITS.matcher(stopId1);
 		if (matcher.find()) {
-			int digits = Integer.parseInt(matcher.group());
-			int stopId;
+			final int digits = Integer.parseInt(matcher.group());
+			final int stopId;
 			if (stopId1.startsWith(EE)) {
 				stopId = 100_000;
 			} else if (stopId1.startsWith(EO)) {
@@ -1100,11 +1100,13 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				stopId = 2_400_000;
 			} else if (stopId1.startsWith(SL)) {
 				stopId = 2_500_000;
+			} else if (stopId1.startsWith("WJ")) {
+				stopId = 2_600_000;
 			} else {
-				throw new MTLog.Fatal("Stop doesn't have an ID (start with) %s!", gStop);
+				throw new MTLog.Fatal("Stop doesn't have an ID (start with) %s!", gStop.toStringPlus());
 			}
 			return stopId + digits;
 		}
-		throw new MTLog.Fatal("Unexpected stop ID for %s!", gStop);
+		throw new MTLog.Fatal("Unexpected stop ID for %s!", gStop.toStringPlus());
 	}
 }
