@@ -321,6 +321,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_105 = GATINEAU + RLN_SEP + TUNNEY_S_PASTURE;
 	private static final String ROUTE_106 = ELMVALE + RLN_SEP + HURDMAN;
 	private static final String ROUTE_107 = BAYVIEW + RLN_SEP + SOUTHKEYS;
+	private static final String ROUTE_110 = INNOVATION + RLN_SEP + FALLOWFIELD;
 	private static final String ROUTE_111 = BILLINGS_BRIDGE + SLASH + CARLETON + RLN_SEP + BASELINE;
 	private static final String ROUTE_112 = ELMVALE + RLN_SEP + BILLINGS_BRIDGE;
 	private static final String ROUTE_114 = HURDMAN + RLN_SEP + GREENBORO;
@@ -619,6 +620,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 105: return ROUTE_105;
 				case 106: return ROUTE_106;
 				case 107: return ROUTE_107;
+				case 110: return ROUTE_110;
 				case 111: return ROUTE_111;
 				case 112: return ROUTE_112;
 				case 114: return ROUTE_114;
