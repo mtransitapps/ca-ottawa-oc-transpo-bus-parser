@@ -18,7 +18,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.mtransit.parser.StringUtils.EMPTY;
+import static org.mtransit.commons.StringUtils.EMPTY;
 
 // https://www.octranspo.com/en/plan-your-trip/travel-tools/developers/
 // https://www.octranspo.com/fr/planifiez/outils-dinformation/developpeurs/
@@ -38,6 +38,14 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	@Override
 	public String getAgencyName() {
 		return "OC Transpo";
+	}
+
+	@Override
+	public boolean excludeRoute(@NotNull GRoute gRoute) {
+		if (gRoute.getRouteShortName().equals("1")) {
+			return EXCLUDE; // misclassified as bus(3) intead of rail(2)
+		}
+		return super.excludeRoute(gRoute);
 	}
 
 	@NotNull
