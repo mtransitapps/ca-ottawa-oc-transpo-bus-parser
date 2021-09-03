@@ -503,6 +503,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_660 = BELL_HIGH_SCHOOL + RLN_SEP + INNOVATION;
 	private static final String ROUTE_661 = BELL_HIGH_SCHOOL + RLN_SEP + TERRY_FOX_STA;
 	private static final String ROUTE_665 = BELL_HIGH_SCHOOL + RLN_SEP + BRIDLEWOOD;
+	private static final String ROUTE_667 = "Holy Trinity " + HIGH_SCHOOL + RLN_SEP + "Summergaze";
+	private static final String ROUTE_668 = "Holy Trinity " + HIGH_SCHOOL + RLN_SEP + BRIDLEWOOD;
 	private static final String ROUTE_669 = BELL_HIGH_SCHOOL + RLN_SEP + BAYSHORE + SLASH + CARLING;
 	private static final String ROUTE_670 = ST_PIUS_X_HIGH_SCHOOL + RLN_SEP + VAAN + SLASH + WOODROFFE;
 	private static final String ROUTE_674 = ALL_STS_CATHOLIC_AND_STEPHEN_LEACOCK_SCHOOLS + RLN_SEP + INNOVATION + SLASH + HINES;
@@ -513,6 +515,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	private static final String ROUTE_689 = OMER_DESLAURIER_HIGH_SCHOOL + RLN_SEP + BILLINGS_BRIDGE;
 	private static final String ROUTE_691 = E_S_DESLAURIERS + RLN_SEP + BAYSHORE_STA;
 	private static final String ROUTE_698 = RIDGEMONT_HIGH_SCHOOL + SLASH + ST_PATRICK_S_HIGH_SCHOOL + RLN_SEP + GREENBORO;
+	private static final String ROUTE_699 = E + " Pierre-de-Blois" + RLN_SEP + "Findlay Creek";
 	private static final String ROUTE_696 = BASELINE + RLN_SEP + GREENBORO;
 	private static final String ROUTE_701 = BLAIR + RLN_SEP + TUNNEY_S_PASTURE;
 	private static final String ROUTE_702 = BAYVIEW + RLN_SEP + SOUTH_KEYS;
@@ -802,6 +805,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 660: return ROUTE_660;
 				case 661: return ROUTE_661;
 				case 665: return ROUTE_665;
+				case 667: return ROUTE_667;
+				case 668: return ROUTE_668;
 				case 669: return ROUTE_669;
 				case 670: return ROUTE_670;
 				case 674: return ROUTE_674;
@@ -811,8 +816,9 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				case 686: return ROUTE_686;
 				case 689: return ROUTE_689;
 				case 691: return ROUTE_691;
-				case 698: return ROUTE_698;
 				case 696: return ROUTE_696;
+				case 698: return ROUTE_698;
+				case 699: return ROUTE_699;
 				case 701: return ROUTE_701;
 				case 702: return ROUTE_702;
 				// @formatter:on
