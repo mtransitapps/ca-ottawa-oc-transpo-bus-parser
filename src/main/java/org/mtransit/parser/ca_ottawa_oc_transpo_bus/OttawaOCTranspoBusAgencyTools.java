@@ -211,6 +211,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				stopId = 2_500_000;
 			} else if (stopId1.startsWith("WJ")) {
 				stopId = 2_600_000;
+			} else if (stopId1.startsWith("NI")) {
+				stopId = 2_700_000;
 			} else {
 				throw new MTLog.Fatal("Stop doesn't have an ID (start with) %s!", gStop.toStringPlus());
 			}
