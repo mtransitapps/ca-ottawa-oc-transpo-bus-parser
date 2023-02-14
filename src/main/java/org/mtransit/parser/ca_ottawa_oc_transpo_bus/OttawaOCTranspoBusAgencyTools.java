@@ -12,6 +12,7 @@ import org.mtransit.parser.MTLog;
 import org.mtransit.parser.gtfs.data.GRoute;
 import org.mtransit.parser.gtfs.data.GStop;
 import org.mtransit.parser.mt.data.MAgency;
+import org.mtransit.parser.mt.data.MRouteSNToIDConverter;
 
 import java.util.List;
 import java.util.Locale;
@@ -65,6 +66,16 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	@Override
 	public boolean useRouteShortNameForRouteId() {
 		return true;
+	}
+
+	@Nullable
+	@Override
+	public Long convertRouteIdPreviousChars(@NotNull String previousChars) {
+		switch(previousChars) {
+			case "SNO":
+				return MRouteSNToIDConverter.startsWith(MRouteSNToIDConverter.OTHER_MIN_ + 0);
+		}
+		return null;
 	}
 
 	@Override
