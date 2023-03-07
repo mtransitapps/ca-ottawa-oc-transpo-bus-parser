@@ -71,9 +71,9 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	@Nullable
 	@Override
 	public Long convertRouteIdPreviousChars(@NotNull String previousChars) {
-		switch(previousChars) {
-			case "SNO":
-				return MRouteSNToIDConverter.startsWith(MRouteSNToIDConverter.OTHER_MIN_ + 0);
+		switch (previousChars) {
+		case "SNO":
+			return MRouteSNToIDConverter.startsWith(MRouteSNToIDConverter.OTHER_MIN_ + 1L);
 		}
 		return null;
 	}
@@ -228,6 +228,8 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 				stopId = 2_800_000;
 			} else if (stopId1.startsWith("NC")) {
 				stopId = 2_900_000;
+			} else if (stopId1.startsWith("AJ")) {
+				stopId = 3_000_000;
 			} else {
 				throw new MTLog.Fatal("Stop doesn't have an ID (start with) %s!", gStop.toStringPlus());
 			}
