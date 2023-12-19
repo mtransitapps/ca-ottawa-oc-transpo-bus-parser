@@ -79,6 +79,11 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 	}
 
 	@Override
+	public boolean allowGTFSIdOverride() {
+		return true; // BREAKS GTFS-RT compatibility!
+	}
+
+	@Override
 	public boolean defaultRouteLongNameEnabled() {
 		return true;
 	}
