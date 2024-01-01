@@ -20,7 +20,6 @@ import java.util.regex.Matcher;
 
 // https://www.octranspo.com/en/plan-your-trip/travel-tools/developers/
 // https://www.octranspo.com/fr/planifiez/outils-dinformation/developpeurs/
-// https://www.octranspo.com/files/google_transit.zip
 public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 
 	public static void main(@NotNull String[] args) {
@@ -78,9 +77,9 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		return null;
 	}
 
-	@Override
-	public boolean allowGTFSIdOverride() {
-		return true; // BREAKS GTFS-RT compatibility!
+	@Nullable
+	public String getRouteIdCleanupRegex() {
+		return "\\-\\d+$";
 	}
 
 	@Override
@@ -93,7 +92,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		return true;
 	}
 
-	private static final String AGENCY_COLOR = "A2211F";
+	private static final String AGENCY_COLOR = "DA291C";
 
 	@NotNull
 	@Override
