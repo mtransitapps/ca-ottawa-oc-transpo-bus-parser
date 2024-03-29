@@ -86,7 +86,7 @@ public class OttawaOCTranspoBusAgencyTools extends DefaultAgencyTools {
 		return true;
 	}
 
-	private static final String AGENCY_COLOR = "DA291C";
+	private static final String AGENCY_COLOR = "C80D1A";
 
 	@NotNull
 	@Override
